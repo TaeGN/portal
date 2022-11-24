@@ -1,6 +1,11 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
+<c:url value="/sugang/info" var="infoLink"></c:url>
+<c:url value="/sugang/list" var="listLink"></c:url>
+
+<h3>수강신청 페이지</h3>
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Navbar</a>
@@ -13,10 +18,10 @@
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li> -->
         <li class="nav-item">
-          <a class="nav-link" href="#">수강편람</a>
+          <a class="nav-link" href="${listLink }">수강편람</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">수강안내</a>
+          <a class="nav-link" href="${infoLink }">수강안내</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">수강신청</a>
