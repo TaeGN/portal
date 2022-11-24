@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.portal.domain.member.StudentDto;
@@ -19,6 +20,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Autowired
 	private StudentMapper studentMapper;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,9 +40,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 //				authorityList.add(new SimpleGrantedAuthority(auth));
 //			}
 //		}
-		
 		// 세번째 칸 = 권한
-		User user = new User(student.getId(), student.getPassword(), authorityList);
+		User user = new User(student.getId(), passwordEncoder.encode(student.getPassword()), authorityList);
 		return user;
 	}
 

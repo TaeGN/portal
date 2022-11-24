@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class StudentController {
 
 	
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@GetMapping("login")
 	public void login() {
 		
 	}
+	
+
 }
