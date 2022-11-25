@@ -41,6 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 //			}
 //		}
 		// 세번째 칸 = 권한
+		// 
 		User user = new User(student.getId(), passwordEncoder.encode(student.getPassword()), authorityList);
 		return user;
 	}

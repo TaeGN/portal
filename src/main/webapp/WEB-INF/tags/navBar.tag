@@ -4,14 +4,17 @@
 
 <c:url value="/sugang/info" var="infoLink"></c:url>
 <c:url value="/sugang/list" var="listLink"></c:url>
-
-<h3>수강신청 페이지</h3>
+<c:url value="/sugang/login" var="loginLink"></c:url>
+<div class="d-flex">
+	<h3>수강신청 페이지</h3>
+	<a href="${loginLink }">로그인 하러 가기</a>
+</div>
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <!-- <a class="navbar-brand" href="#">Navbar</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
-    </button>
+    </button> -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 <!--         <li class="nav-item">
