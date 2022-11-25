@@ -8,4 +8,8 @@ public class StudentDto {
 	private String studentName;
 	private String id;
 	private String password;
+	private String firstResidentId;
+	private String lastResidentId;
+	private int grade;
+	private String department;
 }
