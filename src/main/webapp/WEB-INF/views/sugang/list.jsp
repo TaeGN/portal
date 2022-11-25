@@ -13,44 +13,48 @@
 </head>
 <body>
 <my:navBar></my:navBar>
-<form action="" method="post" class="d-flex">
+<form action="" method="get" >
+<div class="d-flex">
 		조직
 	<div class="me-3">
-		<select class="form-select" aria-label="Default select example">
-		  <option selected>select menu</option>
-		  <option value="1">One</option>
-		  <option value="2">Two</option>
-		  <option value="3">Three</option>
+		<select name="organization" id="organizationId1" class="form-select" aria-label="Default select example">
+		  <option selected>대학(학부/서울)</option>
+		  <option value="대학원">대학원</option>
+<!-- 		  <option value="2">Two</option>
+		  <option value="3">Three</option> -->
 		</select>
 	</div>
 		년도
 	<div class="me-3">
-		<select class="form-select" aria-label="Default select example">
-		  <option selected>select menu</option>
-		  <option value="1">One</option>
-		  <option value="2">Two</option>
-		  <option value="3">Three</option>
+		<select name="year" id="yearId1" class="form-select" aria-label="Default select example">
+		  <option value="2022">2022</option>
+		  <option value="2021">2021</option>
+		  <option value="2020">2020</option>
+		  <option value="2019">2019</option>
 		</select>
 	</div>
 		학기
 	<div class="me-3">
-		<select class="form-select" aria-label="Default select example">
-		  <option selected>select menu</option>
-		  <option value="1">One</option>
-		  <option value="2">Two</option>
-		  <option value="3">Three</option>
+		<select name="semester" id="semesterId1" class="form-select" aria-label="Default select example">
+		  <option value="1학기">1학기</option>
+		  <option value="여름학기">여름학기</option>
+		  <option value="2학기">2학기</option>
+		  <option selected="selected">겨울학기</option>
 		</select>
 	</div>
 		학년
 	<div class="me-3">
-		<select class="form-select" aria-label="Default select example">
-		  <option selected>select menu</option>
-		  <option value="1">One</option>
-		  <option value="2">Two</option>
-		  <option value="3">Three</option>
+		<select name="grade" id="gradeId1" class="form-select" aria-label="Default select example">
+		  <option selected value="10">전체</option>
+		  <option value="1">1</option>
+		  <option value="2">2</option>
+		  <option value="3">3</option>
+		  <option value="4">4</option>
+		  <option value="5">5</option>
 		</select>
 	</div>
 	
+	<!-- checkbox -->
 	<div class="form-check">
 	  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
 	  <label class="form-check-label" for="flexCheckDefault">
@@ -76,39 +80,57 @@
 	  </label>
 	</div>
 	
+	<!-- radio -->
 	<div class="d-flex ms-auto">
-	<div class="form-check">
-	  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-	  <label class="form-check-label" for="flexRadioDefault1">
-	    radio
-	  </label>
-	</div>
-	<div class="form-check">
-	  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-	  <label class="form-check-label" for="flexRadioDefault1">
-	    radio
-	  </label>
-	</div>
-	<div class="form-check">
-	  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-	  <label class="form-check-label" for="flexRadioDefault1">
-	    radio
-	  </label>
-	</div>
+		<div class="form-check">
+		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+		  <label class="form-check-label" for="flexRadioDefault1">
+		    radio
+		  </label>
+		</div>
+		<div class="form-check">
+		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+		  <label class="form-check-label" for="flexRadioDefault1">
+		    radio
+		  </label>
+		</div>
+		<div class="form-check">
+		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+		  <label class="form-check-label" for="flexRadioDefault1">
+		    radio
+		  </label>
+		</div>
 	</div>
 		
-	<input type="submit" value="전송">
+	<input id="submitButton1" type="submit" value="조회">
 	<!-- <button type="button" class="btn btn-primary">Primary</button> -->
+	</div>
+	
+	<div class="d-flex">
+	이수구분
+	<div class="me-3">
+		<select name="courseClassification" class="form-select" aria-label="Default select example">
+		  <option selected >전공심화</option>
+		  <option value="1">1</option>
+		  <option value="2">2</option>
+		  <option value="3">3</option>
+		  <option value="4">4</option>
+		  <option value="5">5</option>
+		</select>
+	</div>
+	</div>
 </form>
 
 <hr>
 
-<div class="container-md">
+<div id="sugangListId1" class="container-md">
 	<div class="row">
 		<div class="col">
 			<table class="table">
 				<thead>
 					<tr>
+						<th>학년</th>
+						<th>이수구분</th>
 						<th>수업코드</th>
 						<th>학수번호</th>
 						<th>교과목명</th>
@@ -117,6 +139,8 @@
 				<tbody>
 					<c:forEach items="${courseList }" var="course">
 						<tr>
+							<td>${course.grade }</td>
+							<td>${course.courseClassification }</td>
 							<td>${course.classCode }</td>
 							<td>${course.classNumber }</td>
 							<td>${course.courseName }</td>
@@ -130,5 +154,32 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script>
+const ctx = "${pageContext.request.contextPath}";
+
+/* const selectSemesterId1 = document.querySelector("#selectSemesterId1");
+selectSemesterId1.addEventListener("change", function() {
+	const selected = selectSemesterId1.value;
+	if(selected == "2" || selected == "4") {
+		document.querySelector("#radioId1").innerHTML = "disabled";
+	}
+}); */
+
+/*  document.querySelector("#submitButton1").addEventListener("click", function() {
+	const organization = document.querySelector("#organizationId1 option:selected").value;
+	const year = document.querySelector("#yearId1").value;
+	const semester = document.querySelector("#semesterId1").value;
+	const grade = document.querySelector("#gradeId1").value;
+	const data = {organization, year, semester, grade};
+	fetch(ctx + "/sugang/list", {
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(data)
+	});
+});  */
+
+</script>
+
 </body>
 </html>

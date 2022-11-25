@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.portal.domain.sugang.CourseDto;
 import com.portal.domain.sugang.InfoDto;
+import com.portal.domain.sugang.SearchDto;
 import com.portal.service.sugang.SugangService;
 
 
@@ -22,6 +23,11 @@ public class SugangController {
 	@Autowired
 	private SugangService sugangService;
 	
+	@GetMapping("login")
+	public void login() {
+		
+	}
+	
 	@GetMapping("info")
 	public void info(Model model) {
 		List<InfoDto> list = sugangService.getInfoList();
@@ -30,9 +36,9 @@ public class SugangController {
 	}
 	
 	@GetMapping("list")
-	public void list(Model model) {
-		List<CourseDto> list = sugangService.getCourseList(); 
-
+	public void list(CourseDto course, Model model) {
+		List<CourseDto> list = sugangService.getCourseList(course); 
+		System.out.println(course);
 		model.addAttribute("courseList", list);
 	}
 	

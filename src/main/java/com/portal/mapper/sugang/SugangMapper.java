@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.portal.domain.sugang.CourseDto;
 import com.portal.domain.sugang.InfoDto;
+import com.portal.domain.sugang.SearchDto;
 
 @Mapper
 public interface SugangMapper {
@@ -15,4 +16,7 @@ public interface SugangMapper {
 	List<InfoDto> selectInfoAll();
 
 	String selectInfoTextByInfoId(int id);
+
+	List<CourseDto> selectCourseBySearchDto(CourseDto course);
+
 }
