@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.portal.mapper.admin.AdminMapper">
+	
+	<select id="selectLastAdminMemberId" resultType="int">
+		SELECT MAX(id) FROM AdminMember
+	</select>
+
+	<insert id="insertAdminAuthority">
+		INSERT INTO AdminAuthority (adminId, authority)
+		VALUES (#{adminId},#{authority})	
+	</insert>
+
+	<insert id="insertAdminMember">
+		INSERT INTO AdminMember (adminMemberId, password)
+		VALUES (#{adminMemberId},#{password})
+	</insert>
+
+
+</mapper>
