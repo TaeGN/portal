@@ -3,6 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.member.StudentMapper">
+	
 	<insert id="insertStudent">
 		INSERT INTO Student (studentNumber, department, grade, studentName, id, password, firstResidentId, lastResidentId)
 		VALUES (#{studentNumber},#{department},#{grade},#{studentName},#{studentNumber},#{lastResidentId},#{firstResidentId},#{lastResidentId});

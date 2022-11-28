@@ -2,14 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:url value="/admin/board" var="boardLink"></c:url>
-<c:url value="/admin/member" var="memberLink"></c:url>
+<c:url value="/admin/list" var="listLink"></c:url>
 <c:url value="/admin/student" var="studentLink"></c:url>
 
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-		  <a class="btn btn-light" href="${memberLink }">
+		  <a class="btn btn-light" href="${listLink }">
 		    관리자 계정 관리
 		  </a>
         </li>
@@ -79,10 +79,10 @@
           <a class="nav-link disabled">Disabled</a>
         </li> -->
       </ul>
-      <form class="d-flex" role="search">
+<!--       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      </form> -->
      
       
   </div>

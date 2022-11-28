@@ -1,5 +1,7 @@
 package com.portal.controller.admin;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -42,7 +44,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("register")
-	public void member() {
+	public void register() {
 		
 	}
 	
@@ -54,5 +56,12 @@ public class AdminController {
 		
 		
 		return "redirect:/admin/list";
+	}
+	
+	@GetMapping("list")
+	public void member(Model model) {
+		List<AdminMemberDto> list = adminService.getAdminMemberList();
+		System.out.println(list);
+		model.addAttribute("adminMemberList", list);
 	}
 }

@@ -1,5 +1,7 @@
 package com.portal.mapper.admin;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.portal.domain.admin.AdminMemberDto;
@@ -14,5 +16,7 @@ public interface AdminMapper {
 	void selectLastAdminMember();
 
 	int selectLastAdminMemberId();
+
+	List<AdminMemberDto> selectAdminMemberAll();
 
 }
