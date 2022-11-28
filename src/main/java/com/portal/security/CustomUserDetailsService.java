@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
+		
 		StudentDto student = studentMapper.selectStudentById(username);
 		
 		if (student == null) {
