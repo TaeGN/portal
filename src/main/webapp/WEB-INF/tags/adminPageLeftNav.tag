@@ -1,6 +1,7 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<c:url value="/admin/board" var="boardLink"></c:url>
 <c:url value="/admin/member" var="memberLink"></c:url>
 <c:url value="/admin/student" var="studentLink"></c:url>
 
@@ -15,6 +16,14 @@
         
         <hr>
         
+        <li class="nav-item">
+		  <a class="btn btn-light" href="${boardLink }">
+		    대시보드
+		  </a>
+        </li>
+        
+        <hr>
+              
         <li class="nav-item">
 		  <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#memberCollapse" aria-expanded="false" aria-controls="memberCollapse">
 		    회원
