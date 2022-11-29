@@ -9,5 +9,5 @@ public class AdminMemberDto {
 	private int id;
 	private String adminMemberId;
 	private String password;
-	private List<String> authority;
+	private List<String> authorityList;
 }
