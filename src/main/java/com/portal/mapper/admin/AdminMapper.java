@@ -13,10 +13,10 @@ public interface AdminMapper {
 
 	int insertAdminAuthority(int adminId, String authority);
 
-	void selectLastAdminMember();
-
 	int selectLastAdminMemberId();
 
 	List<AdminMemberDto> selectAdminMemberAll();
+	
+	AdminMemberDto selectAdminMemberByUserName(String username);
 
 }

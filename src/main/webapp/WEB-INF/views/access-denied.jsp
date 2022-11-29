@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,13 +11,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<my:adminPageTopNav></my:adminPageTopNav>
-
-<div class="d-flex">
-<my:adminPageLeftNav></my:adminPageLeftNav>
-<a href="/admin/register">관리자 등록하러 가기</a>
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam officia quae facere ipsam dolore consectetur sequi ducimus quia dignissimos doloremque perferendis perspiciatis atque at minus quaerat excepturi quam et laboriosam!
-</div>
+<h1>권한 없음</h1>
+<a href=""></a>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </body>
 </html>

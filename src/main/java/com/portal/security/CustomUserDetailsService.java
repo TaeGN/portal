@@ -12,7 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.portal.domain.admin.AdminMemberDto;
 import com.portal.domain.member.StudentDto;
+import com.portal.mapper.admin.AdminMapper;
 import com.portal.mapper.member.StudentMapper;
 
 @Component
@@ -22,27 +24,45 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private StudentMapper studentMapper;
 	
 	@Autowired
+	private AdminMapper adminMapper;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+		String userId = "";
+		String password = ""; 
 		
-		StudentDto student = studentMapper.selectStudentById(username);
-		
-		if (student == null) {
+		AdminMemberDto adminMember = adminMapper.selectAdminMemberByUserName(username);
+//		StudentDto student = studentMapper.selectStudentById(username);
+		System.out.println(adminMember);
+//		System.out.println(student);
+		// 관리자 로그인의 경우
+		if(adminMember != null && adminMember.getId() < 1000000000) {
+			userId = adminMember.getAdminMemberId();
+			password = adminMember.getPassword();
+			
+			if(adminMember.getAuthorityList() != null) {
+				for(String authority : adminMember.getAuthorityList()) {
+					authorityList.add(new SimpleGrantedAuthority(authority));
+				}
+			}
+//		} else if(student != null) {
+			// 학생 로그인의 경우
+	//		if(student.getAuth() != null) {
+	//			for(String auth : student.getAuth()) {
+	//				authorityList.add(new SimpleGrantedAuthority(auth));
+	//			}
+	//		}
+
+		} else {
 			return null;
 		}
-//		
-		List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-//		
-//		if(student.getAuth() != null) {
-//			for(String auth : student.getAuth()) {
-//				authorityList.add(new SimpleGrantedAuthority(auth));
-//			}
-//		}
 		// 세번째 칸 = 권한
-		// 
-		User user = new User(student.getId(), passwordEncoder.encode(student.getPassword()), authorityList);
+		User user = new User(userId, password, authorityList);
+		System.out.println(user);
 		return user;
 	}
 

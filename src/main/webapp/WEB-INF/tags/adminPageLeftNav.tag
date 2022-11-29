@@ -7,7 +7,7 @@
 
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-column">
         <li class="nav-item">
 		  <a class="btn btn-light" href="${listLink }">
 		    관리자 계정 관리
