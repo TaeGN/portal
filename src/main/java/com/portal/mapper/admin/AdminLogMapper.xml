@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.portal.mapper.admin.AdminLogMapper">
+		
+	<!-- adminLog -->
+<!-- 	<insert id="insertAdminLog">
+		INSERT INTO AdminLog (adminMemberId, log)
+		VALUES (#{adminMemberId},#{log})		
+	</insert> -->
+	
+	<select id="selectAdminLogAll" resultType="com.portal.domain.admin.AdminLogDto">
+		SELECT 
+			id,
+			menu,
+			category,
+			adminMemberId,
+			log,
+			inserted
+		FROM AdminLog
+		ORDER BY id DESC
+	</select>
+	
+	<insert id="insertAdminLog">
+		INSERT INTO AdminLog (adminMemberId, log, menu, category)
+		VALUES (#{adminMemberId},#{log},#{menu},#{category})		
+	</insert>
+	
+</mapper>

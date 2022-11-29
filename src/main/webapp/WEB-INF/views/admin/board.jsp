@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html>
@@ -16,8 +17,33 @@
 
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
-<a href="/admin/register">관리자 등록하러 가기</a>
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam officia quae facere ipsam dolore consectetur sequi ducimus quia dignissimos doloremque perferendis perspiciatis atque at minus quaerat excepturi quam et laboriosam!
+	<div class="row">
+		<div class="col">
+			<table class="table">
+				<h1>관리자 로그</h1>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>카테고리</th>
+						<th>로그</th>
+						<th>관리자명</th>
+						<th>시간</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${adminLogList }" var="adminLog">
+						<tr>
+							<td>${adminLog.id }</td>
+							<td>${adminLog.menu } - ${adminLog.category }</td>
+							<td>${adminLog.log }</td>
+							<td>${adminLog.adminMemberId }</td>
+							<td>${adminLog.inserted }</td>
+						</tr>
+					</c:forEach>				
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </body>
