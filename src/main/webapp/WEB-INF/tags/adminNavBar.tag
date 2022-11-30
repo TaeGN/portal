@@ -5,7 +5,6 @@
 <c:url value="/student/register" var="registerLink"></c:url>
 <c:url value="/student/list" var="listLink"></c:url>
 <div class="d-flex">
-	<h3>관리자 페이지</h3>
 </div>
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">

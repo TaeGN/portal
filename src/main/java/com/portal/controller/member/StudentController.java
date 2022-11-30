@@ -3,6 +3,7 @@ package com.portal.controller.member;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,23 +39,27 @@ public class StudentController {
 	}
 	
 	@GetMapping("register")
+	@PreAuthorize("hasAnyAuthority('admin','member')")
 	public void register() {
 		
 	}
 	
 	@PostMapping("register")
+	@PreAuthorize("hasAnyAuthority('admin','member')")
 	public void register(StudentDto student) {
 		int cnt = studentService.registerStudent(student);
 	}
 	
 	@GetMapping("list")
+	@PreAuthorize("hasAnyAuthority('admin','member')")
 	public void list(Model model) {
 		List<StudentDto> list= studentService.studentList();
 		model.addAttribute("studentList", list);
 	}
 	
 	@GetMapping("get")
-	public void modify(@RequestParam(name = "q") int studentNumber, Model model) {
+	@PreAuthorize("hasAnyAuthority('admin','member')")
+	public void modify(@RequestParam(name = "q") int studentNumber, Model model, String username) {
 		StudentDto student = studentService.getStudentByStudentNumber(studentNumber);
 		model.addAttribute("student", student);
 	}

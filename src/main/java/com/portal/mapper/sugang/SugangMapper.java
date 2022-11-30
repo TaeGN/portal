@@ -4,9 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.portal.domain.sugang.CourseDto;
+import com.portal.domain.course.CourseDto;
 import com.portal.domain.sugang.InfoDto;
-import com.portal.domain.sugang.SearchDto;
 
 @Mapper
 public interface SugangMapper {

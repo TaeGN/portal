@@ -3,7 +3,8 @@
 
 <c:url value="/admin/board" var="boardLink"></c:url>
 <c:url value="/admin/list" var="listLink"></c:url>
-<c:url value="/admin/student" var="studentLink"></c:url>
+<c:url value="/student/list" var="studentLink"></c:url>
+<c:url value="/course/list" var="courseLink"></c:url>
 
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
@@ -49,7 +50,7 @@
 		  </button>
         </li>
 	 	<li class="nav-item ms-4">
-	      <a id="courseCollapse" class="nav-link collapse" aria-current="page" href="#">강의관리</a>
+	      <a id="courseCollapse" class="nav-link collapse" aria-current="page" href="${courseLink }">강의관리</a>
 	    </li>
 	 	<li class="nav-item ms-4">
 	      <a id="courseCollapse" class="nav-link collapse" aria-current="page" href="#">.......</a>

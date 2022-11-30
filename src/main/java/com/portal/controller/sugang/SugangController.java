@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.portal.domain.sugang.CourseDto;
+import com.portal.domain.course.CourseDto;
 import com.portal.domain.sugang.InfoDto;
 import com.portal.domain.sugang.SearchDto;
 import com.portal.service.sugang.SugangService;
