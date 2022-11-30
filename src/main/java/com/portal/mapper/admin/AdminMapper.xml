@@ -3,9 +3,30 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.admin.AdminMapper">
+	
+	<!-- adminMember -->
+	<delete id="deleteAdminMemberById">
+		DELETE FROM AdminMember 
+		WHERE id = #{id};
+	</delete>
+
+	<delete id="deleteAdminAuthorityByAdminId">
+		DELETE FROM AdminAuthority 
+		WHERE adminId = #{id};
+	</delete>
+
+	<update id="updateAdminMember">
+		UPDATE AdminMember
+		SET
+			name = #{name},
+			adminMemberId = #{adminMemberId},
+			password = #{password}
+		WHERE
+			id = #{id}
+	</update>
 
 	<select id="selectAdminMemberByUserName" resultMap="adminMemberByUserName">
-		SELECT m.id, adminMemberId, password, authority 
+		SELECT m.id, m.name, adminMemberId, password, authority 
 		FROM AdminMember m 
 		JOIN AdminAuthority a ON m.id = a.adminId
 		WHERE adminMemberId = #{username}
@@ -13,6 +34,7 @@
 	
  	<resultMap type="com.portal.domain.admin.AdminMemberDto" id="adminMemberByUserName">
 	<id column="id" property="id"/>
+	<result column="name" property="name"/>
 	<result column="adminMemberId" property="adminMemberId"/>
 	<result column="password" property="password"/>
 	<collection property="authorityList" ofType="string">
@@ -22,13 +44,14 @@
 
 	
 	<select id="selectAdminMemberAll" resultMap="adminMemberAll">
-		SELECT m.id, adminMemberId, password, authority 
+		SELECT m.id, m.name, adminMemberId, password, authority 
 		FROM AdminMember m 
 		JOIN AdminAuthority a ON m.id = a.adminId
 	</select>
 	
  	<resultMap type="com.portal.domain.admin.AdminMemberDto" id="adminMemberAll">
 	<id column="id" property="id"/>
+	<result column="name" property="name"/>
 	<result column="adminMemberId" property="adminMemberId"/>
 	<result column="password" property="password"/>
 	<collection property="authorityList" ofType="string">
@@ -37,7 +60,7 @@
 	</resultMap> 
 
 
-	<select id="selectLastAdminMemberId" resultType="int">
+	<select id="selectLastAdminMemberById" resultType="int">
 		SELECT MAX(id) FROM AdminMember
 	</select>
 
@@ -47,8 +70,8 @@
 	</insert>
 
 	<insert id="insertAdminMember">
-		INSERT INTO AdminMember (adminMemberId, password)
-		VALUES (#{adminMemberId},#{password})
+		INSERT INTO AdminMember (id, name, adminMemberId, password)
+		VALUES (#{id}, #{name}, #{adminMemberId}, #{password})
 	</insert>
 
 

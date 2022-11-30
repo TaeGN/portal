@@ -19,10 +19,20 @@
 	<div class="row">
 		<div class="col">
 			<table class="table">
-				<h1>관리자리스트</h1>
+				<div class="d-flex">
+					<h1 class="me-auto">관리자리스트</h1>
+					<c:url value="/admin/register" var="registerLink"></c:url>
+					<a href="${registerLink }">새 관리자 등록</a>
+				</div>
+				<c:if test="${not empty message }">
+					<div class="alert alert-success">
+						${message }
+					</div>
+				</c:if>
 				<thead>
 					<tr>
 						<th>#</th>
+						<th>관리자명</th>
 						<th>아이디</th>
 						<th>비밀번호</th>
 						<th>권한</th>
@@ -31,9 +41,13 @@
 				<tbody>
 					<c:forEach items="${adminMemberList }" var="adminMember">
 						<tr>
+							<c:url value="/admin/get" var="getLink">
+								<c:param name="username" value="${adminMember.adminMemberId }"></c:param>
+							</c:url>
 							<td>${adminMember.id }</td>
+							<td><a href="${getLink }">${adminMember.name }</a></td>
 							<td>${adminMember.adminMemberId }</td>
-							<td>${adminMember.password }</td>
+							<td>*******</td>
 							<td>
 								<c:forEach items="${adminMember.authorityList }" var="authority">
 									${authority } 
@@ -45,7 +59,6 @@
 			</table>
 		</div>
 	</div>
-</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </body>

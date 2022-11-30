@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class AdminMemberDto {
 	private int id;
+	private String name;
 	private String adminMemberId;
 	private String password;
 	private List<String> authorityList;
