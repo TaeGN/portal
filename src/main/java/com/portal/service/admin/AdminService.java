@@ -58,10 +58,10 @@ public class AdminService {
 
 	public int removeAdminMemberById(int id) {
 		// 권한 테이블 삭제
-		int cnt1 = adminMapper.deleteAdminAuthorityByAdminId(id);
-		//
-		int cnt2 = adminMapper.deleteAdminMemberById(id);
-		return cnt1 * cnt2;
+		adminMapper.deleteAdminAuthorityByAdminId(id);
+		// adminMember 삭제
+		int cnt = adminMapper.deleteAdminMemberById(id);
+		return cnt;
 	}
 
 

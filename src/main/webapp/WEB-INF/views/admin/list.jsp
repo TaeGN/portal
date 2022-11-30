@@ -32,6 +32,7 @@
 				<thead>
 					<tr>
 						<th>#</th>
+						<th>관리자명</th>
 						<th>아이디</th>
 						<th>비밀번호</th>
 						<th>권한</th>
@@ -44,7 +45,8 @@
 								<c:param name="username" value="${adminMember.adminMemberId }"></c:param>
 							</c:url>
 							<td>${adminMember.id }</td>
-							<td><a href="${getLink }">${adminMember.adminMemberId }</a></td>
+							<td><a href="${getLink }">${adminMember.name }</a></td>
+							<td>${adminMember.adminMemberId }</td>
 							<td>*******</td>
 							<td>
 								<c:forEach items="${adminMember.authorityList }" var="authority">

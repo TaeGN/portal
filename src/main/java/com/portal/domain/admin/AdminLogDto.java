@@ -7,9 +7,10 @@ import lombok.Data;
 @Data
 public class AdminLogDto {
 	private int id;
-	private String adminMemberId;
+	private String adminId;
 	private String log;
 	private LocalDateTime inserted;
 	private String menu;
 	private String category;
+	private String adminName;
 }

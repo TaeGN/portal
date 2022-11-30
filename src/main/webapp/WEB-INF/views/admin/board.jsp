@@ -36,7 +36,7 @@
 							<td>${adminLog.id }</td>
 							<td>${adminLog.menu } - ${adminLog.category }</td>
 							<td>${adminLog.log }</td>
-							<td>${adminLog.adminMemberId }</td>
+							<td>${adminLog.adminId }-${adminLog.adminName }</td>
 							<td>${adminLog.inserted }</td>
 						</tr>
 					</c:forEach>				

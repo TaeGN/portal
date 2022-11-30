@@ -36,7 +36,14 @@
 						
 					</h1>
 				</div>
-			
+				
+				<div class="mb-3">
+					<label class="form-label">
+						닉네임 
+					</label>
+					<input class="form-control" type="text" value="${adminMember.name }" readonly>
+				</div>
+				
 				<div class="mb-3">
 					<label class="form-label">
 						아이디 

@@ -12,19 +12,26 @@
 	
 	<select id="selectAdminLogAll" resultType="com.portal.domain.admin.AdminLogDto">
 		SELECT 
-			id,
+			l.id,
 			menu,
 			category,
-			adminMemberId,
+			l.adminId,
+			m.name adminName,
 			log,
 			inserted
-		FROM AdminLog
-		ORDER BY id DESC
+		FROM AdminLog l
+		JOIN AdminMember m ON l.adminId = m.id
+		ORDER BY l.id DESC
 	</select>
 	
-	<insert id="insertAdminLog">
+	<insert id="insertAdminLogById">
+		INSERT INTO AdminLog (adminId, log, menu, category)
+		VALUES (#{adminId},#{log},#{menu},#{category})		
+	</insert>
+	
+<!-- 	<insert id="insertAdminLog">
 		INSERT INTO AdminLog (adminMemberId, log, menu, category)
 		VALUES (#{adminMemberId},#{log},#{menu},#{category})		
-	</insert>
+	</insert> -->
 	
 </mapper>

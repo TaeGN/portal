@@ -26,6 +26,12 @@
 				<form id="modifyForm" action="" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="id" value="${adminMember.id }">
 					<!-- .mb-3*4>label.form-label+input.form-control -->
+					
+					<div class="mb-3">
+						<label for="" class="form-label">닉네임</label>
+						<input type="text" name="name" class="form-control" value="${adminMember.name }">
+					</div>
+					
 					<div class="mb-3">
 						<label for="" class="form-label">아이디</label>
 						<input type="text" name="adminMemberId" class="form-control" value="${adminMember.adminMemberId }">

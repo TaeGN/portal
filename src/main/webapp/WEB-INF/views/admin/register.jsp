@@ -23,6 +23,11 @@
 				</div>
 				<form id="registerForm1" action="" method="post" enctype="multipart/form-data">
 					<div class="mb-3">
+						<label for="" class="form-label">닉네임</label>
+						<input required="required" type="text" class="form-control" name="name">
+					</div>
+					
+					<div class="mb-3">
 						<label for="" class="form-label">아이디</label>
 						<input required="required" type="text" class="form-control" name="adminMemberId">
 					</div>

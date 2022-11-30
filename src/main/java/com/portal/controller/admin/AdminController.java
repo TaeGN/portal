@@ -59,12 +59,18 @@ public class AdminController {
 	@PreAuthorize("hasAuthority('admin')")
 	public String remove(int id, RedirectAttributes rttr) {
 		int cnt = adminService.removeAdminMemberById(id);
+		
+		String messageLog = "";
 		if(cnt == 1) {
-			rttr.addFlashAttribute("message", "관리자 번호 " + id + " 정보 삭제 완료");
+			messageLog = "관리자 번호 " + id + " 정보 삭제 완료";
+			rttr.addFlashAttribute("message", messageLog);
 			
 		} else {
-			rttr.addFlashAttribute("message", "관리자 번호 " + id + " 정보 삭제 실패");
+			messageLog = "관리자 번호 " + id + " 정보 삭제 실패";
+			rttr.addFlashAttribute("message", messageLog);
 		}
+		
+		adminLogService.registerAdminLogById(id, messageLog, "remove");
 		return "redirect:/admin/list";
 	}
 	
@@ -94,7 +100,7 @@ public class AdminController {
 			rttr.addFlashAttribute("message", messageLog);
 		}
 		
-		adminLogService.registerAdminLog(adminMember.getAdminMemberId(),messageLog);
+		adminLogService.registerAdminLogById(adminMember.getId(), messageLog, "modify");
 		return "redirect:/admin/list";
 	}
 	
@@ -133,7 +139,7 @@ public class AdminController {
 			rttr.addFlashAttribute("message", messageLog);
 		}
 		// adminLog 등록
-		adminLogService.registerAdminLog(adminMember.getAdminMemberId(),messageLog);
+		adminLogService.registerAdminLogById(adminMember.getId(), messageLog, "register");
 		
 		return "redirect:/admin/list";
 	}
