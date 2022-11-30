@@ -57,7 +57,7 @@ public class AdminController {
 	
 	@PostMapping("remove")
 	@PreAuthorize("hasAuthority('admin')")
-	public String remove(int id, RedirectAttributes rttr) {
+	public String remove(int id, RedirectAttributes rttr, Authentication authentication) {
 		int cnt = adminService.removeAdminMemberById(id);
 		
 		String messageLog = "";
@@ -69,8 +69,8 @@ public class AdminController {
 			messageLog = "관리자 번호 " + id + " 정보 삭제 실패";
 			rttr.addFlashAttribute("message", messageLog);
 		}
-		
-		adminLogService.registerAdminLogById(id, messageLog, "remove");
+		AdminMemberDto adminMember = adminMapper.selectAdminMemberByUserName(authentication.getName());
+		adminLogService.registerAdminLogById(adminMember.getId(), messageLog, "remove");
 		return "redirect:/admin/list";
 	}
 	
@@ -87,7 +87,8 @@ public class AdminController {
 	@PreAuthorize("hasAuthority('admin') or (authentication.name == #username)")
 	public String modify(AdminMemberDto adminMember,
 			Model model, 
-			RedirectAttributes rttr) {
+			RedirectAttributes rttr,
+			Authentication authentication) {
 		int cnt = adminService.modifyAdminMember(adminMember);
 		
 		String messageLog = "";
@@ -99,8 +100,8 @@ public class AdminController {
 			messageLog = "관리자 번호 " + adminMember.getId() + " 정보 수정 실패";
 			rttr.addFlashAttribute("message", messageLog);
 		}
-		
-		adminLogService.registerAdminLogById(adminMember.getId(), messageLog, "modify");
+		AdminMemberDto admin = adminMapper.selectAdminMemberByUserName(authentication.getName());
+		adminLogService.registerAdminLogById(admin.getId(), messageLog, "modify");
 		return "redirect:/admin/list";
 	}
 	
@@ -124,7 +125,8 @@ public class AdminController {
 	@PostMapping("register")
 	@PreAuthorize("hasAuthority('admin')")
 	public String method(AdminMemberDto adminMember, 
-			RedirectAttributes rttr) {
+			RedirectAttributes rttr,
+			Authentication authentication) {
 		int id = adminMapper.selectLastAdminMemberById();
 		adminMember.setId(id + 1);
 		int cnt = adminService.registerAdminMember(adminMember);
@@ -139,7 +141,8 @@ public class AdminController {
 			rttr.addFlashAttribute("message", messageLog);
 		}
 		// adminLog 등록
-		adminLogService.registerAdminLogById(adminMember.getId(), messageLog, "register");
+		AdminMemberDto admin = adminMapper.selectAdminMemberByUserName(authentication.getName());
+		adminLogService.registerAdminLogById(admin.getId(), messageLog, "register");
 		
 		return "redirect:/admin/list";
 	}

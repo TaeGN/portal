@@ -24,7 +24,7 @@
 			
 				<div class="d-flex">
 					<h1 class="me-auto">
-						관리자 ${adminMember.adminMemberId }
+						관리자 ${adminMember.id }. ${adminMember.name }
 						 
 						<c:url value="/admin/modify" var="modifyLink">
 							<c:param name="username" value="${adminMember.adminMemberId }"></c:param>
