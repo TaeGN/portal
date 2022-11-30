@@ -88,9 +88,9 @@ public class AdminController {
 	public String modify(AdminMemberDto adminMember,
 			Model model, 
 			RedirectAttributes rttr,
-			Authentication authentication) {
+			Authentication authentication,
+			String username) {
 		int cnt = adminService.modifyAdminMember(adminMember);
-		
 		String messageLog = "";
 		if(cnt == 1) {
 			messageLog = "관리자 번호 " + adminMember.getId() + " 정보 수정 완료";

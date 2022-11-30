@@ -16,41 +16,55 @@
 
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
-<div id="sugangListId1" class="container-md">
-<my:adminNavBar></my:adminNavBar>
-<h1>학생리스트</h1>
 	<div class="row">
 		<div class="col">
 			<table class="table">
+				<div class="d-flex">
+					<h1 class="me-auto">강의리스트</h1>
+					<c:url value="/course/register" var="registerLink"></c:url>
+					<a href="${registerLink }">새 강의 등록</a>
+				</div>
+				<c:if test="${not empty message }">
+					<div class="alert alert-success">
+						${message }
+					</div>
+				</c:if>
 				<thead>
 					<tr>
-						<th>학번</th>
-						<th>학부</th>
 						<th>학년</th>
-						<th>이름</th>
-						<th>아이디</th>
-						<th>패스워드</th>
-						<th>주민등록번호</th>
+						<th>이수구분</th>
+						<th>수업번호</th>
+						<th>학수번호</th>
+						<th>교과목명</th>
+						<th>학점</th>
+						<th>수업</th>
+						<th>강의</th>
+						<th>수강정원</th>
+						<th>관장학과</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${studentList }" var="student">
+					<c:forEach items="${courseList }" var="course">
 						<tr>
-							<c:url value="/student/get?q=${student.studentNumber }" var="getLink"></c:url>
-							<td><a href="${getLink }">${student.studentNumber }</a></td>
-							<td>${student.department }</td>
-							<td>${student.grade }</td>
-							<td>${student.studentName }</td>
-							<td>${student.id }</td>
-							<td>${student.password }</td>
-							<td>${student.firstResidentId }-${student.lastResidentId }</td>
+							<c:url value="/course/get" var="getLink">
+								<c:param name="classCode" value="${course.classCode }"></c:param>
+							</c:url>
+							<td>${course.grade }</td>
+							<td>${course.courseInfo.courseClassification }</td>
+							<td><a href="${getLink }">${course.classCode }</a></td>
+							<td>${course.classNumber }</td>
+							<td>${course.courseInfo.courseName }</td>
+							<td>${course.courseInfo.credit }</td>
+							<td>${course.courseInfo.theory }</td>
+							<td>${course.courseInfo.practice }</td>
+							<td>${course.maxPersonnel }</td>
+							<td>${course.department.name }</td>
 						</tr>
 					</c:forEach>				
 				</tbody>
 			</table>
 		</div>
 	</div>
-</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </body>

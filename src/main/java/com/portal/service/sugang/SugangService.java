@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.portal.domain.sugang.CourseDto;
+import com.portal.domain.course.CourseDto;
 import com.portal.domain.sugang.InfoDto;
-import com.portal.domain.sugang.SearchDto;
 import com.portal.mapper.sugang.SugangMapper;
 
 @Service

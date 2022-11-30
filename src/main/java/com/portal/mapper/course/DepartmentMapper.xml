@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.portal.mapper.course.DepartmentMapper">
+
+	<select id="selectDepartmentIdByName" resultType="com.portal.domain.course.DepartmentDto">
+		SELECT
+			id,
+			name,
+			collegeId
+		FROM Department
+		WHERE name = #{departmentName}
+	</select>
+	
+	<select id="selectOrganizationById" resultType="com.portal.domain.course.OrganizationDto">
+		SELECT 
+			id,
+			name
+		FROM Organization
+		WHERE id = #{id}
+	</select>
+	
+	<select id="selectCollegeById" resultType="com.portal.domain.course.CollegeDto">
+		SELECT 
+			id,
+			name,
+			organizationId
+		FROM College
+		WHERE id = #{id}
+	</select>
+	
+
+	<select id="selectDepartmentById" resultType="com.portal.domain.course.DepartmentDto">
+		SELECT 
+			id,
+			name,
+			collegeId
+		FROM Department
+		WHERE id = #{id}
+	</select>
+
+
+
+<!-- 	<select id="selectDepartmentById" resultType="com.portal.domain.course.DepartmentDto">
+		SELECT 
+			d.id,
+		    d.name department,
+		    c.name college,
+		    o.name organization
+		FROM Department d
+		JOIN College c ON d.collegeId = c.id
+		JOIN Organization o ON c.organizationId = o.id
+		WHERE id = #{id}
+	</select> -->
+	
+	
+</mapper>

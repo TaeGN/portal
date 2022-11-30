@@ -24,7 +24,7 @@
 		FROM ClassInfo
 	</select>
 	
-	<select id="selectCourseBySearchDto" resultType="com.portal.domain.sugang.CourseDto">
+	<select id="selectCourseBySearchDto" resultType="com.portal.domain.course.CourseDto">
 		SELECT 
 			classCode,
 			classNumber,
@@ -44,7 +44,7 @@
 <!--         AND courseClassification = #{courseClassification}	 -->
 	</select>
 		
-	<select id="selectCourseAll" resultType="com.portal.domain.sugang.CourseDto">
+	<select id="selectCourseAll" resultType="com.portal.domain.course.CourseDto">
 		SELECT 
 			classCode,
 			classNumber,
