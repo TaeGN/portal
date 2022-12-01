@@ -24,7 +24,7 @@
             c.year,
             c.semester
 		FROM Course	c
-		JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN Department d ON c.departmentId = d.id
 		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
 	</select>
 	

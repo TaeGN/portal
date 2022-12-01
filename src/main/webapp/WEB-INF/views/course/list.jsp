@@ -51,8 +51,16 @@
 							</c:url>
 							<td>${course.grade }</td>
 							<td>${course.courseInfo.courseClassification }</td>
-							<td><a href="${getLink }">${course.classCode }</a></td>
-							<td>${course.classNumber }</td>
+							<td>
+								<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#classInfoModal">
+								  ${course.classCode }
+								</button>
+							</td>
+							<td>
+								<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#courseInfoModal">
+								  ${course.classNumber }
+								</button>
+							</td>
 							<td>${course.courseInfo.courseName }</td>
 							<td>${course.courseInfo.credit }</td>
 							<td>${course.courseInfo.theory }</td>
@@ -65,6 +73,82 @@
 			</table>
 		</div>
 	</div>
+</div>
+
+
+<!-- 학수번호 Modal -->
+<div class="modal fade" id="courseInfoModal" tabindex="-1" aria-labelledby="courseInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="courseInfoModalLabel">교과목 개요서</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body modal-dialog modal-dialog-scrollable">
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		<h1>...</h1>
+		
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 수업번호 Modal -->
+<div class="modal fade" id="classInfoModal" tabindex="-1" aria-labelledby="classInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="classInfoModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </body>
