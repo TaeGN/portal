@@ -5,6 +5,7 @@
 <c:url value="/admin/list" var="listLink"></c:url>
 <c:url value="/student/list" var="studentLink"></c:url>
 <c:url value="/course/list" var="courseLink"></c:url>
+<c:url value="/courseInfo/list" var="courseInfoLink"></c:url>
 
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
@@ -50,10 +51,10 @@
 		  </button>
         </li>
 	 	<li class="nav-item ms-4">
-	      <a id="courseCollapse" class="nav-link collapse" aria-current="page" href="${courseLink }">강의관리</a>
+	      <a id="courseCollapse" class="nav-link collapse" aria-current="page" href="${courseLink }">강의 관리</a>
 	    </li>
 	 	<li class="nav-item ms-4">
-	      <a id="courseCollapse" class="nav-link collapse" aria-current="page" href="#">.......</a>
+	      <a id="courseCollapse" class="nav-link collapse" aria-current="page" href="${courseInfoLink }">강의 정보 관리</a>
 	    </li>		        
  	 	<li class="nav-item ms-4">
 	      <a id="courseCollapse" class="nav-link collapse" aria-current="page" href="#">.......</a>

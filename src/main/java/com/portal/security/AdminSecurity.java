@@ -11,16 +11,8 @@ import com.portal.mapper.admin.AdminMapper;
 @Component("adminSecurity")
 public class AdminSecurity {
 	
-	public boolean checkMemberAuthority(Authentication authentication) {
-		return authentication.getAuthorities().contains(new SimpleGrantedAuthority("member"));
-	}
-	
-	public boolean checkCourseAuthority(Authentication authentication) {
-		return authentication.getAuthorities().contains(new SimpleGrantedAuthority("course"));
-	}
-	
 	public boolean checkAdminAuthority(Authentication authentication) {
-		return authentication.getAuthorities().contains(new SimpleGrantedAuthority("admin"));
+		return authentication.getAuthorities().size() != 0;
 	}
 	
 }

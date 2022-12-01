@@ -1,10 +1,13 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <c:url value="/sugang/info" var="infoLink"></c:url>
 <c:url value="/sugang/list" var="listLink"></c:url>
 <c:url value="/sugang/login" var="loginLink"></c:url>
+
+<sec:authorize access="isAuthenticated()" var="loggedIn" />
+
 <div class="d-flex">
 	<h3>수강신청 페이지</h3>
 	<a href="${loginLink }">로그인 하러 가기</a>
@@ -26,15 +29,17 @@
         <li class="nav-item">
           <a class="nav-link" href="${infoLink }">수강안내</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">수강신청</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">희망수업</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">신청내역</a>
-        </li>
+        <c:if test="${loggedIn }">
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">수강신청</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">희망수업</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">신청내역</a>
+	        </li>
+        </c:if>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown

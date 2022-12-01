@@ -16,4 +16,6 @@ public interface AdminLogMapper {
 
 	int insertAdminLogById(int adminId, String log, String menu, String category);
 
+	int insertCourseLogById(int adminId, String log, String menu, String category);
+
 }

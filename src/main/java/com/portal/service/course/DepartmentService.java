@@ -1,5 +1,7 @@
 package com.portal.service.course;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,11 @@ public class DepartmentService {
 		DepartmentDto department = departmentMapper.selectDepartmentIdByName(departmentName);
 		return department.getId();
 		
+	}
+
+	public List<DepartmentDto> getDepartmentAll() {
+		// TODO Auto-generated method stub
+		return departmentMapper.selectDepartmentAll();
 	}
 
 }

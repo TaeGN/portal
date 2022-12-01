@@ -20,9 +20,9 @@
 		<div class="col">
 			<table class="table">
 				<div class="d-flex">
-					<h1 class="me-auto">강의리스트</h1>
-					<c:url value="/course/register" var="registerLink"></c:url>
-					<a href="${registerLink }">새 강의 등록</a>
+					<h1 class="me-auto">강의 정보 리스트</h1>
+					<c:url value="/courseInfo/register" var="registerLink"></c:url>
+					<a href="${registerLink }">새 강의 정보 등록</a>
 				</div>
 				<c:if test="${not empty message }">
 					<div class="alert alert-success">
@@ -31,26 +31,30 @@
 				</c:if>
 				<thead>
 					<tr>
-						<th>학년</th>
-						<th>이수구분</th>
-						<th>수업번호</th>
 						<th>학수번호</th>
 						<th>교과목명</th>
-						<th>관장학과</th>
+						<th>과목구분</th>
+						<!-- <th>학점 / 강의 / 실습</th> -->
+						<th>학점</th>
+						<th>강의</th>
+						<th>실습</th>
+						<th>수업 개요</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${courseList }" var="course">
+					<c:forEach items="${courseInfoList }" var="courseInfo">
 						<tr>
-							<c:url value="/course/get" var="getLink">
-								<c:param name="classCode" value="${course.classCode }"></c:param>
+							<c:url value="/courseInfo/get" var="getLink">
+								<c:param name="classNumber" value="${courseInfo.classNumber }"></c:param>
 							</c:url>
-							<td>${course.grade }</td>
-							<td>${course.courseClassification }</td>
-							<td><a href="${getLink }">${course.classCode }</a></td>
-							<td>${course.classNumber }</td>
-							<td>${course.courseName }</td>
-							<td>${course.department }</td>
+							<td><a href="${getLink }">${courseInfo.classNumber }</a></td>
+							<td>${courseInfo.courseName }</td>
+							<td>${courseInfo.courseClassification }</td>
+							<%-- <td>${courseInfo.credit } / ${courseInfo.theory } / ${courseInfo.practice }</td> --%>
+							<td>${courseInfo.credit }</td>
+							<td>${courseInfo.theory }</td>
+							<td>${courseInfo.practice }</td>
+							<td>${courseInfo.summary }</td>
 						</tr>
 					</c:forEach>				
 				</tbody>

@@ -9,6 +9,23 @@
 		VALUES (#{classNumber},#{departmentId}, #{grade},#{year},#{semester},#{maxPersonnel})
 	</insert>
 	
+	<select id="selectLastCourse" resultType="com.portal.domain.course.CourseDto">
+		SELECT 
+			classCode,
+			classNumber,
+			departmentId,
+			grade,
+			year,
+			semester,
+			maxPersonnel,
+			startTimeId,
+			endTimeId,
+			classroom
+		FROM Course
+		ORDER BY classCode DESC
+        LIMIT 0,1
+	</select>
+	
 	<select id="selectCourseAll" resultMap="selectCourseAllMap">
 		SELECT 
             c.grade,
@@ -24,7 +41,7 @@
             c.year,
             c.semester
 		FROM Course	c
-		JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN Department d ON c.departmentId = d.id
 		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
 	</select>
 	

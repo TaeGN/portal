@@ -13,4 +13,6 @@ public interface CourseMapper {
 
 	int insertCourse(CourseDto course);
 
+	CourseDto selectLastCourse();
+
 }

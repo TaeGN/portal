@@ -24,32 +24,93 @@
 		FROM ClassInfo
 	</select>
 	
-	<select id="selectCourseBySearchDto" resultType="com.portal.domain.course.CourseDto">
+	<select id="selectCourseBySearchDto" resultMap="selectCourseBySearchDtoMap">
 		SELECT 
-			classCode,
-			classNumber,
-			courseName,
-            organization,
-            year,
-            semester,
-            grade,
-            courseClassification
-		FROM Course
-        WHERE organization = #{organization}
-		AND year = #{year}
+            c.grade,
+            i.courseClassification,
+			c.classCode,
+			c.classNumber,
+			i.courseName,
+			i.credit,
+			i.theory,
+			i.practice,
+			c.maxPersonnel,
+            d.name,
+            c.year,
+            c.semester
+		FROM Course	c
+		LEFT JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
+<!--         WHERE department.organization.name = #{organization} -->
+		WHERE year = #{year}
         AND semester = #{semester}
-        <if test="grade != null">
+        <if test="grade != 10">
         	AND grade = #{grade}
         </if>
 <!--         AND courseClassification = #{courseClassification}	 -->
 	</select>
+	
+		<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseBySearchDtoMap">
+		<id column="classCode" property="classCode"></id>
+		<result column="grade" property="grade"/>
+		<result column="classNumber" property="classNumber"/>
+		<result column="maxPersonnel" property="maxPersonnel"/>
+		<result column="year" property="year"/>
+		<result column="semester" property="semester"/>
 		
-	<select id="selectCourseAll" resultType="com.portal.domain.course.CourseDto">
-		SELECT 
-			classCode,
-			classNumber,
-			courseName
-		FROM Course
-	</select>
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<result column="name" property="name"/>
+		</association>
+		
+		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
+			<result column="courseClassification" property="courseClassification"/>
+			<result column="courseName" property="courseName"/>
+			<result column="credit" property="credit"/>
+			<result column="theory" property="theory"/>
+			<result column="practice" property="practice"/>
+		</association>
+	</resultMap>
 
+
+
+	<select id="selectCourseAll" resultMap="selectCourseAllMap">
+		SELECT 
+            c.grade,
+            i.courseClassification,
+			c.classCode,
+			c.classNumber,
+			i.courseName,
+			i.credit,
+			i.theory,
+			i.practice,
+			c.maxPersonnel,
+            d.name,
+            c.year,
+            c.semester
+		FROM Course	c
+		LEFT JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
+	</select>
+	
+	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseAllMap">
+		<id column="classCode" property="classCode"></id>
+		<result column="grade" property="grade"/>
+		<result column="classNumber" property="classNumber"/>
+		<result column="maxPersonnel" property="maxPersonnel"/>
+		<result column="year" property="year"/>
+		<result column="semester" property="semester"/>
+		
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<result column="name" property="name"/>
+		</association>
+		
+		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
+			<result column="courseClassification" property="courseClassification"/>
+			<result column="courseName" property="courseName"/>
+			<result column="credit" property="credit"/>
+			<result column="theory" property="theory"/>
+			<result column="practice" property="practice"/>
+		</association>
+	</resultMap>	
+	
 </mapper>
