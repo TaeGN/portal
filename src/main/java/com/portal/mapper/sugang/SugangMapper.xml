@@ -42,9 +42,9 @@
 		LEFT JOIN Department d ON c.departmentId = d.id
 		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
 <!--         WHERE department.organization.name = #{organization} -->
-		AND year = #{year}
+		WHERE year = #{year}
         AND semester = #{semester}
-        <if test="grade != null">
+        <if test="grade != 10">
         	AND grade = #{grade}
         </if>
 <!--         AND courseClassification = #{courseClassification}	 -->

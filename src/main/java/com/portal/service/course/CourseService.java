@@ -25,12 +25,17 @@ public class CourseService {
 		return courseMapper.selectCourseAll();
 	}
 
-	public int registerCourse(CourseDto course, String departmentName) {
-		int departmentId = departmentService.getDepartmentIdByName(departmentName);
-		course.setDepartmentId(departmentId);
+	public int registerCourse(CourseDto course) {
+//		int departmentId = departmentService.getDepartmentIdByName(departmentName);
+//		course.setDepartmentId(departmentId);
 		
 //		DepartmentDto department = departmentService.getDepartmentById(departmentId);
 //		course.setDepartment(department);
 		return courseMapper.insertCourse(course);
+	}
+
+	public CourseDto getLastCourse() {
+		// TODO Auto-generated method stub
+		return courseMapper.selectLastCourse();
 	}
 }

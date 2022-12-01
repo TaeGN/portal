@@ -38,6 +38,12 @@ public class AdminLogService {
 		return adminLogMapper.selectAdminLogAll();
 	}
 
+
+	public int registerCourseLogById(int adminId, String log, String category) {
+		String menu = "student";
+		return adminLogMapper.insertCourseLogById(adminId, log, menu, category);
+	}
+
 	
 	
 }

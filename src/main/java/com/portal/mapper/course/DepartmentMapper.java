@@ -1,5 +1,7 @@
 package com.portal.mapper.course;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.portal.domain.course.CollegeDto;
@@ -16,6 +18,8 @@ public interface DepartmentMapper {
 	OrganizationDto selectOrganizationById(int id);
 
 	DepartmentDto selectDepartmentIdByName(String departmentName);
+
+	List<DepartmentDto> selectDepartmentAll();
 	
 	
 }

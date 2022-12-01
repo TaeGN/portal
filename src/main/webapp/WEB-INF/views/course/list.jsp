@@ -52,12 +52,12 @@
 							<td>${course.grade }</td>
 							<td>${course.courseInfo.courseClassification }</td>
 							<td>
-								<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#classInfoModal">
+								<button id="classCodeButtonId1" type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#classInfoModal">
 								  ${course.classCode }
 								</button>
 							</td>
 							<td>
-								<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#courseInfoModal">
+								<button id="classNumberButtonId1" type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#courseInfoModal">
 								  ${course.classNumber }
 								</button>
 							</td>
@@ -84,42 +84,24 @@
         <h1 class="modal-title fs-5" id="courseInfoModalLabel">교과목 개요서</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body modal-dialog modal-dialog-scrollable">
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
+      <div id="classNumberModalBodyId1" class="modal-body modal-dialog modal-dialog-scrollable">
+		<div class="container-md">
+			<div class="row">
+				<div class="col">
+					<div class="table">
+						<thead>
+							<tr>
+								<th>과목</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</div>
 		
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
-		<h1>...</h1>
+				</div>
+			</div>
+		</div>
 		
 
       </div>
@@ -151,5 +133,23 @@
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script type="text/javascript">
+const ctx = "${pageContext.request.contextPath}";
+
+/* const classNumberButton1 = document.querySelector("#classNumberButtonId1");
+classNumberButton1.addEventListener("click", function() {
+	const classNumber = classNumberButton1.value;
+	fetch(ctx + "/courseInfo/getInfo", {
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(classNumber)
+	})
+	.then(res => res.json())
+	.then(data => {
+		
+	})
+}); */
+</script>
 </body>
 </html>

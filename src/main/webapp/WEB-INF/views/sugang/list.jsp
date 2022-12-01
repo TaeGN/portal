@@ -39,7 +39,7 @@
 		  <option value="1학기">1학기</option>
 		  <option value="여름학기">여름학기</option>
 		  <option value="2학기">2학기</option>
-		  <option selected="selected">겨울학기</option>
+		  <option value="겨울학기" selected="selected">겨울학기</option>
 		</select>
 	</div>
 		학년

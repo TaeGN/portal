@@ -50,6 +50,12 @@
 					    course
 					  </label>
 					</div>
+					<div class="form-check">
+					  <input class="form-check-input" type="checkbox" value="courseInfo" id="checkbox2" name="authorityList">
+					  <label class="form-check-label" for="flexCheckDefault3">
+					    courseInfo
+					  </label>
+					</div>
 					<input id="submitButton1" class="btn btn-primary" type="submit" value="등록">
 				</form>
 			</div>

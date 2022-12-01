@@ -34,27 +34,34 @@
 					
 					<div class="mb-3">
 						<label for="" class="form-label">과목구분</label>
-						<input required="required" type="text" class="form-control" name="courseClassification">
+						<select name="courseClassification" class="form-select" aria-label="Default select example">
+							<option value="전공기초">전공기초</option>
+							<option value="전공심화">전공심화</option>
+							<option value="전공핵심">전공핵심</option>
+							<option value="핵심교양">핵심교양</option>
+							<option value="일반교양">일반교양</option>
+							<option value="교양필수">교양필수</option>
+						</select>
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">학점</label>
-						<input required="required" type="text" class="form-control" name="credit">
+						<input required="required" type="number" class="form-control" name="credit">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">강의</label>
-						<input required="required" type="text" class="form-control" name="theory">
+						<input required="required" type="number" class="form-control" name="theory">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">실습</label>
-						<input required="required" type="text" class="form-control" name="practice">
+						<input required="required" type="number" class="form-control" name="practice">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">수업개요</label>
-						<textarea required="required" rows="5" class="form-control" name="summary"></textarea>
+						<textarea required="required" rows="5" class="form-control" name="summary">강의 열심히 들으세요.</textarea>
 					</div>
 					
 <!-- 					<label for="" class="form-label">교과목명</label>

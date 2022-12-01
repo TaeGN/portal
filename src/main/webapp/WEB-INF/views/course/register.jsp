@@ -24,46 +24,45 @@
 				<form id="registerForm1" action="" method="post" enctype="multipart/form-data">
 					<div class="mb-3">
 						<label for="" class="form-label">학년</label>
-						<input required="required" type="number" class="form-control" name="grade">
+						<input required="required" type="number" class="form-control" name="grade" value="1">
 					</div>
 					
 					<div class="mb-3">
-						<label for="" class="form-label">학수번호</label>
-						<input required="required" type="text" class="form-control" name="classNumber">
+						<label for="" class="form-label">학수번호 - 교과목명</label>
+						<select name="classNumber" class="form-select" aria-label="Default select example">
+							<c:forEach items="${courseInfoList }" var="courseInfo">
+								<option value="${courseInfo.classNumber }">${courseInfo.classNumber } - ${courseInfo.courseName }</option>
+							</c:forEach>
+						</select>
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">수강정원</label>
-						<input required="required" type="text" class="form-control" name="maxPersonnel">
+						<input required="required" type="number" class="form-control" name="maxPersonnel" value="40">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">관장학과</label>
-						<input required="required" type="text" class="form-control" name="departmentName">
+						<select name="departmentId" class="form-select" aria-label="Default select example">
+							<c:forEach items="${departmentList }" var="department">
+								<option value="${department.id }">${department.name }</option>
+							</c:forEach>
+						</select>
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">년도</label>
-						<input required="required" type="number" class="form-control" name="year">
+						<input required="required" type="number" class="form-control" name="year" value="2022">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">학기</label>
-						<input required="required" type="text" class="form-control" name="semester">
-					</div>
-					
-<!-- 					<label for="" class="form-label">교과목명</label>
-					<div class="form-check">
-					  <input class="form-check-input" type="checkbox" value="member" id="checkbox1" name="authorityList">
-					  <label class="form-check-label" for="flexCheckDefault1">
-					    member
-					  </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="checkbox" value="course" id="checkbox2" name="authorityList">
-					  <label class="form-check-label" for="flexCheckDefault2">
-					    course
-					  </label> -->
+						<select name="semester" class="form-select" aria-label="Default select example">
+						  <option value="1학기">1학기</option>
+						  <option value="여름학기">여름학기</option>
+						  <option value="2학기">2학기</option>
+						  <option value="겨울학기" selected>겨울학기</option>
+						</select>
 					</div>
 					<input id="submitButton1" class="btn btn-primary" type="submit" value="등록">
 				</form>
