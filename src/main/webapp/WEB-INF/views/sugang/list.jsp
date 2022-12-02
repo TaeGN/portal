@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<my:navBar></my:navBar>
+<my:sugangNavBar></my:sugangNavBar>
 <form action="" method="get" >
 <div class="d-flex">
 		조직
@@ -45,12 +45,13 @@
 		학년
 	<div class="me-3">
 		<select name="grade" id="gradeId1" class="form-select" aria-label="Default select example">
-		  <option selected value="10">전체</option>
+		  <option selected value="0">전체</option>
 		  <option value="1">1</option>
 		  <option value="2">2</option>
 		  <option value="3">3</option>
 		  <option value="4">4</option>
 		  <option value="5">5</option>
+		  <option >전학년</option>
 		</select>
 	</div>
 	
@@ -135,9 +136,11 @@
 						<th>학수번호</th>
 						<th>교과목명</th>
 						<th>학점</th>
-						<th>수업</th>
 						<th>강의</th>
+						<th>실습</th>
 						<th>수강정원</th>
+						<th>수업시간</th>
+						<th>강의실</th>
 						<th>관장학과</th>
 					</tr>
 				</thead>
@@ -156,6 +159,8 @@
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
 							<td>${course.maxPersonnel }</td>
+							<td>${course.startTime } - ${course.endTime }</td>
+							<td>${course.classroom }</td>
 							<td>${course.department.name }</td>
 						</tr>
 					</c:forEach>				
