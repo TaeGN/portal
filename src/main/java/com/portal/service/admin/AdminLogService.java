@@ -40,7 +40,7 @@ public class AdminLogService {
 
 
 	public int registerCourseLogById(int adminId, String log, String category) {
-		String menu = "student";
+		String menu = "course";
 		return adminLogMapper.insertCourseLogById(adminId, log, menu, category);
 	}
 

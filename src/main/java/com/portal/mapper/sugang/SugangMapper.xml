@@ -37,14 +37,17 @@
 			c.maxPersonnel,
             d.name,
             c.year,
-            c.semester
+            c.semester,
+            (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
+			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
+			c.classroom
 		FROM Course	c
 		LEFT JOIN Department d ON c.departmentId = d.id
 		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
 <!--         WHERE department.organization.name = #{organization} -->
 		WHERE year = #{year}
         AND semester = #{semester}
-        <if test="grade != 10">
+        <if test="grade != 0">
         	AND grade = #{grade}
         </if>
 <!--         AND courseClassification = #{courseClassification}	 -->
@@ -57,6 +60,9 @@
 		<result column="maxPersonnel" property="maxPersonnel"/>
 		<result column="year" property="year"/>
 		<result column="semester" property="semester"/>
+		<result column="startTime" property="startTime"/>
+		<result column="endTime" property="endTime"/>
+		<result column="classroom" property="classroom"/>
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
 			<result column="name" property="name"/>
@@ -86,7 +92,10 @@
 			c.maxPersonnel,
             d.name,
             c.year,
-            c.semester
+            c.semester,
+            (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
+			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
+			c.classroom
 		FROM Course	c
 		LEFT JOIN Department d ON c.departmentId = d.id
 		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
@@ -99,6 +108,9 @@
 		<result column="maxPersonnel" property="maxPersonnel"/>
 		<result column="year" property="year"/>
 		<result column="semester" property="semester"/>
+		<result column="startTime" property="startTime"/>
+		<result column="endTime" property="endTime"/>
+		<result column="classroom" property="classroom"/>
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
 			<result column="name" property="name"/>

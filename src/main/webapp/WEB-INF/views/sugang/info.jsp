@@ -19,7 +19,7 @@
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-	<my:navBar></my:navBar>
+	<my:sugangNavBar></my:sugangNavBar>
 	<div class="container-md">
 		<div class="row">
 			<div class="col">

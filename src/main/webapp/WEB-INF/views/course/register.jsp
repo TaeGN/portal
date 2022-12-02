@@ -24,7 +24,14 @@
 				<form id="registerForm1" action="" method="post" enctype="multipart/form-data">
 					<div class="mb-3">
 						<label for="" class="form-label">학년</label>
-						<input required="required" type="number" class="form-control" name="grade" value="1">
+						<select name="grade" class="form-select" aria-label="Default select example">
+							<option value="1학년" selected="selected">1</option>
+							<option value="2학년">2</option>
+							<option value="3학년">3</option>
+							<option value="4학년">4</option>
+							<option value="5학년">5</option>
+							<option value="전학년">전학년</option>
+						</select>
 					</div>
 					
 					<div class="mb-3">
@@ -39,6 +46,38 @@
 					<div class="mb-3">
 						<label for="" class="form-label">수강정원</label>
 						<input required="required" type="number" class="form-control" name="maxPersonnel" value="40">
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">수업시간</label>
+						<div class="d-flex">
+							<select name="startTimeId" class="form-select" aria-label="Default select example">
+								<c:forEach items="${courseTimeList }" var="courseTime">
+									<option value="${courseTime.id }">${courseTime.time }</option>
+								</c:forEach>
+							</select>
+							<select name="endTimeId" class="form-select" aria-label="Default select example">
+								<c:forEach items="${courseTimeList }" var="courseTime">
+									<option value="${courseTime.id }">${courseTime.time }</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">강의실</label>
+						<div class="d-flex">
+							<select id="selectBuildingId1" name="building" class="form-select" aria-label="Default select example" >
+								<c:forEach items="${buildingList }" var="building">
+									<option value="${building.campus }:${building.id }">${building.campus } ${building.name }</option>
+								</c:forEach>
+							</select>
+							<select id="selectRoomId1" name="room" class="form-select" aria-label="Default select example">
+								<c:forEach items="${roomListByFirstBuilding }" var="room">
+									<option value="${room.room }${room.classification }">${room.room }${room.classification }</option>
+								</c:forEach>
+							</select>
+						</div>
 					</div>
 					
 					<div class="mb-3">
@@ -73,7 +112,35 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
 const ctx = "${pageContext.request.contextPath}";
+
+// 강의실
+const selectBuilding1 = document.querySelector("#selectBuildingId1");
+selectBuilding1.addEventListener("change", function selectRoomByBuilding() {
+	const selectRoomId1 = document.querySelector("#selectRoomId1"); 
+	selectRoomId1.innerHTML = "";
 	
+	const building = document.querySelector("#selectBuildingId1").value
+	const data = {building};
+	fetch(`\${ctx}/course/getClassroom`, {
+		method : "post",
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(data)
+	})
+	.then(res => res.json())
+	.then(list => {
+		
+		for(const item of list) {
+			const room = `<option value="\${item.id }">\${item.room }\${item.classification }</option>`	
+			selectRoomId1.insertAdjacentHTML("beforeend", room);
+		}
+	});
+});
+
+
+
+
 </script>
 </body>
 </html>

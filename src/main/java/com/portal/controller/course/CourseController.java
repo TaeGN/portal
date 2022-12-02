@@ -1,6 +1,8 @@
 package com.portal.controller.course;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,14 +11,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.portal.domain.admin.AdminMemberDto;
+import com.portal.domain.classroom.BuildingDto;
+import com.portal.domain.classroom.ClassroomDto;
+import com.portal.domain.classroom.RoomDto;
 import com.portal.domain.course.CourseDto;
 import com.portal.domain.course.CourseInfoDto;
+import com.portal.domain.course.CourseTimeDto;
 import com.portal.domain.course.DepartmentDto;
 import com.portal.mapper.admin.AdminMapper;
 import com.portal.service.admin.AdminLogService;
+import com.portal.service.course.ClassroomService;
 import com.portal.service.course.CourseInfoService;
 import com.portal.service.course.CourseService;
 import com.portal.service.course.DepartmentService;
@@ -33,6 +42,9 @@ public class CourseController {
 	private DepartmentService departmentService;
 	
 	@Autowired
+	private ClassroomService classroomService;
+	
+	@Autowired
 	private CourseInfoService courseInfoService;
 	
 	@Autowired
@@ -40,6 +52,21 @@ public class CourseController {
 	
 	@Autowired
 	private AdminMapper adminMapper;
+	
+	@PostMapping("getClassroom")
+	@ResponseBody
+	@PreAuthorize("hasAnyAuthority('admin','course')")
+	public List<RoomDto> getRooms(@RequestBody Map<String, String> req) {
+//		Map<String, Object> map = new HashMap<>();
+		String[] building = req.get("building").split(":");
+		String campus = building[0];
+		int buildingId = Integer.parseInt(building[1]);
+		
+		System.out.println(building);
+		List<RoomDto> roomList = classroomService.getClassroomByBuildingId(buildingId, campus);
+		System.out.println(roomList);
+		return roomList;
+	}
 	
 	@GetMapping("list")
 	@PreAuthorize("@adminSecurity.checkAdminAuthority(authentication)")
@@ -52,9 +79,19 @@ public class CourseController {
 	@GetMapping("register")
 	@PreAuthorize("hasAnyAuthority('admin','course')")
 	public void register(Model model) {
+		
+//		List<ClassroomDto> classroomList = classroomService.getClassroom();
+		List<BuildingDto> buildingList = classroomService.getBuildingAll();
+		List<RoomDto> roomListByFirstBuilding = classroomService.getClassroomByBuildingId(buildingList.get(0).getId(), buildingList.get(0).getCampus());
 		List<DepartmentDto> departmentList = departmentService.getDepartmentAll();
+		List<CourseTimeDto> courseTimeList = courseService.getCourseTimeAll();
 		List<CourseInfoDto> courseInfoList = courseInfoService.getCourseInfoAll(); 
+		
+//		model.addAttribute("classroomList", classroomList);
+		model.addAttribute("buildingList", buildingList);
+		model.addAttribute("roomListByFirstBuilding", roomListByFirstBuilding);
 		model.addAttribute("departmentList", departmentList);
+		model.addAttribute("courseTimeList", courseTimeList);
 		model.addAttribute("courseInfoList", courseInfoList);
 	}
 	

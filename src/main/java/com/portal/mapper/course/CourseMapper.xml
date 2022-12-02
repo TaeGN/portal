@@ -4,9 +4,14 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.course.CourseMapper">
 
+	<select id="selectCourseTimeAll" resultType="com.portal.domain.course.CourseTimeDto">
+		SELECT id, time
+		FROM CourseTime		
+	</select>
+
 	<insert id="insertCourse">
-		INSERT INTO Course (classNumber, departmentId, grade, year, semester, maxPersonnel)
-		VALUES (#{classNumber},#{departmentId}, #{grade},#{year},#{semester},#{maxPersonnel})
+		INSERT INTO Course (classNumber, departmentId, grade, year, semester, maxPersonnel, startTimeId, endTimeId, classroom)
+		VALUES (#{classNumber},#{departmentId}, #{grade},#{year},#{semester},#{maxPersonnel},#{startTimeId},#{endTimeId},#{classroom})
 	</insert>
 	
 	<select id="selectLastCourse" resultType="com.portal.domain.course.CourseDto">
@@ -39,7 +44,10 @@
 			c.maxPersonnel,
             d.name,
             c.year,
-            c.semester
+            c.semester,
+            (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
+			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
+			classroom
 		FROM Course	c
 		LEFT JOIN Department d ON c.departmentId = d.id
 		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
@@ -52,6 +60,9 @@
 		<result column="maxPersonnel" property="maxPersonnel"/>
 		<result column="year" property="year"/>
 		<result column="semester" property="semester"/>
+		<result column="startTime" property="startTime"/>
+		<result column="endTime" property="endTime"/>
+		<result column="classroom" property="classroom"/>
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
 			<result column="name" property="name"/>

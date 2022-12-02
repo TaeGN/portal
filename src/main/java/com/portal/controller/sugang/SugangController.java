@@ -48,4 +48,6 @@ public class SugangController {
 		
 		model.addAttribute("infoText", infoText);
 	}
+	
+	
 }

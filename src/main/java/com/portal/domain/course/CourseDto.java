@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CourseDto {
-	private int grade;
+	private String grade;
 	private int classCode;
 	private String classNumber;
 	private String professor;
@@ -12,6 +12,13 @@ public class CourseDto {
 	private int departmentId;
 	private int year;
 	private String semester;
+	private int startTimeId;
+	private String startTime;
+	private int endTimeId;
+	private String endTime;
+	private String classroom;
+	private String building;
+	private String room;
 	private DepartmentDto department;
 	private CourseInfoDto courseInfo;
 }
