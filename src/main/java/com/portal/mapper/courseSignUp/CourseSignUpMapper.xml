@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.portal.mapper.courseSignUp.CourseSignUpMapper">
+
+		<select id="selectCourseByStudentNumber" resultMap="selectCourseByStudentNumberMap">
+		SELECT 
+            c.grade,
+            i.courseClassification,
+			c.classCode,
+			c.classNumber,
+			i.courseName,
+			i.credit,
+			i.theory,
+			i.practice,
+			c.maxPersonnel,
+            d.name,
+            c.year,
+            c.semester,
+            (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
+			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
+			classroom
+		FROM Course	c
+		LEFT JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
+		JOIN CourseSignUp s ON c.classCode = s.classCode
+		WHERE s.studentNumber = #{studentNumber}
+	</select>
+	
+	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseByStudentNumberMap">
+		<id column="classCode" property="classCode"></id>
+		<result column="grade" property="grade"/>
+		<result column="classNumber" property="classNumber"/>
+		<result column="maxPersonnel" property="maxPersonnel"/>
+		<result column="year" property="year"/>
+		<result column="semester" property="semester"/>
+		<result column="startTime" property="startTime"/>
+		<result column="endTime" property="endTime"/>
+		<result column="classroom" property="classroom"/>
+		
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<result column="name" property="name"/>
+		</association>
+		
+		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
+			<result column="courseClassification" property="courseClassification"/>
+			<result column="courseName" property="courseName"/>
+			<result column="credit" property="credit"/>
+			<result column="theory" property="theory"/>
+			<result column="practice" property="practice"/>
+		</association>
+	</resultMap>
+
+	<select id="selectClassCodeByStudentNumber" resultType="integer">
+		SELECT classCode
+		FROM CourseSignUp
+		WHERE studentNumber = #{studentNumber}
+	</select>
+
+	<select id="selectCourseSignUpById" resultType="com.portal.domain.course.CourseSignUpDto">
+		SELECT 
+			studentNumber,
+		    classCode,
+		    inserted,
+		    IF(signUp, 'true', 'false') signUp,
+		    signUpInserted
+		FROM CourseSignUp
+		WHERE studentNumber = #{studentNumber}
+		AND classCode = #{classCode}
+	</select>
+
+	<insert id="insertCourseSignUp">
+		INSERT INTO CourseSignUp (studentNumber, classCode)
+		VALUES (#{studentNumber},#{classCode})
+	</insert>
+	
+</mapper>

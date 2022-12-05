@@ -9,6 +9,21 @@
 		VALUES (#{studentNumber},#{department},#{grade},#{studentName},#{studentNumber},#{lastResidentId},#{firstResidentId},#{lastResidentId});
 	</insert>
 	
+		<select id="selectStudentByStudentId" resultType="com.portal.domain.member.StudentDto">
+		SELECT 
+			studentNumber, 
+			department,
+			grade,
+			studentName, 
+			id, 
+			password,
+			firstResidentId,
+			lastResidentId			
+		 FROM Student
+		 WHERE
+		 	id = #{studentId}		
+	</select>
+	
 	<select id="selectStudentByStudentNumber" resultType="com.portal.domain.member.StudentDto">
 		SELECT 
 			studentNumber, 

@@ -5,12 +5,18 @@
 <c:url value="/sugang/info" var="infoLink"></c:url>
 <c:url value="/sugang/list" var="listLink"></c:url>
 <c:url value="/sugang/login" var="loginLink"></c:url>
+<c:url value="/sugang/desiredCourseList" var="desiredCourseLink"></c:url>
 
 <sec:authorize access="isAuthenticated()" var="loggedIn" />
 
 <div class="d-flex">
 	<h3>수강신청 페이지</h3>
-	<a href="${loginLink }">로그인 하러 가기</a>
+	<sec:authorize access="!isAuthenticated()">
+		<a href="${loginLink }">로그인 하러 가기</a>
+	</sec:authorize>
+ 	<sec:authorize access="isAuthenticated()">
+		<a href="${loginLink }">로그아웃</a>
+	</sec:authorize> 
 </div>
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
@@ -34,7 +40,7 @@
 	          <a class="nav-link" href="#">수강신청</a>
 	        </li>
 	        <li class="nav-item">
-	          <a class="nav-link" href="#">희망수업</a>
+	          <a class="nav-link" href="${desiredCourseLink }">희망수업</a>
 	        </li>
 	        <li class="nav-item">
 	          <a class="nav-link" href="#">신청내역</a>

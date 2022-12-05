@@ -30,6 +30,12 @@ public class StudentService {
 		// TODO Auto-generated method stub
 		return studentMapper.selectStudentByStudentNumber(studentNumber);
 	}
+
+	public StudentDto getStudentByStudentId(String studentId) {
+		// TODO Auto-generated method stub
+		return studentMapper.selectStudentByStudentId(studentId);
+	}
+
 	
 	
 }

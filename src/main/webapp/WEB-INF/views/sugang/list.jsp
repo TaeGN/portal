@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html>
@@ -12,6 +13,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+<sec:authentication property="name" var="studentId"/>
+
 <my:sugangNavBar></my:sugangNavBar>
 <form action="" method="get" >
 <div class="d-flex">
@@ -55,54 +58,6 @@
 		</select>
 	</div>
 	
-	<!-- checkbox -->
-	<div class="form-check">
-	  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-	  <label class="form-check-label" for="flexCheckDefault">
-	    checkbox
-	  </label>
-	</div>
-	<div class="form-check">
-	  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-	  <label class="form-check-label" for="flexCheckDefault">
-	    checkbox
-	  </label>
-	</div>	
-	<div class="form-check">
-	  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-	  <label class="form-check-label" for="flexCheckDefault">
-	    checkbox
-	  </label>
-	</div>	
-	<div class="form-check">
-	  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-	  <label class="form-check-label" for="flexCheckDefault">
-	    checkbox
-	  </label>
-	</div>
-	
-	<!-- radio -->
-	<div class="d-flex ms-auto">
-		<div class="form-check">
-		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-		  <label class="form-check-label" for="flexRadioDefault1">
-		    radio
-		  </label>
-		</div>
-		<div class="form-check">
-		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-		  <label class="form-check-label" for="flexRadioDefault1">
-		    radio
-		  </label>
-		</div>
-		<div class="form-check">
-		  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-		  <label class="form-check-label" for="flexRadioDefault1">
-		    radio
-		  </label>
-		</div>
-	</div>
-		
 	<input id="submitButton1" type="submit" value="조회">
 	<!-- <button type="button" class="btn btn-primary">Primary</button> -->
 	</div>
@@ -147,9 +102,13 @@
 				<tbody>
 					<c:forEach items="${courseList }" var="course">
 						<tr>
+							<input type="hidden" name="studentId" value="${studentId }">
 							<c:url value="/course/get" var="getLink">
 								<c:param name="classCode" value="${course.classCode }"></c:param>
 							</c:url>
+							<sec:authorize access="isAuthenticated()">
+								<td><button onclick="CourseSignUp(${course.classCode}, ${studentId})" class="btn btn-primary" value="${course.classCode }">신청</button></td>
+							</sec:authorize>
 							<td>${course.grade }</td>
 							<td>${course.courseInfo.courseClassification }</td>
 							<td><a href="${getLink }">${course.classCode }</a></td>
@@ -170,10 +129,49 @@
 	</div>
 </div>
 
+<!-- courseSignUpToast -->
+<div class="toast" id="courseSignUpToast">
+    <div class="toast-header">
+        <strong id="courseSignUpToastStrong" class="me-auto"><i class="bi-gift-fill"></i></strong>
+        <small id="courseSignUpToastSmall">방금 전</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div id="courseSignUpToastBody" class="toast-body">
+    	
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
 const ctx = "${pageContext.request.contextPath}";
+
+function CourseSignUp(classCode, studentId) {
+	const data = {classCode, studentId};
+	fetch(ctx + "/courseSignUp/register", {
+		method : "post",
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(data)
+	})
+	.then(res => res.json())
+	.then(data => {
+		document.querySelector("#courseSignUpToastStrong").innerText = data.message;
+		document.querySelector("#courseSignUpToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
+
+
+		const courseSignUpToast = document.querySelector("#courseSignUpToast");
+		const toast = new bootstrap.Toast(courseSignUpToast);
+ 		toast.show();
+	});
+};
+
+/* // 희망수업 등록 및 토스트 출력
+document.querySelector("#courseSignUp").addEventListener("click", function() {
+	const classCode = document.querySelector("#courseSignUp").value;
+	const studentId = document.querySelector("#getStudentId").value;
+	CourseSignUp(classCode, studentId);
+}); */
 
 /* const selectSemesterId1 = document.querySelector("#selectSemesterId1");
 selectSemesterId1.addEventListener("change", function() {
@@ -183,7 +181,7 @@ selectSemesterId1.addEventListener("change", function() {
 	}
 }); */
 
-/*  document.querySelector("#submitButton1").addEventListener("click", function() {
+/*   document.querySelector("#submitButton1").addEventListener("click", function() {
 	const organization = document.querySelector("#organizationId1 option:selected").value;
 	const year = document.querySelector("#yearId1").value;
 	const semester = document.querySelector("#semesterId1").value;

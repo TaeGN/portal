@@ -36,9 +36,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 		String password = ""; 
 		
 		AdminMemberDto adminMember = adminMapper.selectAdminMemberByUserName(username);
-//		StudentDto student = studentMapper.selectStudentById(username);
+		StudentDto student = studentMapper.selectStudentById(username);
 		System.out.println(adminMember);
-//		System.out.println(student);
+		System.out.println(student);
+		
 		// 관리자 로그인의 경우
 		if(adminMember != null && adminMember.getId() < 1000000000) {
 			userId = adminMember.getAdminMemberId();
@@ -49,13 +50,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 					authorityList.add(new SimpleGrantedAuthority(authority));
 				}
 			}
-//		} else if(student != null) {
-			// 학생 로그인의 경우
-	//		if(student.getAuth() != null) {
-	//			for(String auth : student.getAuth()) {
-	//				authorityList.add(new SimpleGrantedAuthority(auth));
-	//			}
-	//		}
+		} else if(student != null) {
+			 // 학생 로그인의 경우
+			userId = student.getId();
+			password = passwordEncoder.encode(student.getPassword());
+//			if(student.getAuth() != null) {
+//				for(String auth : student.getAuth()) {
+//					authorityList.add(new SimpleGrantedAuthority(auth));
+//				}
+//			}
 
 		} else {
 			return null;
