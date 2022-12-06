@@ -53,7 +53,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 		} else if(student != null) {
 			 // 학생 로그인의 경우
 			userId = student.getId();
-			password = passwordEncoder.encode(student.getPassword());
+			password = student.getPassword();
+			authorityList.add(new SimpleGrantedAuthority("student"));
 //			if(student.getAuth() != null) {
 //				for(String auth : student.getAuth()) {
 //					authorityList.add(new SimpleGrantedAuthority(auth));

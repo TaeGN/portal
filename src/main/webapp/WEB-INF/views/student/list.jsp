@@ -38,11 +38,12 @@
 						<tr>
 							<c:url value="/student/get?q=${student.studentNumber }" var="getLink"></c:url>
 							<td><a href="${getLink }">${student.studentNumber }</a></td>
-							<td>${student.department }</td>
+							<td>${student.department.name }</td>
 							<td>${student.grade }</td>
 							<td>${student.studentName }</td>
 							<td>${student.id }</td>
-							<td>${student.password }</td>
+							<td>*******</td>
+							<%-- <td>${student.password }</td> --%>
 							<td>${student.firstResidentId }-${student.lastResidentId }</td>
 						</tr>
 					</c:forEach>				

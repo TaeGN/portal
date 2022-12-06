@@ -14,6 +14,7 @@
 </head>
 <body>
 <sec:authentication property="name" var="studentId"/>
+<sec:authorize access="hasAuthority('student')" var="hasStudentAdmin"></sec:authorize>
 
 <my:sugangNavBar></my:sugangNavBar>
 <form action="" method="get" >
@@ -107,7 +108,9 @@
 								<c:param name="classCode" value="${course.classCode }"></c:param>
 							</c:url>
 							<sec:authorize access="isAuthenticated()">
+								<c:if test="${hasStudentAdmin }">
 								<td><button onclick="CourseSignUp(${course.classCode}, ${studentId})" class="btn btn-primary" value="${course.classCode }">신청</button></td>
+								</c:if>
 							</sec:authorize>
 							<td>${course.grade }</td>
 							<td>${course.courseInfo.courseClassification }</td>

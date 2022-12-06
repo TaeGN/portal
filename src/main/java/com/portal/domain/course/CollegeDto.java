@@ -7,4 +7,5 @@ public class CollegeDto {
 	private int id;
 	private String name;
 	private int organizationId;
+	private OrganizationDto organization;
 }

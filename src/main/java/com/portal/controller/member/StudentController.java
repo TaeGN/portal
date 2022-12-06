@@ -1,6 +1,8 @@
 package com.portal.controller.member;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,8 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.portal.domain.course.DepartmentDto;
 import com.portal.domain.member.StudentDto;
+import com.portal.service.course.DepartmentService;
 import com.portal.service.member.StudentService;
 
 @Controller
@@ -28,6 +33,9 @@ public class StudentController {
 	@Autowired
 	private StudentService studentService;
 	
+	@Autowired
+	private DepartmentService departmentService;
+	
 	@GetMapping("login")
 	public void login() {
 		
@@ -40,14 +48,15 @@ public class StudentController {
 	
 	@GetMapping("register")
 	@PreAuthorize("hasAnyAuthority('admin','member')")
-	public void register() {
-		
+	public void register(Model model) {
+		List<DepartmentDto> departmentList = departmentService.getDepartmentAll();
+		model.addAttribute("departmentList", departmentList);
 	}
 	
 	@PostMapping("register")
 	@PreAuthorize("hasAnyAuthority('admin','member')")
 	public void register(StudentDto student) {
-		int cnt = studentService.registerStudent(student);
+	int cnt = studentService.registerStudent(student);
 	}
 	
 	@GetMapping("list")
@@ -62,5 +71,15 @@ public class StudentController {
 	public void modify(@RequestParam(name = "q") int studentNumber, Model model, String username) {
 		StudentDto student = studentService.getStudentByStudentNumber(studentNumber);
 		model.addAttribute("student", student);
+	}
+	
+	@PostMapping("setStudentNumber")
+	@ResponseBody
+	public Map<String, Object> setStudentNumber(@RequestBody Map<String, String> req) {
+		Map<String, Object> map = new HashMap<>();
+		int departmentId = Integer.parseInt(req.get("department"));
+		int studentNumber = studentService.setStudentNumberByDepartmentId(departmentId);
+		map.put("studentNumber", studentNumber);
+		return map;
 	}
 }

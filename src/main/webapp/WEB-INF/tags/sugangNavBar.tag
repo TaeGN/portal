@@ -6,8 +6,10 @@
 <c:url value="/sugang/list" var="listLink"></c:url>
 <c:url value="/sugang/login" var="loginLink"></c:url>
 <c:url value="/sugang/desiredCourseList" var="desiredCourseLink"></c:url>
+<c:url value="/admin/board" var="adminLink"></c:url>
 
 <sec:authorize access="isAuthenticated()" var="loggedIn" />
+<sec:authorize access="hasAnyAuthority('admin','member','course','courseInfo')" var="admin" />
 
 <div class="d-flex">
 	<h3>수강신청 페이지</h3>
@@ -17,6 +19,11 @@
  	<sec:authorize access="isAuthenticated()">
 		<a href="${loginLink }">로그아웃</a>
 	</sec:authorize> 
+	<div class="ms-auto">
+		<c:if test="${admin }">
+			<a href="${adminLink }">관리자 페이지로 이동</a>
+		</c:if>
+	</div>
 </div>
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">

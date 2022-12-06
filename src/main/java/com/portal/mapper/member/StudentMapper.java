@@ -18,4 +18,6 @@ public interface StudentMapper {
 	StudentDto selectStudentByStudentNumber(int studentNumber);
 
 	StudentDto selectStudentByStudentId(String studentId);
+
+	StudentDto selectMinStudentNumberByDepartmentId(int minStudentNumber);
 }

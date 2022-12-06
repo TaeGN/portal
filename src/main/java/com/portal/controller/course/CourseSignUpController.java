@@ -40,7 +40,7 @@ public class CourseSignUpController {
 	@ResponseBody
 	public Map<String, Object> register(@RequestBody Map<String, String> req) {
 		Map<String, Object> map = new HashMap<>();
-		
+		System.out.println(req);
 		int classCode = Integer.parseInt(req.get("classCode"));
 		String studentId = req.get("studentId");
 		StudentDto student = studentService.getStudentByStudentId(studentId);

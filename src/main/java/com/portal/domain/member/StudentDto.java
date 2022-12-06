@@ -1,5 +1,9 @@
 package com.portal.domain.member;
 
+import com.portal.domain.course.CollegeDto;
+import com.portal.domain.course.DepartmentDto;
+import com.portal.domain.course.OrganizationDto;
+
 import lombok.Data;
 
 @Data
@@ -10,6 +14,7 @@ public class StudentDto {
 	private String password;
 	private String firstResidentId;
 	private String lastResidentId;
-	private int grade;
-	private String department;
+	private String grade;
+	private int departmentId;
+	private DepartmentDto department;
 }

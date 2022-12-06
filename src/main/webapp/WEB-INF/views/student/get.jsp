@@ -12,6 +12,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+<my:adminPageTopNav></my:adminPageTopNav>
+
+<div class="d-flex">
+<my:adminPageLeftNav></my:adminPageLeftNav>
+<div id="sugangListId1" class="container-md">
 <my:adminNavBar></my:adminNavBar>
 	<div class="container-md">
 		<div class="row">
@@ -71,7 +76,7 @@
 					<label class="form-label">
 						학부 
 					</label>
-					<input class="form-control" type="text" value="${student.department }" readonly>
+					<input class="form-control" type="text" value="${student.department.name }" readonly>
 				</div>	
 				
 				<div class="mb-3">
@@ -106,7 +111,7 @@
 					<label class="form-label">
 						주민등록번호 
 					</label>
-					<input class="form-control" type="text" value="${student.firstResidentId }-${student.firstResidentId }" readonly>
+					<input class="form-control" type="text" value="${student.firstResidentId }-${student.lastResidentId }" readonly>
 				</div>
 				
 				<%-- 
@@ -144,6 +149,8 @@
 			</div>
 		</div>
 	</div>
+</div>
+</div>
 	
 	<hr>
 <%-- 	
