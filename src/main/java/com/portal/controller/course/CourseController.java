@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import com.portal.domain.course.CourseDto;
 import com.portal.domain.course.CourseInfoDto;
 import com.portal.domain.course.CourseTimeDto;
 import com.portal.domain.course.DepartmentDto;
+import com.portal.domain.course.SyllabusDto;
 import com.portal.domain.member.StudentDto;
 import com.portal.mapper.admin.AdminMapper;
 import com.portal.service.admin.AdminLogService;
@@ -63,6 +65,12 @@ public class CourseController {
 	@Autowired
 	private AdminMapper adminMapper;
 	
+	@GetMapping("getSyllabus/{classCode}")
+	public void getSyllabus(@PathVariable int classCode, Model model) {
+		SyllabusDto syllabus = null;
+	}
+	
+	
 	@PostMapping("getClassroom")
 	@ResponseBody
 	@PreAuthorize("hasAnyAuthority('admin','course')")
@@ -82,9 +90,9 @@ public class CourseController {
 	@PreAuthorize("@adminSecurity.checkAdminAuthority(authentication)")
 	public void list(Model model, Authentication authentication) {
 		List<CourseDto> courseList = courseService.getCourseAll();
-		
+		System.out.println(courseList);
 		// 희망수업 내역
-		List<Integer> classCodeList = courseSignUpService.getClassCodeByUserId(authentication.getName());
+//		List<Integer> classCodeList = courseSignUpService.getClassCodeByUserId(authentication.getName());
 //		List<Object[]> signUpList = new ArrayList<>();
 //		Object[] signUp = new Object[2];
 //		for(CourseDto course : courseList) {

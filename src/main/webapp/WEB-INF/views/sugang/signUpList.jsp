@@ -14,6 +14,7 @@
 </head>
 <body>
 <sec:authentication property="name" var="studentId"/>
+<sec:authorize access="hasAuthority('student')" var="hasStudentAdmin"></sec:authorize>
 
 <my:sugangNavBar></my:sugangNavBar>
 <div class="d-flex">
@@ -24,9 +25,10 @@
 				<thead>
 					<tr>
 						<sec:authorize access="isAuthenticated()">
-							<th>수강신청</th>
+							<c:if test="${hasStudentAdmin }">
+								<th>수강취소</th>
+							</c:if>
 						</sec:authorize>
-						<th>학년</th>
 						<th>이수구분</th>
 						<th>수업번호</th>
 						<th>학수번호</th>
@@ -42,12 +44,15 @@
 				</thead>
 				<tbody>
 					<input id="getStudentId" type="hidden" name="studentId" value="${studentId }">
-					<c:forEach items="${signUpCourseList }" var="course">
+					<c:forEach items="${signUpList }" var="course">
 						<tr>
-							<sec:authorize access="isAuthenticated()">
-								<td><button onclick="CourseSignUp(${course.classCode}, ${studentId})" class="btn btn-primary" value="${course.classCode }">신청</button></td>
-							</sec:authorize>
-							<td>${course.grade }</td>
+							<td>
+								<sec:authorize access="isAuthenticated()">
+									<c:if test="${hasStudentAdmin and course.signUp eq 'true'}">
+										<button onclick="CancelCourseSignUpConfirm(${course.classCode}, ${studentId})" class="btn btn-danger" value="${course.classCode }">취소</button>
+									</c:if>
+								</sec:authorize>
+							</td>
 							<td>${course.courseInfo.courseClassification }</td>
 							<td><a href="${getLink }">${course.classCode }</a></td>
 							<td>${course.classNumber }</td>
@@ -66,6 +71,48 @@
 		</div>
 	</div>
 </div>
+
+<!-- cancelCourseSignUpConfirmToast -->
+<div class="toast" id="cancelCourseSignUpConfirmToast">
+    <div class="toast-header">
+        <strong id="cancelCourseSignUpConfirmToastStrong" class="me-auto"><i class="bi-gift-fill"></i></strong>
+        <small id="cancelCourseSignUpConfirmToastSmall">방금 전</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div id="cancelCourseSignUpConfirmToastBody" class="toast-body">
+    	
+    </div>
+</div>
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script>
+const ctx = "${pageContext.request.contextPath}";
+
+//signUp table에서 signUp false로 변경
+function CancelCourseSignUpConfirm(classCode, studentId) {
+	const data = {classCode, studentId};
+	fetch(ctx + "/courseSignUp/cancelSignUp", {
+		method : "put",
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(data)
+	})
+	.then(res => res.json())
+	.then(data => {
+		document.querySelector("#cancelCourseSignUpConfirmToastStrong").innerText = data.message;
+		document.querySelector("#cancelCourseSignUpConfirmToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
+		
+		// 페이지 새로고침
+		location.reload();
+
+		const cancelCourseSignUpConfirmToast = document.querySelector("#cancelCourseSignUpConfirmToast");
+		const toast = new bootstrap.Toast(cancelCourseSignUpConfirmToast);
+		toast.show();
+	});
+};
+</script>
 </body>
 </html>

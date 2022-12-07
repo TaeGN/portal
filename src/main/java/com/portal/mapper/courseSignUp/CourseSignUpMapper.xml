@@ -4,7 +4,32 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.courseSignUp.CourseSignUpMapper">
 
-		<select id="selectCourseByStudentNumber" resultMap="selectCourseByStudentNumberMap">
+	<update id="updateCourseSignUpFalse">
+		UPDATE CourseSignUp
+		SET 
+			signUp = '0',
+			signUpInserted = null
+		WHERE studentNumber = #{studentNumber}
+		AND classCode = #{classCode}
+	</update>
+
+	<update id="updateCourseSignUpTrue">
+		UPDATE CourseSignUp
+		SET 
+			signUp = '1',
+			signUpInserted = now()
+		WHERE studentNumber = #{studentNumber}
+		AND classCode = #{classCode}
+	</update>
+
+	<delete id="deleteCourseSignUp">
+	DELETE FROM CourseSignUp
+	WHERE studentNumber = #{studentNumber}
+	AND classCode = #{classCode}
+	</delete>
+
+
+	<select id="selectSignUpAllByStudentNumber" resultMap="selectSignUpAllByStudentNumberMap">
 		SELECT 
             c.grade,
             i.courseClassification,
@@ -15,17 +40,102 @@
 			i.theory,
 			i.practice,
 			c.maxPersonnel,
-            d.name,
             c.year,
             c.semester,
             (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
 			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
-			classroom
+			c.classroom,
+			c.departmentId,
+            d.name departmentName,
+            d.collegeId,
+            l.name collegeName,
+            l.organizationId,
+            o.name organizationName,           
+            if(s.signUp, 'true', 'false') signUp
 		FROM Course	c
 		LEFT JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN College l ON l.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = l.organizationId
 		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
 		JOIN CourseSignUp s ON c.classCode = s.classCode
 		WHERE s.studentNumber = #{studentNumber}
+		AND s.signUp = '1'
+		ORDER BY c.classCode
+	</select>
+	
+	<resultMap type="com.portal.domain.course.CourseDto" id="selectSignUpAllByStudentNumberMap">
+		<id column="classCode" property="classCode"></id>
+		<result column="grade" property="grade"/>
+		<result column="classNumber" property="classNumber"/>
+		<result column="maxPersonnel" property="maxPersonnel"/>
+		<result column="year" property="year"/>
+		<result column="semester" property="semester"/>
+		<result column="startTime" property="startTime"/>
+		<result column="endTime" property="endTime"/>
+		<result column="classroom" property="classroom"/>
+		<result column="desire" property="desire"/>
+		<result column="signUp" property="signUp"/>
+		<result column="departmentId" property="departmentId"/>
+		
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>
+		</association>
+		
+		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
+			<result column="courseClassification" property="courseClassification"/>
+			<result column="courseName" property="courseName"/>
+			<result column="credit" property="credit"/>
+			<result column="theory" property="theory"/>
+			<result column="practice" property="practice"/>
+		</association>
+	</resultMap>
+
+
+	<select id="selectCourseByStudentNumber" resultMap="selectCourseByStudentNumberMap">
+		SELECT 
+            c.grade,
+            i.courseClassification,
+			c.classCode,
+			c.classNumber,
+			i.courseName,
+			i.credit,
+			i.theory,
+			i.practice,
+			c.maxPersonnel,
+            c.year,
+            c.semester,
+            (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
+			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
+			c.classroom,
+			c.departmentId,
+            d.name departmentName,
+            d.collegeId,
+            l.name collegeName,
+            l.organizationId,
+            o.name organizationName,
+            if(ifnull(s.classCode,0), 'true', 'false') desire,
+            if(s.signUp, 'true', 'false') signUp,
+            (SELECT count(*) FROM CourseSignUp u GROUP BY u.classCode HAVING u.classCode = c.classCode) countDesire,
+            (SELECT count(*) FROM CourseSignUp u WHERE u.signUp = 1 GROUP BY u.classCode HAVING u.classCode = c.classCode) countSignUp
+		FROM Course	c
+		LEFT JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN College l ON l.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = l.organizationId
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
+		JOIN CourseSignUp s ON c.classCode = s.classCode
+		WHERE s.studentNumber = #{studentNumber}
+		ORDER BY c.classCode
 	</select>
 	
 	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseByStudentNumberMap">
@@ -38,9 +148,25 @@
 		<result column="startTime" property="startTime"/>
 		<result column="endTime" property="endTime"/>
 		<result column="classroom" property="classroom"/>
+		<result column="desire" property="desire"/>
+		<result column="signUp" property="signUp"/>
+		<result column="countDesire" property="countDesire"/>
+		<result column="countSignUp" property="countSignUp"/>
+		<result column="departmentId" property="departmentId"/>
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
-			<result column="name" property="name"/>
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>
 		</association>
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
@@ -63,7 +189,7 @@
 			studentNumber,
 		    classCode,
 		    inserted,
-		    IF(signUp, 'true', 'false') signUp,
+		    if(signUp, 'true', 'false') signUp,
 		    signUpInserted
 		FROM CourseSignUp
 		WHERE studentNumber = #{studentNumber}

@@ -7,7 +7,6 @@
 	<select id="selectMinStudentNumberByDepartmentId" resultType="com.portal.domain.member.StudentDto">
 		SELECT studentNumber FROM Student
 		WHERE studentNumber >= #{minStudentNumber}
-<!-- 		AND studentNumber &lt; #{maxStudentNumber}	 -->
 		LIMIT 0,1
 	</select>
 	
@@ -36,8 +35,7 @@
          LEFT JOIN Department d ON s.departmentId = d.id
          LEFT JOIN College c ON c.id = d.collegeId
          LEFT JOIN Organization o ON o.id = c.organizationId
-		 WHERE
-		 	s.id = #{studentId}
+		 WHERE s.id = #{studentId}
 	</select>
 	
 	<resultMap type="com.portal.domain.member.StudentDto" id="selectStudentByStudentIdMap">

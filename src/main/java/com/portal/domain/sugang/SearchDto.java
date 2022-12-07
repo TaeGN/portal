@@ -7,7 +7,7 @@ public class SearchDto {
 	private String organization;
 	private int year;
 	private String semester;
-	private int grade;
+	private String grade;
 	private String courseClassification;
-
+	private int studentNumber;
 }

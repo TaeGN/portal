@@ -6,7 +6,7 @@
 
 	<select id="selectDepartmentAll" resultMap="selectDepartmentAllMap">
 		SELECT
-			d.id departmentId
+			d.id departmentId,
             d.name departmentName,
             d.collegeId,
             c.name collegeName,

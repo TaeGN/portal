@@ -9,6 +9,6 @@ public class CourseSignUpDto {
 	private int studentNumber;
 	private int classCode;
 	private LocalDateTime inserted;
-	private boolean signUp;
+	private String signUp;
 	private LocalDateTime signUpInserted;
 }

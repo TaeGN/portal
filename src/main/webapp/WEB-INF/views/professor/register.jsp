@@ -16,12 +16,12 @@
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
 <div id="sugangListId1" class="container-md">
-<my:studentAdminNav></my:studentAdminNav>
+<my:professorAdminNav></my:professorAdminNav>
 	<div class="container-md">
 		<div class="row">
 			<div class="col">
 				<div class="mb-3">
-					<h1>학생 등록</h1>
+					<h1>교수 등록</h1>
 				</div>
 				<form id="registerForm1" action="" method="post" enctype="multipart/form-data">
 				
@@ -34,26 +34,43 @@
 						</select>
 					</div>
 					
-					<div class="mb-3">
-						<label for="" class="form-label">학번</label>
-						<input id="studentNumberId1" required="required" type="number" class="form-control" name="studentNumber">
-					</div>
 					
 					<div class="mb-3">
-						<label for="" class="form-label">학년</label>
-						<select name="grade" class="form-select" aria-label="Default select example">
-							<option value="1학년" selected="selected">1</option>
-							<option value="2학년">2</option>
-							<option value="3학년">3</option>
-							<option value="4학년">4</option>
-							<option value="5학년">5</option>
-						</select>
+						<label for="" class="form-label">교수번호</label>
+						<input id="professorNumberId1" required="required" type="number" class="form-control" name="professorNumber">
 					</div>
-					
+				
 					<div class="mb-3">
 						<label for="" class="form-label">이름</label>
-						<input required="required" type="text" class="form-control" name="studentName" value="">
+						<input id="" required="required" type="text" class="form-control" name="name">
 					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">아이디</label>
+						<input id="" type="text" class="form-control" name="loginId">
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">비밀번호</label>
+						<input id="" type="text" class="form-control" name="password">
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">연락처</label>
+						<input id="" required="required" type="text" class="form-control" name="contact">
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">이메일</label>
+						<input id="" required="required" type="email" class="form-control" name="email">
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">홈페이지</label>
+						<input id="" required="required" type="url" class="form-control" name="homepage">
+					</div>
+				
+					
 					
 					<div class="mb-3">
 						<label for="" class="form-label">주민번호</label>
@@ -63,8 +80,6 @@
 						</div>
 					</div>
 					
-					
-
 
 					<input id="submitButton1" class="btn btn-primary" type="submit" value="등록">
 				</form>
@@ -78,11 +93,11 @@
 const ctx = "${pageContext.request.contextPath}";
 const selectDepartment = document.querySelector("#selectDepartmentId1");
 
-setStudentNumberBySeleteDepartment();
+setProfessorNumberBySeleteDepartment();
 
-function setStudentNumberBySeleteDepartment() {
+function setProfessorNumberBySeleteDepartment() {
 	const department = selectDepartment.value;
-	fetch(ctx + "/student/setStudentNumber", {
+	fetch(ctx + "/professor/setProfessorNumber", {
 		method : "post",
 		headers : {
 			"Content-Type" :"application/json"
@@ -91,14 +106,15 @@ function setStudentNumberBySeleteDepartment() {
 	})
 	.then(res => res.json())
 	.then(data => {
-		document.querySelector("#studentNumberId1").value = data.studentNumber;
+		document.querySelector("#professorNumberId1").value = data.professorNumber;
 	});
 }
 
 selectDepartment.addEventListener("change", function() {
-	setStudentNumberBySeleteDepartment();
+	setProfessorNumberBySeleteDepartment();
 });
 
 </script>
+
 </body>
 </html>

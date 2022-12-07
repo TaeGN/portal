@@ -17,7 +17,7 @@
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
 <div id="sugangListId1" class="container-md">
-<my:adminNavBar></my:adminNavBar>
+<my:studentAdminNav></my:studentAdminNav>
 	<div class="container-md">
 		<div class="row">
 			<div class="col">

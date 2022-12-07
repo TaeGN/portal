@@ -15,4 +15,12 @@ public interface CourseSignUpMapper {
 
 	List<CourseDto> selectCourseByStudentNumber(int studentNumber);
 
+	int deleteCourseSignUp(int studentNumber, int classCode);
+
+	int updateCourseSignUpTrue(int studentNumber, int classCode);
+
+	int updateCourseSignUpFalse(int studentNumber, int classCode);
+
+	List<CourseDto> selectSignUpAllByStudentNumber(int studentNumber);
+
 }

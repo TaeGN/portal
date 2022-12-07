@@ -28,6 +28,11 @@ public class CourseSignUpService {
 		return courseSignUpMapper.insertCourseSignUp(studentNumber, classCode);
 	}
 
+	public int removeCourseSignUp(int studentNumber, int classCode) {
+		// TODO Auto-generated method stub
+		return courseSignUpMapper.deleteCourseSignUp(studentNumber, classCode);
+	}
+	
 	public CourseSignUpDto getCourseSignUpById(int studentNumber, int classCode) {
 		// TODO Auto-generated method stub
 		return courseSignUpMapper.selectCourseSignUpById(studentNumber, classCode);
@@ -42,5 +47,35 @@ public class CourseSignUpService {
 		StudentDto student = studentService.getStudentByStudentId(userId);
 		return courseSignUpMapper.selectCourseByStudentNumber(student.getStudentNumber());
 	}
+	
+	// signUp true로 변경
+	public int courseSignUp(int studentNumber, int classCode) {
+		CourseSignUpDto courseSignUp = courseSignUpMapper.selectCourseSignUpById(studentNumber, classCode);
+		int cnt = 0;
+		
+		// signUp이 false일때만 실행
+		if(courseSignUp.getSignUp().equals("false")) {
+			cnt = courseSignUpMapper.updateCourseSignUpTrue(studentNumber, classCode);
+		}
+		return cnt;
+	}
+	
+	// signUp false로 변경
+	public int cancelCourseSignUp(int studentNumber, int classCode) {
+		CourseSignUpDto courseSignUp = courseSignUpMapper.selectCourseSignUpById(studentNumber, classCode);
+		int cnt = 0;
+		System.out.println(courseSignUp);
+		// signUp이 true일때만 실행
+		if(courseSignUp.getSignUp().equals("true")) {
+			cnt = courseSignUpMapper.updateCourseSignUpFalse(studentNumber, classCode);
+		}
+		return cnt;
+	}
+
+	public List<CourseDto> getSignUpAllByUserId(String userId) {
+		StudentDto student = studentService.getStudentByStudentId(userId);
+		return courseSignUpMapper.selectSignUpAllByStudentNumber(student.getStudentNumber());
+	}
+
 	
 }

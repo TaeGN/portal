@@ -72,6 +72,7 @@
 		<result column="endTime" property="endTime"/>
 		<result column="classroom" property="classroom"/>
 		<result column="departmentId" property="departmentId"/>
+<!-- 		<result column="desire" property="desire"/> -->
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
 			<id column="departmentId" property="id"/>
