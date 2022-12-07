@@ -4,6 +4,7 @@
 <c:url value="/admin/board" var="boardLink"></c:url>
 <c:url value="/admin/list" var="listLink"></c:url>
 <c:url value="/student/list" var="studentLink"></c:url>
+<c:url value="/professor/list" var="professorLink"></c:url>
 <c:url value="/course/list" var="courseLink"></c:url>
 <c:url value="/courseInfo/list" var="courseInfoLink"></c:url>
 
@@ -36,10 +37,10 @@
 	      <a id="memberCollapse" class="nav-link collapse" aria-current="page" href="${studentLink }">학생관리</a>
 	    </li>
 	 	<li class="nav-item ms-4">
-	      <a id="memberCollapse" class="nav-link collapse" aria-current="page" href="#">수강신청</a>
+	      <a id="memberCollapse" class="nav-link collapse" aria-current="page" href="${professorLink }">교수관리</a>
 	    </li>	
 	 	<li class="nav-item ms-4">
-	      <a id="memberCollapse" class="nav-link collapse" aria-current="page" href="#">.......</a>
+	      <a id="memberCollapse" class="nav-link collapse" aria-current="page" href="#">수강신청</a>
 	    </li>	
 	    	    
 	    <hr>

@@ -4,13 +4,33 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.course.DepartmentMapper">
 
-	<select id="selectDepartmentAll" resultType="com.portal.domain.course.DepartmentDto">
+	<select id="selectDepartmentAll" resultMap="selectDepartmentAllMap">
 		SELECT
-			id,
-			name,
-			collegeId
-		FROM Department
+			d.id departmentId,
+            d.name departmentName,
+            d.collegeId,
+            c.name collegeName,
+            c.organizationId,
+            o.name organizationName
+		 FROM Department d
+         LEFT JOIN College c ON c.id = d.collegeId
+         LEFT JOIN Organization o ON o.id = c.organizationId		
 	</select>
+	
+	<resultMap type="com.portal.domain.course.DepartmentDto" id="selectDepartmentAllMap">
+		<id column="departmentId" property="id"/>
+		<result column="departmentName" property="name"/>
+		<result column="collegeId" property="collegeId"/>
+		<association property="college" javaType="com.portal.domain.course.CollegeDto">
+			<id column="collegeId" property="id"/>
+			<result column="collegeName" property="name"/>
+			<result column="organizationId" property="organizationId"/>
+			<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+				<id column="organizationId" property="id"/>
+				<result column="organizationName" property="name"/>
+			</association>
+		</association>	
+	</resultMap>
 
 	<select id="selectDepartmentIdByName" resultType="com.portal.domain.course.DepartmentDto">
 		SELECT
@@ -39,14 +59,43 @@
 	</select>
 	
 
-	<select id="selectDepartmentById" resultType="com.portal.domain.course.DepartmentDto">
+<!-- 	<select id="selectDepartmentById" resultType="com.portal.domain.course.DepartmentDto">
 		SELECT 
 			id,
 			name,
 			collegeId
 		FROM Department
 		WHERE id = #{id}
+	</select> -->
+	
+		<select id="selectDepartmentById" resultMap="selectDepartmentByIdMap">
+		SELECT
+			d.id departmentId
+            d.name departmentName,
+            d.collegeId,
+            c.name collegeName,
+            c.organizationId,
+            o.name organizationName
+		 FROM Department d
+         LEFT JOIN College c ON c.id = d.collegeId
+         LEFT JOIN Organization o ON o.id = c.organizationId	
+         WHERE id = #{id}	
 	</select>
+	
+	<resultMap type="com.portal.domain.course.DepartmentDto" id="selectDepartmentByIdMap">
+		<id column="departmentId" property="id"/>
+		<result column="departmentName" property="name"/>
+		<result column="collegeId" property="collegeId"/>
+		<association property="college" javaType="com.portal.domain.course.CollegeDto">
+			<id column="collegeId" property="id"/>
+			<result column="collegeName" property="name"/>
+			<result column="organizationId" property="organizationId"/>
+			<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+				<id column="organizationId" property="id"/>
+				<result column="organizationName" property="name"/>
+			</association>
+		</association>	
+	</resultMap>
 
 
 

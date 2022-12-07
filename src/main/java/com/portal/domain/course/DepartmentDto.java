@@ -8,5 +8,4 @@ public class DepartmentDto {
 	private String name;
 	private int collegeId;
 	private CollegeDto college;
-	private OrganizationDto organization;
 }

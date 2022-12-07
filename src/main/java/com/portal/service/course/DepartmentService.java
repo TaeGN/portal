@@ -20,14 +20,14 @@ public class DepartmentService {
 
 	public DepartmentDto getDepartmentById(int departmentId) {
 		DepartmentDto department = departmentMapper.selectDepartmentById(departmentId);
-		
-		int collegeId = department.getCollegeId();
-		CollegeDto college = departmentMapper.selectCollegeById(collegeId);
-		department.setCollege(college);
-		
-		int organizationId = college.getOrganizationId();
-		OrganizationDto organization = departmentMapper.selectOrganizationById(organizationId);
-		department.setOrganization(organization);
+//		
+//		int collegeId = department.getCollegeId();
+//		CollegeDto college = departmentMapper.selectCollegeById(collegeId);
+//		department.setCollege(college);
+//		
+//		int organizationId = college.getOrganizationId();
+//		OrganizationDto organization = departmentMapper.selectOrganizationById(organizationId);
+//		department.getCollege().setOrganization(organization);
 		
 		return department;
 	}

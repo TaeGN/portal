@@ -84,7 +84,7 @@
 						<label for="" class="form-label">관장학과</label>
 						<select name="departmentId" class="form-select" aria-label="Default select example">
 							<c:forEach items="${departmentList }" var="department">
-								<option value="${department.id }">${department.name }</option>
+								<option value="${department.id }">${department.name } - ${department.college.name } - ${department.college.organization.name }</option>
 							</c:forEach>
 						</select>
 					</div>

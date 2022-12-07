@@ -19,6 +19,10 @@ public class CourseDto {
 	private String classroom;
 	private String building;
 	private String room;
+	private String desire;
+	private String signUp;
+	private int countDesire;
+	private int countSignUp;
 	private DepartmentDto department;
 	private CourseInfoDto courseInfo;
 }

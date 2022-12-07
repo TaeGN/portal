@@ -24,7 +24,180 @@
 		FROM ClassInfo
 	</select>
 	
+
+<select id="selectSearchCourseListByStudentNumber" resultMap="selectSearchCourseListByStudentNumberMap">
+		SELECT 
+            c.grade,
+            i.courseClassification,
+			c.classCode,
+			c.classNumber,
+			i.courseName,
+			i.credit,
+			i.theory,
+			i.practice,
+			c.maxPersonnel,
+            d.name,
+            c.year,
+            c.semester,
+            c.departmentId,
+            d.name departmentName,
+            d.collegeId,
+            l.name collegeName,
+            l.organizationId,
+            o.name organizationName,
+            (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
+			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
+			c.classroom,
+  			IF(s.classCode > 0, 'true', 'false') desire,
+ 			s.classCode signUp
+		FROM Course	c
+		LEFT JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN College l ON l.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = l.organizationId
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber 
+		LEFT JOIN CourseSignUp s ON c.classCode = s.classCode AND s.studentNumber = #{studentNumber}
+<!-- 		LEFT JOIN CourseSignUp s ON c.classCode = s.classCode -->	
+<!--         WHERE department.organization.name = #{organization} -->
+		WHERE c.classCode > 0
+  		<if test="year != 0">
+			AND c.year = #{year}
+		</if> 
+		<if test="semester != null">
+       		AND c.semester = #{semester}
+        </if>
+        <if test="grade != null and grade != '전체'">
+       	 AND c.grade = #{grade}
+        </if> 
+<!--         AND courseClassification = #{courseClassification}	 -->
+		ORDER BY c.classCode
+	</select>
+	
+	<resultMap type="com.portal.domain.course.CourseDto" id="selectSearchCourseListByStudentNumberMap">
+		<id column="classCode" property="classCode"></id>
+		<result column="grade" property="grade"/>
+		<result column="classNumber" property="classNumber"/>
+		<result column="maxPersonnel" property="maxPersonnel"/>
+		<result column="year" property="year"/>
+		<result column="semester" property="semester"/>
+		<result column="startTime" property="startTime"/>
+		<result column="endTime" property="endTime"/>
+		<result column="classroom" property="classroom"/>
+		<result column="departmentId" property="departmentId"/>
+		<result column="desire" property="desire"/>
+		<result column="signUp" property="signUp"/> 
+		
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>
+		</association>
+		
+		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
+			<result column="courseClassification" property="courseClassification"/>
+			<result column="courseName" property="courseName"/>
+			<result column="credit" property="credit"/>
+			<result column="theory" property="theory"/>
+			<result column="practice" property="practice"/>
+		</association>
+	</resultMap>
+
+
+
 	<select id="selectCourseBySearchDto" resultMap="selectCourseBySearchDtoMap">
+		SELECT 
+            c.grade,
+            i.courseClassification,
+			c.classCode,
+			c.classNumber,
+			i.courseName,
+			i.credit,
+			i.theory,
+			i.practice,
+			c.maxPersonnel,
+            d.name,
+            c.year,
+            c.semester,
+            c.departmentId,
+            d.name departmentName,
+            d.collegeId,
+            l.name collegeName,
+            l.organizationId,
+            o.name organizationName,
+            (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
+			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
+			c.classroom
+<!--  			IF(s.classCode > 0, 'true', 'false') desire,
+ 			s.classCode signUp -->
+		FROM Course	c
+		LEFT JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN College l ON l.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = l.organizationId
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber
+<!-- 		LEFT JOIN CourseSignUp s ON c.classCode = s.classCode -->	
+<!--         WHERE department.organization.name = #{organization} -->
+		WHERE c.classCode > 0
+		<if test="year != 0">
+			AND c.year = #{search.year}
+		</if>
+		<if test="semester != null">
+       		AND c.semester = #{search.semester}
+        </if>
+        <if test="grade != null">
+        	AND c.grade = #{search.grade}
+        </if>
+<!--         AND courseClassification = #{courseClassification}	 -->
+		ORDER BY c.classCode
+	</select>
+	
+	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseBySearchDtoMap">
+		<id column="classCode" property="classCode"></id>
+		<result column="grade" property="grade"/>
+		<result column="classNumber" property="classNumber"/>
+		<result column="maxPersonnel" property="maxPersonnel"/>
+		<result column="year" property="year"/>
+		<result column="semester" property="semester"/>
+		<result column="startTime" property="startTime"/>
+		<result column="endTime" property="endTime"/>
+		<result column="classroom" property="classroom"/>
+		<result column="departmentId" property="departmentId"/>
+<!-- 		<result column="desire" property="desire"/>
+		<result column="signUp" property="signUp"/> -->
+		
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>
+		</association>
+		
+		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
+			<result column="courseClassification" property="courseClassification"/>
+			<result column="courseName" property="courseName"/>
+			<result column="credit" property="credit"/>
+			<result column="theory" property="theory"/>
+			<result column="practice" property="practice"/>
+		</association>
+	</resultMap>
+
+
+	<select id="selectCourseAllByStudentNumber" resultMap="selectCourseAllByStudentNumberMap">
 		SELECT 
             c.grade,
             i.courseClassification,
@@ -40,20 +213,25 @@
             c.semester,
             (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
 			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
-			c.classroom
+			c.classroom,
+			c.departmentId,
+            d.name departmentName,
+            d.collegeId,
+            l.name collegeName,
+            l.organizationId,
+            o.name organizationName,
+ 			if(s.classCode, 'true', 'false') desire 
 		FROM Course	c
 		LEFT JOIN Department d ON c.departmentId = d.id
-		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
-<!--         WHERE department.organization.name = #{organization} -->
-		WHERE year = #{year}
-        AND semester = #{semester}
-        <if test="grade != 0">
-        	AND grade = #{grade}
-        </if>
-<!--         AND courseClassification = #{courseClassification}	 -->
+		LEFT JOIN College l ON l.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = l.organizationId
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber 
+		LEFT JOIN CourseSignUp s ON c.classCode = s.classCode AND s.studentNumber = #{studentNumber}
+<!-- 		LEFT JOIN CourseSignUp s ON c.classCode = s.classCode -->
+		ORDER BY c.classCode
 	</select>
 	
-		<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseBySearchDtoMap">
+	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseAllByStudentNumberMap">
 		<id column="classCode" property="classCode"></id>
 		<result column="grade" property="grade"/>
 		<result column="classNumber" property="classNumber"/>
@@ -63,9 +241,22 @@
 		<result column="startTime" property="startTime"/>
 		<result column="endTime" property="endTime"/>
 		<result column="classroom" property="classroom"/>
+		<result column="departmentId" property="departmentId"/>
+ 		<result column="desire" property="desire"/> 
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
-			<result column="name" property="name"/>
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>
 		</association>
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
@@ -95,10 +286,21 @@
             c.semester,
             (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
 			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
-			c.classroom
+			c.classroom,
+			c.departmentId,
+            d.name departmentName,
+            d.collegeId,
+            l.name collegeName,
+            l.organizationId,
+            o.name organizationName
+<!-- 			if(s.inserted, 'true', 'false') desire -->
 		FROM Course	c
 		LEFT JOIN Department d ON c.departmentId = d.id
-		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
+		LEFT JOIN College l ON l.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = l.organizationId
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber 
+<!-- 		LEFT JOIN CourseSignUp s ON c.classCode = s.classCode -->
+		ORDER BY c.classCode
 	</select>
 	
 	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseAllMap">
@@ -111,9 +313,22 @@
 		<result column="startTime" property="startTime"/>
 		<result column="endTime" property="endTime"/>
 		<result column="classroom" property="classroom"/>
+		<result column="departmentId" property="departmentId"/>
+<!-- 		<result column="desire" property="desire"/> -->
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
-			<result column="name" property="name"/>
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>
 		</association>
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">

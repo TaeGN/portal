@@ -16,4 +16,8 @@ public interface StudentMapper {
 	List<StudentDto> selectStudentAll();
 
 	StudentDto selectStudentByStudentNumber(int studentNumber);
+
+	StudentDto selectStudentByStudentId(String studentId);
+
+	StudentDto selectMinStudentNumberByDepartmentId(int minStudentNumber);
 }

@@ -17,34 +17,38 @@
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
 <div id="sugangListId1" class="container-md">
-<my:studentAdminNav></my:studentAdminNav>
-<h1>학생리스트</h1>
+<my:professorAdminNav></my:professorAdminNav>
+<h1>교수리스트</h1>
 	<div class="row">
 		<div class="col">
 			<table class="table">
 				<thead>
 					<tr>
-						<th>학번</th>
-						<th>학부</th>
-						<th>학년</th>
+						<th>#</th>
 						<th>이름</th>
 						<th>아이디</th>
-						<th>패스워드</th>
-						<th>주민등록번호</th>
+						<th>비밀번호</th>
+						<th>연락처</th>
+						<th>이메일</th>
+						<th>홈페이지</th>
+						<th>학부</th>
+						<th>주민번호</th>
+						<th>나이 등등</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${studentList }" var="student">
+					<c:forEach items="${professorList }" var="professor">
 						<tr>
-							<c:url value="/student/get?q=${student.studentNumber }" var="getLink"></c:url>
-							<td><a href="${getLink }">${student.studentNumber }</a></td>
-							<td>${student.department.name }</td>
-							<td>${student.grade }</td>
-							<td>${student.studentName }</td>
-							<td>${student.id }</td>
+							<td>${professor.professorNumber }</td>
+							<td>${professor.name }</td>
+							<td>${professor.loginId }</td>
 							<td>*******</td>
-							<%-- <td>${student.password }</td> --%>
-							<td>${student.firstResidentId }-${student.lastResidentId }</td>
+							<td>${professor.contact }</td>
+							<td>${professor.email }</td>
+							<td>${professor.homepage }</td>
+							<td>${professor.department.name }</td>
+							<td>${professor.firstResidentId }-${professor.lastResidentId }</td>
+							<td>추가 예정</td>
 						</tr>
 					</c:forEach>				
 				</tbody>

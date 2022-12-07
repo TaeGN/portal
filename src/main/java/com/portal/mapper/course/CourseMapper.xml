@@ -42,38 +42,61 @@
 			i.theory,
 			i.practice,
 			c.maxPersonnel,
-            d.name,
             c.year,
             c.semester,
             (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
 			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
-			classroom
+			c.classroom,
+			c.departmentId,
+            d.name departmentName,
+            d.collegeId,
+            l.name collegeName,
+            l.organizationId,
+            o.name organizationName,
+            i.summary
 		FROM Course	c
 		LEFT JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN College l ON l.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = l.organizationId	
 		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
 	</select>
 	
 	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseAllMap">
 		<id column="classCode" property="classCode"></id>
-		<result column="grade" property="grade"/>
 		<result column="classNumber" property="classNumber"/>
+		<result column="grade" property="grade"/>
 		<result column="maxPersonnel" property="maxPersonnel"/>
 		<result column="year" property="year"/>
 		<result column="semester" property="semester"/>
 		<result column="startTime" property="startTime"/>
 		<result column="endTime" property="endTime"/>
 		<result column="classroom" property="classroom"/>
+		<result column="departmentId" property="departmentId"/>
+<!-- 		<result column="desire" property="desire"/> -->
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
-			<result column="name" property="name"/>
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>	
 		</association>
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
+			<id column="classNumber" property="classNumber"/>
 			<result column="courseClassification" property="courseClassification"/>
 			<result column="courseName" property="courseName"/>
 			<result column="credit" property="credit"/>
 			<result column="theory" property="theory"/>
 			<result column="practice" property="practice"/>
+			<result column="summary" property="summary"/>
 		</association>
 	</resultMap>
 

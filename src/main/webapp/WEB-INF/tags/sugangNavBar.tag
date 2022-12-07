@@ -5,12 +5,26 @@
 <c:url value="/sugang/info" var="infoLink"></c:url>
 <c:url value="/sugang/list" var="listLink"></c:url>
 <c:url value="/sugang/login" var="loginLink"></c:url>
+<c:url value="/sugang/desireList" var="desireLink"></c:url>
+<c:url value="/sugang/signUpList" var="signUpLink"></c:url>
+<c:url value="/admin/board" var="adminLink"></c:url>
 
 <sec:authorize access="isAuthenticated()" var="loggedIn" />
+<sec:authorize access="hasAnyAuthority('admin','member','course','courseInfo')" var="admin" />
 
 <div class="d-flex">
 	<h3>수강신청 페이지</h3>
-	<a href="${loginLink }">로그인 하러 가기</a>
+	<sec:authorize access="!isAuthenticated()">
+		<a href="${loginLink }">로그인 하러 가기</a>
+	</sec:authorize>
+ 	<sec:authorize access="isAuthenticated()">
+		<a href="${loginLink }">로그아웃</a>
+	</sec:authorize> 
+	<div class="ms-auto">
+		<c:if test="${admin }">
+			<a href="${adminLink }">관리자 페이지로 이동</a>
+		</c:if>
+	</div>
 </div>
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
@@ -31,29 +45,12 @@
         </li>
         <c:if test="${loggedIn }">
 	        <li class="nav-item">
-	          <a class="nav-link" href="#">수강신청</a>
+	          <a class="nav-link" href="${desireLink }">희망수업</a>
 	        </li>
 	        <li class="nav-item">
-	          <a class="nav-link" href="#">희망수업</a>
-	        </li>
-	        <li class="nav-item">
-	          <a class="nav-link" href="#">신청내역</a>
+	          <a class="nav-link" href="${signUpLink }">신청내역</a>
 	        </li>
         </c:if>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
-        </li>
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
