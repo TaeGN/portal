@@ -24,6 +24,9 @@ public class CourseService {
 	
 	@Autowired
 	private DepartmentService departmentService;
+	
+	@Autowired
+	private CourseScheduleService courseScheduleService;
 
 	public List<CourseDto> getCourseAll() {
 		List<CourseDto> courseList = courseMapper.selectCourseAll();
@@ -31,11 +34,6 @@ public class CourseService {
 	}
 
 	public int registerCourse(CourseDto course) {
-//		int departmentId = departmentService.getDepartmentIdByName(departmentName);
-//		course.setDepartmentId(departmentId);
-		
-//		DepartmentDto department = departmentService.getDepartmentById(departmentId);
-//		course.setDepartment(department);
 		
 		// building 구하기
 		int buildingId = Integer.parseInt(course.getBuilding().split(":")[1]);
@@ -46,6 +44,7 @@ public class CourseService {
 				+ " " + course.getRoom();
 		
 		course.setClassroom(classroom);
+		
 		return courseMapper.insertCourse(course);
 	}
 

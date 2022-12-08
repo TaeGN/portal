@@ -29,14 +29,17 @@ import com.portal.domain.course.CourseDto;
 import com.portal.domain.course.CourseInfoDto;
 import com.portal.domain.course.CourseTimeDto;
 import com.portal.domain.course.DepartmentDto;
+import com.portal.domain.member.ProfessorDto;
 import com.portal.domain.member.StudentDto;
 import com.portal.mapper.admin.AdminMapper;
 import com.portal.service.admin.AdminLogService;
 import com.portal.service.course.ClassroomService;
 import com.portal.service.course.CourseInfoService;
+import com.portal.service.course.CourseScheduleService;
 import com.portal.service.course.CourseService;
 import com.portal.service.course.CourseSignUpService;
 import com.portal.service.course.DepartmentService;
+import com.portal.service.member.ProfessorService;
 import com.portal.service.member.StudentService;
 
 @Controller
@@ -60,7 +63,13 @@ public class CourseController {
 	private StudentService studentService;
 	
 	@Autowired
+	private ProfessorService professorService;
+	
+	@Autowired
 	private CourseSignUpService courseSignUpService;
+	
+	@Autowired
+	private CourseScheduleService courseScheduleService;
 	
 	@Autowired
 	private AdminLogService adminLogService;
@@ -70,7 +79,6 @@ public class CourseController {
 	
 	@GetMapping("getSyllabus/{classCode}")
 	public String getSyllabus(@PathVariable int classCode, RedirectAttributes rttr) {
-		System.out.println(classCode);
 		CourseDto syllabus = courseService.getCourseByClassCode(classCode);
 		
 		rttr.addFlashAttribute("syllabus", syllabus);
@@ -89,14 +97,11 @@ public class CourseController {
 	@ResponseBody
 	@PreAuthorize("hasAnyAuthority('admin','course')")
 	public List<RoomDto> getRooms(@RequestBody Map<String, String> req) {
-//		Map<String, Object> map = new HashMap<>();
 		String[] building = req.get("building").split(":");
 		String campus = building[0];
 		int buildingId = Integer.parseInt(building[1]);
 		
-		System.out.println(building);
 		List<RoomDto> roomList = classroomService.getClassroomByBuildingId(buildingId, campus);
-		System.out.println(roomList);
 		return roomList;
 	}
 	
@@ -117,6 +122,7 @@ public class CourseController {
 		List<DepartmentDto> departmentList = departmentService.getDepartmentAll();
 		List<CourseTimeDto> courseTimeList = courseService.getCourseTimeAll();
 		List<CourseInfoDto> courseInfoList = courseInfoService.getCourseInfoAll(); 
+		List<ProfessorDto> professorList = professorService.getProfessorAll();
 		
 //		model.addAttribute("classroomList", classroomList);
 		model.addAttribute("buildingList", buildingList);
@@ -124,19 +130,32 @@ public class CourseController {
 		model.addAttribute("departmentList", departmentList);
 		model.addAttribute("courseTimeList", courseTimeList);
 		model.addAttribute("courseInfoList", courseInfoList);
+		model.addAttribute("professorList", professorList);
 	}
 	
 	@PostMapping("register")
 	@PreAuthorize("hasAnyAuthority('admin','course')")
 	public String register(CourseDto course, Authentication authentication) {
+		CourseDto lastCourse = courseService.getLastCourse();
+		int classCode = lastCourse.getClassCode() + 1;
+		course.setClassCode(classCode);
+		
+		// course 등록
 		int cnt = courseService.registerCourse(course);
 		
 		String messageLog = "";
 		
 		
+		// 수업시간 등록
+		for(int i = 0; i < course.getDay().size(); i++) {
+			String day = course.getDay().get(i);
+			int startTimeId = course.getStartTimeId().get(i);
+			int endTimeId = course.getEndTimeId().get(i);
+			courseScheduleService.registerScheduleByClassCode(classCode, day, startTimeId, endTimeId);
+		}
+		
+		
 		if(cnt == 1) {
-			CourseDto newCourse = courseService.getLastCourse();
-			int classCode = newCourse.getClassCode();
 			messageLog = "수업번호 " + classCode + " 강의 추가 성공";
 		}	else {
 			messageLog = "강의 추가 실패";
@@ -147,6 +166,11 @@ public class CourseController {
 		int cnt2 = adminLogService.registerCourseLogById(admin.getId(), messageLog, category);
 		
 		return "redirect:/course/list";
+	}
+	
+	@GetMapping("get")
+	public void get(int classCode) {
+		
 	}
 	
 	@GetMapping("modify")

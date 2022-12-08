@@ -10,8 +10,8 @@
 	</select>
 
 	<insert id="insertCourse">
-		INSERT INTO Course (classNumber, departmentId, grade, year, semester, maxPersonnel, startTimeId, endTimeId, classroom)
-		VALUES (#{classNumber},#{departmentId}, #{grade},#{year},#{semester},#{maxPersonnel},#{startTimeId},#{endTimeId},#{classroom})
+		INSERT INTO Course (classCode, classNumber, departmentId, grade, year, semester, maxPersonnel, classroom, professorNumber)
+		VALUES (#{classCode},#{classNumber},#{departmentId}, #{grade},#{year},#{semester},#{maxPersonnel},#{classroom},#{professorNumber})
 	</insert>
 	
 	<select id="selectLastCourse" resultType="com.portal.domain.course.CourseDto">
@@ -23,8 +23,6 @@
 			year,
 			semester,
 			maxPersonnel,
-			startTimeId,
-			endTimeId,
 			classroom
 		FROM Course
 		ORDER BY classCode DESC
@@ -154,8 +152,9 @@
 			c.maxPersonnel,
             c.year,
             c.semester,
-            (SELECT t.time FROM CourseTime t WHERE t.id = c.startTimeId) startTime,
-			(SELECT t.time FROM CourseTime t WHERE t.id = c.endTimeId) endTime,
+            cs.day,
+            (SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId) startTime,
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId) endTime,
 			c.classroom,
 			c.departmentId,
             d.name departmentName,
@@ -168,7 +167,10 @@
 		LEFT JOIN Department d ON c.departmentId = d.id
 		LEFT JOIN College l ON l.id = d.collegeId
         LEFT JOIN Organization o ON o.id = l.organizationId	
-		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber	
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber
+		LEFT JOIN CourseSchedule cs ON c.classCode = cs.classCode
+		ORDER BY c.classCode
+		<!-- GROUP BY c.classCode -->
 	</select>
 	
 	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseAllMap">
@@ -178,8 +180,6 @@
 		<result column="maxPersonnel" property="maxPersonnel"/>
 		<result column="year" property="year"/>
 		<result column="semester" property="semester"/>
-		<result column="startTime" property="startTime"/>
-		<result column="endTime" property="endTime"/>
 		<result column="classroom" property="classroom"/>
 		<result column="departmentId" property="departmentId"/>
 		
@@ -207,6 +207,13 @@
 			<result column="practice" property="practice"/>
 			<result column="summary" property="summary"/>
 		</association>
+		
+		<collection property="courseSchedule" javaType="java.util.ArrayList" ofType="com.portal.domain.course.CourseScheduleDto">
+			<result column="classCode" property="classCode"/>
+			<result column="day" property="day"/>
+			<result column="startTime" property="startTime"/>
+			<result column="endTime" property="endTime"/>
+		</collection>
 	</resultMap>
 
 </mapper>

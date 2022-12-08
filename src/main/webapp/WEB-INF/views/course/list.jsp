@@ -39,6 +39,8 @@
 						<th>학점</th>
 						<th>수업</th>
 						<th>강의</th>
+						<th>수업시간</th>
+						<th>강의실</th>
 						<th>수강정원</th>
 						<th>관장학과</th>
 					</tr>
@@ -65,8 +67,15 @@
 							<td>${course.courseInfo.credit }</td>
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
+							<td>
+								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
+									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime }
+								</c:forEach>
+							</td>
+							<td>${course.classroom }</td>
 							<td>${course.maxPersonnel }</td>
 							<td>${course.department.name }</td>
+							<td><a href="${getLink }" class="btn btn-primary">수정</a></td>
 						</tr>
 					</c:forEach>				
 				</tbody>
