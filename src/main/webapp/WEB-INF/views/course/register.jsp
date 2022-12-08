@@ -35,10 +35,19 @@
 					</div>
 					
 					<div class="mb-3">
-						<label for="" class="form-label">학수번호 - 교과목명</label>
+						<label for="" class="form-label">학수번호</label>
 						<select name="classNumber" class="form-select" aria-label="Default select example">
 							<c:forEach items="${courseInfoList }" var="courseInfo">
-								<option value="${courseInfo.classNumber }">${courseInfo.classNumber } - ${courseInfo.courseName }</option>
+								<option value="${courseInfo.classNumber }">${courseInfo.classNumber } : ${courseInfo.courseName }</option>
+							</c:forEach>
+						</select>
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">교강사</label>
+						<select name="professorNumber" class="form-select" aria-label="Default select example">
+							<c:forEach items="${professorList }" var="professor">
+								<option value="${professor.professorNumber }">${professor.name } : ${professor.department.name } - ${professor.department.college.name } - ${professor.department.college.organization.name }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -48,9 +57,20 @@
 						<input required="required" type="number" class="form-control" name="maxPersonnel" value="40">
 					</div>
 					
-					<div class="mb-3">
-						<label for="" class="form-label">수업시간</label>
+					<div id="courseScheduleId1" class="mb-3">
+						<label for="" class="form-label">
+							수업시간 <button onclick="AddCourseSchedule()" id="addCourseScheduleButton" class="btn btn-primary"><i class="fa-solid fa-plus"></i></button>
+						</label>
 						<div class="d-flex">
+							<select name="day" class="form-select" aria-label="Default select example">
+								<option value="Monday">월</option>
+								<option value="Tuesday">화</option>
+								<option value="Wednesday">수</option>
+								<option value="Thursday">목</option>
+								<option value="Friday">금</option>
+								<option value="Saturday">토</option>
+								<option value="Sunday">일</option>
+							</select>
 							<select name="startTimeId" class="form-select" aria-label="Default select example">
 								<c:forEach items="${courseTimeList }" var="courseTime">
 									<option value="${courseTime.id }">${courseTime.time }</option>
@@ -112,6 +132,33 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
 const ctx = "${pageContext.request.contextPath}";
+
+function AddCourseSchedule() {
+	document.querySelector("#courseScheduleId1").insertAdjacentHTML("beforeend",`
+			<div class="d-flex">
+				<select name="day" class="form-select" aria-label="Default select example">
+					<option value="Monday">월</option>
+					<option value="Tuesday">화</option>
+					<option value="Wednesday">수</option>
+					<option value="Thursday">목</option>
+					<option value="Friday">금</option>
+					<option value="Saturday">토</option>
+					<option value="Sunday">일</option>
+				</select>
+				<select name="startTimeId" class="form-select" aria-label="Default select example">
+					<c:forEach items="\${courseTimeList }" var="courseTime">
+						<option value="\${courseTime.id }">\${courseTime.time }</option>
+					</c:forEach>
+				</select>
+				<select name="endTimeId" class="form-select" aria-label="Default select example">
+					<c:forEach items="\${courseTimeList }" var="courseTime">
+						<option value="\${courseTime.id }">\${courseTime.time }</option>
+					</c:forEach>
+				</select>
+			</div>
+			`);
+}
+
 
 // 강의실
 const selectBuilding1 = document.querySelector("#selectBuildingId1");

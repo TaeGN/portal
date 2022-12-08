@@ -1,5 +1,7 @@
 package com.portal.domain.course;
 
+import java.util.List;
+
 import com.portal.domain.member.ProfessorDto;
 
 import lombok.Data;
@@ -13,10 +15,9 @@ public class CourseDto {
 	private int departmentId;
 	private int year;
 	private String semester;
-	private int startTimeId;
-	private String startTime;
-	private int endTimeId;
-	private String endTime;
+	private List<Integer> startTimeId;
+	private List<Integer> endTimeId;
+	private List<String> day;
 	private String classroom;
 	private String building;
 	private String room;
@@ -28,4 +29,5 @@ public class CourseDto {
 	private DepartmentDto department;
 	private CourseInfoDto courseInfo;
 	private ProfessorDto professor;
+	private List<CourseScheduleDto> courseSchedule;
 }

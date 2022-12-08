@@ -147,7 +147,11 @@
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
 							<td>${course.maxPersonnel }</td>
-							<td>${course.startTime } - ${course.endTime }</td>
+							<td>
+								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
+									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime }
+								</c:forEach>
+							</td>
 							<td>${course.classroom }</td>
 							<td>${course.department.name }</td>
 						</tr>
