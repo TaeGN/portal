@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.portal.domain.course.CourseDto;
-import com.portal.domain.sugang.InfoDto;
+import com.portal.domain.sugang.SignUpNoticeDto;
 import com.portal.domain.sugang.SearchDto;
 import com.portal.service.course.CourseSignUpService;
 import com.portal.service.sugang.SugangService;
@@ -35,12 +35,20 @@ public class SugangController {
 		
 	}
 	
-	@GetMapping("info")
+	@GetMapping("signUpNotice")
 	public void info(Model model) {
-		List<InfoDto> list = sugangService.getInfoList();
+		List<SignUpNoticeDto> signUpNoticeList = sugangService.getSignUpNoticeList();
 		
-		model.addAttribute("infoList", list);
+		model.addAttribute("signUpNoticeList", signUpNoticeList);
 	}
+	
+	@GetMapping("signUpNoticeText")
+	public void signUpNoticeText(int id, Model model) {
+		String signUpNoticeText = sugangService.getSignUpNoticeText(id);
+		
+		model.addAttribute("signUpNoticeText", signUpNoticeText);
+	}
+	
 	
 	@GetMapping("list")
 	public void list(SearchDto search, Model model, Authentication authentication) {
@@ -74,12 +82,6 @@ public class SugangController {
 //	}
 	
 	
-	@GetMapping("infoText")
-	public void infoText(int id, Model model) {
-		String infoText = sugangService.getInfoText(id);
-		
-		model.addAttribute("infoText", infoText);
-	}
 	
 	// 희망수업 리스트
 	@GetMapping("desireList")

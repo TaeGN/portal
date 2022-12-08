@@ -15,7 +15,7 @@
 			p.lastResidentId,
 			p.loginId,
 			p.password,
-			p.id departmentId 
+			p.departmentId 
 		FROM Professor p
 		WHERE loginId = #{loginId}
 	</select>

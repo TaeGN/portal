@@ -1,5 +1,7 @@
 package com.portal.domain.course;
 
+import com.portal.domain.member.ProfessorDto;
+
 import lombok.Data;
 
 @Data
@@ -7,7 +9,6 @@ public class CourseDto {
 	private String grade;
 	private int classCode;
 	private String classNumber;
-	private String professor;
 	private int maxPersonnel;
 	private int departmentId;
 	private int year;
@@ -23,6 +24,8 @@ public class CourseDto {
 	private String signUp;
 	private int countDesire;
 	private int countSignUp;
+	private int professorNumber;
 	private DepartmentDto department;
 	private CourseInfoDto courseInfo;
+	private ProfessorDto professor;
 }

@@ -18,4 +18,6 @@ public interface CourseMapper {
 
 	List<CourseTimeDto> selectCourseTimeAll();
 
+	CourseDto selectCourseByClassCode(int classCode);
+
 }

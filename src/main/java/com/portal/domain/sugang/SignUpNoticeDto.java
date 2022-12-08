@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import lombok.Data;
 
 @Data
-public class InfoDto {
+public class SignUpNoticeDto {
 	private int id;
 	private String campus;
 	private String title;

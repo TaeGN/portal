@@ -28,10 +28,10 @@ public class CustomConfig {
 		http.exceptionHandling().accessDeniedPage("/access-denied");
 //		http.formLogin().loginPage("/admin/login").defaultSuccessUrl("/admin/board", true);
 		http.formLogin().loginPage("/sugang/login").defaultSuccessUrl("/sugang/list", true);
+//		http.logout().logoutUrl("/admin/logout");
 		http.logout().logoutUrl("/sugang/logout");
 		http.rememberMe();
 		http.csrf().disable();
-		
 		return http.build();
 	}
 }

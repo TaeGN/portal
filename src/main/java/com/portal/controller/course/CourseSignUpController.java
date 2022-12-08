@@ -82,6 +82,7 @@ public class CourseSignUpController {
 			message = "희망수업 삭제 실패";
 		}
 		
+		
 		map.put("message", message);
 		map.put("studentNumber", studentNumber);
 		map.put("classCode", classCode);

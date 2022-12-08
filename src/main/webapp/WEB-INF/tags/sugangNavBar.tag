@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<c:url value="/sugang/info" var="infoLink"></c:url>
+<c:url value="/sugang/signUpNotice" var="signUpNoticeLink"></c:url>
 <c:url value="/sugang/list" var="listLink"></c:url>
 <c:url value="/sugang/login" var="loginLink"></c:url>
 <c:url value="/sugang/desireList" var="desireLink"></c:url>
@@ -41,7 +41,7 @@
           <a class="nav-link" href="${listLink }">수강편람</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="${infoLink }">수강안내</a>
+          <a class="nav-link" href="${signUpNoticeLink }">수강안내</a>
         </li>
         <c:if test="${loggedIn }">
 	        <li class="nav-item">

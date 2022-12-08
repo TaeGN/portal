@@ -6,14 +6,14 @@
 
 	
 
-	<select id="selectInfoTextByInfoId" resultType="string">
+	<select id="selectSignUpNoticeTextById" resultType="string">
 		SELECT text
-		FROM ClassInfo
+		FROM SignUpNotice
 		WHERE id = #{id}
 	</select>
 	
 
-	<select id="selectInfoAll" resultType="com.portal.domain.sugang.InfoDto">
+	<select id="selectSignUpNoticeAll" resultType="com.portal.domain.sugang.SignUpNoticeDto">
 		SELECT 
 			id,
 			campus,
@@ -21,7 +21,7 @@
 			text,
 			writer,
 			inserted
-		FROM ClassInfo
+		FROM SignUpNotice
 	</select>
 	
 
@@ -103,6 +103,7 @@
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
 			<result column="courseClassification" property="courseClassification"/>
+			<result column="classNumber" property="classNumber"/>
 			<result column="courseName" property="courseName"/>
 			<result column="credit" property="credit"/>
 			<result column="theory" property="theory"/>
@@ -189,6 +190,7 @@
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
 			<result column="courseClassification" property="courseClassification"/>
+			<result column="classNumber" property="classNumber"/>
 			<result column="courseName" property="courseName"/>
 			<result column="credit" property="credit"/>
 			<result column="theory" property="theory"/>
@@ -261,6 +263,7 @@
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
 			<result column="courseClassification" property="courseClassification"/>
+			<result column="classNumber" property="classNumber"/>
 			<result column="courseName" property="courseName"/>
 			<result column="credit" property="credit"/>
 			<result column="theory" property="theory"/>
@@ -333,6 +336,7 @@
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
 			<result column="courseClassification" property="courseClassification"/>
+			<result column="classNumber" property="classNumber"/>
 			<result column="courseName" property="courseName"/>
 			<result column="credit" property="credit"/>
 			<result column="theory" property="theory"/>
