@@ -1,5 +1,7 @@
 package com.portal.domain.member;
 
+import java.time.LocalDateTime;
+
 import com.portal.domain.course.DepartmentDto;
 
 import lombok.Data;
@@ -16,5 +18,6 @@ public class ProfessorDto {
 	private int departmentId;
 	private String loginId;
 	private String password;
+	private LocalDateTime inserted;
 	private DepartmentDto department;
 }

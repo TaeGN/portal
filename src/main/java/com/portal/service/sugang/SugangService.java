@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.portal.domain.course.CourseDto;
 import com.portal.domain.member.StudentDto;
-import com.portal.domain.sugang.InfoDto;
+import com.portal.domain.sugang.SignUpNoticeDto;
 import com.portal.domain.sugang.SearchDto;
 import com.portal.mapper.sugang.SugangMapper;
 import com.portal.service.member.StudentService;
@@ -50,15 +50,15 @@ public class SugangService {
 		return list;
 	}
 
-	public List<InfoDto> getInfoList() {
+	public List<SignUpNoticeDto> getSignUpNoticeList() {
 		// TODO Auto-generated method stub
-		return sugangMapper.selectInfoAll();
+		return sugangMapper.selectSignUpNoticeAll();
 	}
 
 
-	public String getInfoText(int id) {
+	public String getSignUpNoticeText(int id) {
 		// TODO Auto-generated method stub
-		return sugangMapper.selectInfoTextByInfoId(id);
+		return sugangMapper.selectSignUpNoticeTextById(id);
 	}
 
 

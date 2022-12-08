@@ -56,7 +56,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 					authorityList.add(new SimpleGrantedAuthority(authority));
 				}
 			}
-		} else if(professor != null && professor.getLoginId() < 1000000000) {
+		} else if(professor != null && professor.getProfessorNumber() < 1000000000) {
 			 // 학생 로그인의 경우
 			userId = professor.getLoginId();
 			password = professor.getPassword();

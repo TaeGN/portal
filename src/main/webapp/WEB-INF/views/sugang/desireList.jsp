@@ -104,13 +104,13 @@
 
 
 <!-- courseSignUpConfirmToast -->
-<div class="toast" id="CourseSignUpConfirmToast">
+<div class="toast" id="courseSignUpConfirmToast">
     <div class="toast-header">
-        <strong id="CourseSignUpConfirmToastStrong" class="me-auto"><i class="bi-gift-fill"></i></strong>
-        <small id="CourseSignUpConfirmToastSmall">방금 전</small>
+        <strong id="courseSignUpConfirmToastStrong" class="me-auto"><i class="bi-gift-fill"></i></strong>
+        <small id="courseSignUpConfirmToastSmall">방금 전</small>
         <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
     </div>
-    <div id="CourseSignUpConfirmToastBody" class="toast-body">
+    <div id="courseSignUpConfirmToastBody" class="toast-body">
     	
     </div>
 </div>
@@ -133,6 +133,7 @@
 <script>
 const ctx = "${pageContext.request.contextPath}";
 
+
 //signUp table에서 signUp false로 변경
 function CancelCourseSignUpConfirm(classCode, studentId) {
 	const data = {classCode, studentId};
@@ -145,15 +146,14 @@ function CancelCourseSignUpConfirm(classCode, studentId) {
 	})
 	.then(res => res.json())
 	.then(data => {
-		document.querySelector("#cancelCourseSignUpConfirmToastStrong").innerText = data.message;
+/* 		document.querySelector("#cancelCourseSignUpConfirmToastStrong").innerText = data.message;
 		document.querySelector("#cancelCourseSignUpConfirmToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
+		const cancelCourseSignUpConfirmToast = document.querySelector("#cancelCourseSignUpConfirmToast");
+		const toast = new bootstrap.Toast(cancelCourseSignUpConfirmToast);
+		toast.show(); */
 		
 		// 페이지 새로고침
 		location.reload();
-
-		const cancelCourseSignUpConfirmToast = document.querySelector("#cancelCourseSignUpConfirmToast");
-		const toast = new bootstrap.Toast(cancelCourseSignUpConfirmToast);
-		toast.show();
 	});
 };
 
@@ -170,15 +170,13 @@ function CourseSignUpConfirm(classCode, studentId) {
 	})
 	.then(res => res.json())
 	.then(data => {
-		document.querySelector("#courseSignUpConfirmToastStrong").innerText = data.message;
+/* 		document.querySelector("#courseSignUpConfirmToastStrong").innerText = data.message;
 		document.querySelector("#courseSignUpConfirmToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
-	
-		// 페이지 새로고침
-		location.reload();
-		
 		const courseSignUpConfirmToast = document.querySelector("#courseSignUpConfirmToast");
 		const toast = new bootstrap.Toast(courseSignUpConfirmToast);
-		toast.show();
+		toast.show(); */
+		// 페이지 새로고침
+		location.reload();
 	});
 };
 
@@ -195,14 +193,15 @@ function DeleteCourseDesire(classCode, studentId) {
 	})
 	.then(res => res.json())
 	.then(data => {
-		document.querySelector("#deleteCourseDesireToastStrong").innerText = data.message;
+ 		location.reload();
+/* 		document.querySelector("#deleteCourseDesireToastStrong").innerText = data.message;
 		document.querySelector("#deleteCourseDesireToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
 		
- 		location.reload(); 
 
 		const deleteCourseDesireToast = document.querySelector("#deleteCourseDesireToast");
 		const toast = new bootstrap.Toast(deleteCourseDesireToast);
- 		toast.show();
+ 		toast.show(); */
+ 		
 	});
 };
 

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.portal.domain.course.CourseDto;
-import com.portal.domain.sugang.InfoDto;
+import com.portal.domain.sugang.SignUpNoticeDto;
 import com.portal.domain.sugang.SearchDto;
 
 @Mapper
@@ -15,9 +15,9 @@ public interface SugangMapper {
 	
 	List<CourseDto> selectCourseAll();
 
-	List<InfoDto> selectInfoAll();
+	List<SignUpNoticeDto> selectSignUpNoticeAll();
 
-	String selectInfoTextByInfoId(int id);
+	String selectSignUpNoticeTextById(int id);
 
 	List<CourseDto> selectCourseBySearchDto(SearchDto search);
 

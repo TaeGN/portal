@@ -33,13 +33,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${infoList }" var="info">
-							<c:url value="/sugang/infoText?id=${info.id }" var="infoTextLink"></c:url>
+						<c:forEach items="${signUpNoticeList }" var="signUpNotice">
+							<c:url value="/sugang/signUpNoticeText?id=${signUpNotice.id }" var="signUpNoticeTextLink"></c:url>
 							<tr>
-								<td>${info.campus }</td>
-								<td><a href="${infoTextLink }"> ${info.title } </a></td>
-								<td>${info.writer }</td>
-								<td>${info.inserted }</td>
+								<td>${signUpNotice.campus }</td>
+								<td><a href="${signUpNoticeTextLink }"> ${signUpNotice.title } </a></td>
+								<td>${signUpNotice.writer }</td>
+								<td>${signUpNotice.inserted }</td>
 							</tr>
 						</c:forEach>
 					</tbody>

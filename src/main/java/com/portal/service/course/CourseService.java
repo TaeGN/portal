@@ -58,4 +58,9 @@ public class CourseService {
 		// TODO Auto-generated method stub
 		return courseMapper.selectCourseTimeAll();
 	}
+
+	public CourseDto getCourseByClassCode(int classCode) {
+		// TODO Auto-generated method stub
+		return courseMapper.selectCourseByClassCode(classCode);
+	}
 }

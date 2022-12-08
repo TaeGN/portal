@@ -6,14 +6,14 @@
 
 	
 
-	<select id="selectInfoTextByInfoId" resultType="string">
+	<select id="selectSignUpNoticeTextById" resultType="string">
 		SELECT text
-		FROM ClassInfo
+		FROM SignUpNotice
 		WHERE id = #{id}
 	</select>
 	
 
-	<select id="selectInfoAll" resultType="com.portal.domain.sugang.InfoDto">
+	<select id="selectSignUpNoticeAll" resultType="com.portal.domain.sugang.SignUpNoticeDto">
 		SELECT 
 			id,
 			campus,
@@ -21,7 +21,7 @@
 			text,
 			writer,
 			inserted
-		FROM ClassInfo
+		FROM SignUpNotice
 	</select>
 	
 

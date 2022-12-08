@@ -129,14 +129,16 @@
 							<td>${course.grade }</td>
 							<td>${course.courseInfo.courseClassification }</td>
 							<td>
-								<%-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classCodeClickModal">
-								  ${course.classCode }
-								</button> --%>
-								<button onclick="GetSyllabus(${course.classCode})" type="button" class="btn btn-primary">
+								<button onclick="GetSyllabus(${course.classCode})" type="button" class="btn btn-link">
 								  ${course.classCode }
 								</button>
 							</td>
-							<td><a href="${getByClassNumberLink }">${course.classNumber }</a></td>
+							<td>
+								${course.classNumber }
+								<%-- <button id="classNumberButton1" onclick="GetClassInfo(${course.courseInfo})" type="button" class="btn btn-link" data-courseClassification="${course.courseInfo.courseClassification }" data-bs-toggle="modal" data-bs-target="#classInfoModal">
+								  ${course.classNumber }
+								</button> --%>
+							</td>
 							<td>${course.courseInfo.courseName }</td>
 							<td>교수명</td>
 							<td>${course.courseInfo.credit }</td>
@@ -153,6 +155,56 @@
 		</div>
 	</div>
 </div>
+
+<!-- classInfoModal -->
+<div class="modal fade" id="classInfoModal" tabindex="-1" aria-labelledby="classInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="classInfoModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body modal-dialog modal-dialog-scrollable">
+        <div class="container-md">
+			<div class="row">
+				<div class="col">
+					<table class="table">
+					<input id="courseInfoId1" type="hidden" name="courseInfo">
+						<tr>
+							<td rowspan="4">과목</td>
+							<td rowspan="2">CourseName</td>
+							<td rowspan="2"></td>
+							<td>과목구분</td>
+							<td id="courseClassificationId1">${courseClassification }</td>
+						</tr>
+						<tr>
+							<td>학점</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td rowspan="2">Department</td>
+							<td rowspan="2"></td>
+							<td>강의</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>실습</td>
+							<td></td>
+						</tr>
+
+					</table>
+				</div>
+			</div>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 <!-- deleteCourseDesireToast -->
@@ -182,6 +234,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
 const ctx = "${pageContext.request.contextPath}";
+
+/* function GetCourseInfo(courseInfo) {
+	const courseClassification = document.querySelector("#classNumberButton1").dataset.courseClassification
+	document.querySelector("#courseInfoId1").value = \${courseInfo};
+	document.querySelector("#courseClassificationId1").innerText = `\${courseClassification}`;
+} */
 
 function GetSyllabus(classCode) {
 	window.open(ctx + "/course/getSyllabus/" + classCode, "myWindow", 'width=800,height=600');
