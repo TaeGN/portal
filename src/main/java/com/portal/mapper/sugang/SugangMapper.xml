@@ -103,6 +103,7 @@
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
 			<result column="courseClassification" property="courseClassification"/>
+			<result column="classNumber" property="classNumber"/>
 			<result column="courseName" property="courseName"/>
 			<result column="credit" property="credit"/>
 			<result column="theory" property="theory"/>
@@ -189,6 +190,7 @@
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
 			<result column="courseClassification" property="courseClassification"/>
+			<result column="classNumber" property="classNumber"/>
 			<result column="courseName" property="courseName"/>
 			<result column="credit" property="credit"/>
 			<result column="theory" property="theory"/>
@@ -261,6 +263,7 @@
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
 			<result column="courseClassification" property="courseClassification"/>
+			<result column="classNumber" property="classNumber"/>
 			<result column="courseName" property="courseName"/>
 			<result column="credit" property="credit"/>
 			<result column="theory" property="theory"/>
@@ -333,6 +336,7 @@
 		
 		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
 			<result column="courseClassification" property="courseClassification"/>
+			<result column="classNumber" property="classNumber"/>
 			<result column="courseName" property="courseName"/>
 			<result column="credit" property="credit"/>
 			<result column="theory" property="theory"/>

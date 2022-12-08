@@ -130,14 +130,16 @@
 							<td>${course.courseInfo.courseClassification }</td>
 							<td>
 								<button onclick="GetSyllabus(${course.classCode})" type="button" class="btn btn-link">
-								  ${course.classCode }
+								  ${course.classCode } <i class="fa-solid fa-magnifying-glass"></i>
 								</button>
 							</td>
 							<td>
-								${course.classNumber }
-								<%-- <button id="classNumberButton1" onclick="GetClassInfo(${course.courseInfo})" type="button" class="btn btn-link" data-courseClassification="${course.courseInfo.courseClassification }" data-bs-toggle="modal" data-bs-target="#classInfoModal">
-								  ${course.classNumber }
+								<%-- <button onclick="GetCourseInfo('${course.classNumber }')" id="classNumberButton" class="btn btn-light" data-classNumber="${course.classNumber }" data-courseName="${course.courseInfo.courseName }" data-courseClassification="${course.courseInfo.courseClassification }" data-credit="${course.courseInfo.credit }" data-theory="${course.courseInfo.theory }" data-practice="${course.courseInfo.practice }" data-summary="${course.courseInfo.summary }" data-bs-toggle="modal" data-bs-target="#courseInfoModal">
+								  ${course.classNumber } <i class="fa-solid fa-magnifying-glass"></i>
 								</button> --%>
+								<button onclick='GetCourseInfo("${course.classNumber}")' type="button" class="btn btn-light">
+								  ${course.classNumber } <i class="fa-solid fa-magnifying-glass"></i>
+								</button>
 							</td>
 							<td>${course.courseInfo.courseName }</td>
 							<td>교수명</td>
@@ -156,46 +158,46 @@
 	</div>
 </div>
 
-<!-- classInfoModal -->
-<div class="modal fade" id="classInfoModal" tabindex="-1" aria-labelledby="classInfoModalLabel" aria-hidden="true">
+<!-- courseInfoModal -->
+<div class="modal fade" id="courseInfoModal" tabindex="-1" aria-labelledby="courseInfoModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="classInfoModalLabel">Modal title</h1>
+        <h1 class="modal-title fs-5" id="courseInfoModalLabel">Modal title</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body modal-dialog modal-dialog-scrollable">
+      <div id="modalBodyId1" class="modal-body modal-dialog modal-dialog-scrollable">
         <div class="container-md">
-			<div class="row">
-				<div class="col">
-					<table class="table">
-					<input id="courseInfoId1" type="hidden" name="courseInfo">
-						<tr>
-							<td rowspan="4">과목</td>
-							<td rowspan="2">CourseName</td>
-							<td rowspan="2"></td>
-							<td>과목구분</td>
-							<td id="courseClassificationId1">${courseClassification }</td>
-						</tr>
-						<tr>
-							<td>학점</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td rowspan="2">Department</td>
-							<td rowspan="2"></td>
-							<td>강의</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>실습</td>
-							<td></td>
-						</tr>
-
-					</table>
+				<div class="row">
+					<div class="col">
+						<table class="table">
+						<input id="courseInfoModalBody" type="hidden" name="courseInfo" >
+							<tr>
+								<td rowspan="4">과목</td>
+								<td rowspan="2">CourseName</td>
+								<td id="courseNameId" rowspan="2">${courseName }</td>
+								<td>과목구분</td>
+								<td>${courseInfo.courseClassification }</td>
+							</tr>
+							<tr>
+								<td>학점</td>
+								<td>${courseInfo.credit }</td>
+							</tr>
+							<tr>
+								<td rowspan="2">Department</td>
+								<td rowspan="2">${courseInfo.department.name }</td>
+								<td>강의</td>
+								<td>${courseInfo.theory }</td>
+							</tr>
+							<tr>
+								<td>실습</td>
+								<td>${courseInfo.practice }</td>
+							</tr>
+	
+						</table>
+					</div>
 				</div>
 			</div>
-		</div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -235,11 +237,53 @@
 <script>
 const ctx = "${pageContext.request.contextPath}";
 
-/* function GetCourseInfo(courseInfo) {
-	const courseClassification = document.querySelector("#classNumberButton1").dataset.courseClassification
-	document.querySelector("#courseInfoId1").value = \${courseInfo};
-	document.querySelector("#courseClassificationId1").innerText = `\${courseClassification}`;
+/* function GetCourseInfo(classNumber) {
+	const classNumber = \${classNumber};
+	document.querySelector("#courseInfoModal").classList.add("hidden");
+	
+	fetch(ctx + "courseInfo/getCourseInfo/" + classNumber)
+	.then(courseInfo => {
+		document.querySelector("#modalBodyId1").innerHTML = `
+			<div class="container-md">
+				<div class="row">
+					<div class="col">
+						<table class="table">
+							<tr>
+								<td rowspan="4">과목</td>
+								<td rowspan="2">CourseName</td>
+								<td rowspan="2"></td>
+								<td>과목구분</td>
+								<td>\${courseInfo.courseClassification }</td>
+							</tr>
+							<tr>
+								<td>학점</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td rowspan="2">Department</td>
+								<td rowspan="2"></td>
+								<td>강의</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>실습</td>
+								<td></td>
+							</tr>
+	
+						</table>
+					</div>
+				</div>
+			</div>
+		`;
+		document.querySelector("#courseInfoModal").classList.remove("hidden");
+	});
 } */
+
+function GetCourseInfo(classNumber) {
+	window.open(ctx + "/courseInfo/getCourseInfo/" + classNumber, "myWindow", 'width=800,height=600');
+	window.close();
+}
+
 
 function GetSyllabus(classCode) {
 	window.open(ctx + "/course/getSyllabus/" + classCode, "myWindow", 'width=800,height=600');
