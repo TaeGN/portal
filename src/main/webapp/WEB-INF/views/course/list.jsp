@@ -36,9 +36,10 @@
 						<th>수업번호</th>
 						<th>학수번호</th>
 						<th>교과목명</th>
+						<th>교강사</th>
 						<th>학점</th>
-						<th>수업</th>
 						<th>강의</th>
+						<th>실습</th>
 						<th>수업시간</th>
 						<th>강의실</th>
 						<th>수강정원</th>
@@ -64,6 +65,7 @@
 								</button>
 							</td>
 							<td>${course.courseInfo.courseName }</td>
+							<td>${course.professor.name }</td>
 							<td>${course.courseInfo.credit }</td>
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>

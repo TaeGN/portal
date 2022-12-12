@@ -28,12 +28,12 @@ public class ProfessorService {
 
 	public int registerProfessor(ProfessorDto professor) {
 		// loginId == null이면 professorNumber로 설정
-		if(professor.getLoginId() == null) {
+		if(professor.getLoginId() == null || professor.getLoginId().length() == 0) {
 			professor.setLoginId("" + professor.getProfessorNumber());
 		}
 		
 		// password == null이면 주민번호 앞자리로 설정
-		if(professor.getPassword() == null) {
+		if(professor.getPassword() == null || professor.getPassword().length() == 0) {
 			professor.setPassword(professor.getFirstResidentId());
 		}
 		

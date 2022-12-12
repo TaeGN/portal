@@ -18,12 +18,12 @@
 
 <my:sugangNavBar></my:sugangNavBar>
 <div class="d-flex">
-<div id="sugangListId1" class="container-md" data-studentId="${studentId }">
+<div id="sugangListId1"  data-studentId="${studentId }">
 	<div class="row">
 		<div class="col">
-			<table class="table">
-				<thead>
-					<tr>
+			<table class="table table-bordered">
+				<thead id="theadId1">
+					<tr class="table-secondary">
 						<sec:authorize access="isAuthenticated()">
 							<c:if test="${hasStudentAdmin }">
 								<th>수강신청</th>
@@ -37,6 +37,7 @@
 						<th>학수번호</th>
 						<th>교과목명</th>
 						<th>희망수업삭제</th>
+						<th>교강사</th>
 						<th>학점</th>
 						<th>강의</th>
 						<th>실습</th>
@@ -75,11 +76,16 @@
 									</c:if>
 								</sec:authorize>
 							</td>
+							<td>${course.professor.name }</td>
 							<td>${course.courseInfo.credit }</td>
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
 							<td>${course.maxPersonnel }</td>
-							<td>${course.startTime } - ${course.endTime }</td>
+							<td>
+								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
+									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime } <br>
+								</c:forEach>
+							</td>
 							<td>${course.classroom }</td>
 							<td>${course.department.name }</td>
 						</tr>

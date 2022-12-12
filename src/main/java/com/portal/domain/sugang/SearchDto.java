@@ -10,4 +10,6 @@ public class SearchDto {
 	private String grade;
 	private String courseClassification;
 	private int studentNumber;
+//	private int startNum;
+//	private int count;
 }

@@ -53,7 +53,11 @@
 						</tr>
 						<tr>
 							<td class="table-primary">강의시간</td>
-							<td colspan="7">${syllabus.startTime }-${syllabus.endTime } ${syllabus.classroom }</td>
+							<td colspan="7">
+								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
+									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime }
+								</c:forEach>
+							</td>
 						</tr>
 
 					</table>

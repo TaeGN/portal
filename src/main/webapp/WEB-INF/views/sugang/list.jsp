@@ -11,6 +11,10 @@
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style type="text/css">
+
+
+</style>
 </head>
 <body>
 <sec:authentication property="name" var="studentId"/>
@@ -80,12 +84,12 @@
 
 <hr>
 
-<div id="sugangListId1" class="container-md">
+<div id="sugangListId1" >
 	<div class="row">
 		<div class="col">
-			<table class="table">
-				<thead>
-					<tr>
+			<table class="table table-bordered">
+				<thead id="theadId1">
+					<tr class="table-secondary">
 						<sec:authorize access="isAuthenticated()">
 							<c:if test="${hasStudentAdmin }">
 								<th>수강희망</th>
@@ -107,7 +111,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${courseList }" var="course">
+					<c:forEach items="${courseList }" var="course" begin="${(page - 1) * 20 + 1 }" end="${page * 20 + 1 }">
 						<tr>
 							<input type="hidden" name="studentId" value="${studentId }">
 							<c:url value="/course/getByClassCode" var="getByClassCodeLink">
@@ -142,14 +146,14 @@
 								</button>
 							</td>
 							<td>${course.courseInfo.courseName }</td>
-							<td>교수명</td>
+							<td>${course.professor.name }</td>
 							<td>${course.courseInfo.credit }</td>
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
 							<td>${course.maxPersonnel }</td>
 							<td>
 								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
-									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime }
+									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime } <br>
 								</c:forEach>
 							</td>
 							<td>${course.classroom }</td>
@@ -211,6 +215,22 @@
   </div>
 </div>
 
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item disabled">
+      <a class="page-link">Previous</a>
+    </li>
+    <c:forEach var="i" begin="${page > 5 ? page - 4 : 1 }" end="${page < maxPage - 4 ? page + 4 : maxPage}">
+    <c:url value="#" var="paginationLink">
+    	<c:param name="page" value="${i }"></c:param>
+    </c:url>
+   	 <li class="page-item"><a class="page-link" href="${paginationLink }">1</a></li>
+    </c:forEach>
+      <a class="page-link" href="#">Next</a>
+    </li>
+  </ul>
+</nav>
+
 
 
 <!-- deleteCourseDesireToast -->
@@ -241,47 +261,6 @@
 <script>
 const ctx = "${pageContext.request.contextPath}";
 
-/* function GetCourseInfo(classNumber) {
-	const classNumber = \${classNumber};
-	document.querySelector("#courseInfoModal").classList.add("hidden");
-	
-	fetch(ctx + "courseInfo/getCourseInfo/" + classNumber)
-	.then(courseInfo => {
-		document.querySelector("#modalBodyId1").innerHTML = `
-			<div class="container-md">
-				<div class="row">
-					<div class="col">
-						<table class="table">
-							<tr>
-								<td rowspan="4">과목</td>
-								<td rowspan="2">CourseName</td>
-								<td rowspan="2"></td>
-								<td>과목구분</td>
-								<td>\${courseInfo.courseClassification }</td>
-							</tr>
-							<tr>
-								<td>학점</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td rowspan="2">Department</td>
-								<td rowspan="2"></td>
-								<td>강의</td>
-								<td></td>
-							</tr>
-							<tr>
-								<td>실습</td>
-								<td></td>
-							</tr>
-	
-						</table>
-					</div>
-				</div>
-			</div>
-		`;
-		document.querySelector("#courseInfoModal").classList.remove("hidden");
-	});
-} */
 
 function GetCourseInfo(classNumber) {
 	window.open(ctx + "/courseInfo/getCourseInfo/" + classNumber, "myWindow", 'width=800,height=600');

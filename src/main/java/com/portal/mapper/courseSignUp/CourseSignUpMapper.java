@@ -23,4 +23,6 @@ public interface CourseSignUpMapper {
 
 	List<CourseDto> selectSignUpAllByStudentNumber(int studentNumber);
 
+	int deleteSignUpByStudentNumber(int studentNumber);
+
 }

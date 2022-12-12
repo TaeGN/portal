@@ -13,6 +13,7 @@ public class SignUpNoticeDto {
 	private String campus;
 	private String title;
 	private String text;
+	private int writerId;
 	private String writer;
 	
 	@JsonFormat(shape = Shape.STRING)

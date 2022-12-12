@@ -41,12 +41,6 @@ public class AdminController {
 		return "redirect:/admin/board";
 	}
 	
-	@GetMapping("login")
-	public void login() {
-		
-	}
-	
-	
 	// 대시보드
 	@GetMapping("board")
 	@PreAuthorize("isAuthenticated()")

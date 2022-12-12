@@ -16,7 +16,6 @@
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
 <div id="sugangListId1" class="container-md">
-<my:professorAdminNav></my:professorAdminNav>
 	<div class="container-md">
 		<div class="row">
 			<div class="col">
@@ -57,17 +56,17 @@
 					
 					<div class="mb-3">
 						<label for="" class="form-label">연락처</label>
-						<input id="" required="required" type="text" class="form-control" name="contact">
+						<input id="" type="text" class="form-control" name="contact">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">이메일</label>
-						<input id="" required="required" type="email" class="form-control" name="email">
+						<input id="" type="email" class="form-control" name="email">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">홈페이지</label>
-						<input id="" required="required" type="url" class="form-control" name="homepage">
+						<input id="" type="url" class="form-control" name="homepage">
 					</div>
 				
 					

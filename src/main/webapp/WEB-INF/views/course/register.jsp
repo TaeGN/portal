@@ -59,7 +59,7 @@
 					
 					<div id="courseScheduleId1" class="mb-3">
 						<label for="" class="form-label">
-							수업시간 <button onclick="AddCourseSchedule()" id="addCourseScheduleButton" class="btn btn-primary"><i class="fa-solid fa-plus"></i></button>
+							수업시간 <button onclick="AddCourseSchedule()" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i></button>
 						</label>
 						<div class="d-flex">
 							<select name="day" class="form-select" aria-label="Default select example">
@@ -81,6 +81,9 @@
 									<option value="${courseTime.id }">${courseTime.time }</option>
 								</c:forEach>
 							</select>
+							<button type="button" disabled="disabled" class="btn btn-light">
+								<i class="fa-solid fa-xmark"></i>
+							</button>
 						</div>
 					</div>
 					
@@ -146,17 +149,25 @@ function AddCourseSchedule() {
 					<option value="Sunday">일</option>
 				</select>
 				<select name="startTimeId" class="form-select" aria-label="Default select example">
-					<c:forEach items="\${courseTimeList }" var="courseTime">
-						<option value="\${courseTime.id }">\${courseTime.time }</option>
+					<c:forEach items="${courseTimeList }" var="courseTime">
+						<option value="${courseTime.id }">${courseTime.time }</option>
 					</c:forEach>
 				</select>
 				<select name="endTimeId" class="form-select" aria-label="Default select example">
-					<c:forEach items="\${courseTimeList }" var="courseTime">
-						<option value="\${courseTime.id }">\${courseTime.time }</option>
+					<c:forEach items="${courseTimeList }" var="courseTime">
+						<option value="${courseTime.id }">${courseTime.time }</option>
 					</c:forEach>
 				</select>
+				<button onclick="DeleteCourseSchedule()" type="button" class="btn btn-light">
+					<i class="fa-solid fa-xmark"></i>
+				</button>
 			</div>
 			`);
+}
+
+function DeleteCourseSchedule() {
+
+	/* this.wrap('<div></div>').remove(); */
 }
 
 

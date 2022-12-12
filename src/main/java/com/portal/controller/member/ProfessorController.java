@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.portal.domain.admin.AdminMemberDto;
 import com.portal.domain.course.DepartmentDto;
 import com.portal.domain.member.ProfessorDto;
 import com.portal.domain.member.StudentDto;
+import com.portal.mapper.admin.AdminMapper;
+import com.portal.service.admin.AdminLogService;
 import com.portal.service.course.DepartmentService;
 import com.portal.service.member.ProfessorService;
 
@@ -29,6 +33,12 @@ public class ProfessorController {
 	
 	@Autowired
 	private DepartmentService departmentService;
+	
+	@Autowired
+	private AdminMapper adminMapper;
+	
+	@Autowired
+	private AdminLogService adminLogService;
 	
 	@GetMapping("list")
 	public void list(Model model) {
@@ -45,8 +55,21 @@ public class ProfessorController {
 	
 	@PostMapping("register")
 	@PreAuthorize("hasAnyAuthority('admin','member')")
-	public String register(ProfessorDto professor) {
+	public String register(ProfessorDto professor, Authentication authentication) {
 	int cnt = professorService.registerProfessor(professor);
+	
+	String messageLog = "";
+	int professorNumber = professor.getProfessorNumber();
+	if(cnt == 1) {
+		messageLog = "교수번호 " + professorNumber + " 교수 등록 성공";
+	} else {
+		messageLog = "교수번호 " + professorNumber + " 교수 등록 실패";
+	}
+	
+	String category = "register";
+	
+	AdminMemberDto admin = adminMapper.selectAdminMemberByUserName(authentication.getName());
+	adminLogService.registerProfessorLogById(admin.getId(), messageLog, category);
 	
 	return "redirect:/professor/list";
 	}
