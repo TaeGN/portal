@@ -3,6 +3,24 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.member.StudentMapper">
+	
+	<delete id="deleteStudent">
+		DELETE FROM Student
+		WHERE studentNumber = #{studentNumber}
+	</delete>
+
+	<update id="updateStudent">
+		UPDATE Student
+		SET 
+			studentName = #{studentName},
+			id = #{id},
+			password = #{password},
+			firstResidentId = #{firstResidentId},
+			lastResidentId = #{lastResidentId},
+			grade = #{grade},
+			departmentId = #{departmentId}
+		WHERE studentNumber = #{studentNumber}
+	</update>
 
 	<select id="selectMinStudentNumberByDepartmentId" resultType="com.portal.domain.member.StudentDto">
 		SELECT studentNumber FROM Student

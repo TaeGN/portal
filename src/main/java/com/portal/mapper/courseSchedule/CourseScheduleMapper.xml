@@ -3,6 +3,11 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.courseSchedule.CourseScheduleMapper">
+
+	<delete id="deleteCourseScheduleByClassCode">
+	DELETE FROM CourseSchedule
+	WHERE classCode = #{classCode}
+	</delete>
 	
 	<insert id="insertScheduleByClassCode">
 		INSERT INTO CourseSchedule (classCode, day, startTimeId, endTimeId)

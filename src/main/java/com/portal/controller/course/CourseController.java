@@ -169,13 +169,16 @@ public class CourseController {
 	}
 	
 	@GetMapping("get")
-	public void get(int classCode) {
-		
+	@PreAuthorize("hasAnyAuthority('admin','course')")
+	public void get(int classCode, Model model) {
+		CourseDto course = courseService.getCourseByClassCode(classCode);
+		model.addAttribute("course", course);
 	}
 	
 	@GetMapping("modify")
 	@PreAuthorize("hasAnyAuthority('admin','course')")
-	public void modify() {
-		
+	public void modify(int classCode, Model model) {
+		CourseDto course = courseService.getCourseByClassCode(classCode);
+		model.addAttribute("course", course);
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.portal.domain.member.StudentDto;
 import com.portal.mapper.admin.AdminMapper;
+import com.portal.mapper.courseSignUp.CourseSignUpMapper;
 import com.portal.mapper.member.StudentMapper;
 
 @Service
@@ -22,18 +23,21 @@ public class StudentService {
 	private AdminMapper adminMapper;
 	
 	@Autowired
+	private CourseSignUpMapper courseSignUpMapper;
+	
+	@Autowired
 	private PasswordEncoder passwordEncoder;	
 
 	public int registerStudent(StudentDto student) {
 		
 		// 비밀번호 암호화
-		if(student.getPassword() == null) {
+		if(student.getPassword() == null || student.getPassword().equals("")) {
 			student.setPassword(student.getFirstResidentId());
 		}
 		student.setPassword(passwordEncoder.encode(student.getPassword()));
 		
 		// 권한 부여
-		adminMapper.insertAdminAuthority(student.getStudentNumber(), "student");
+//		adminMapper.insertAdminAuthority(student.getStudentNumber(), "student");
 		
 		return studentMapper.insertStudent(student);
 	}
@@ -65,6 +69,25 @@ public class StudentService {
 		}
 		return studentNumber;
 		
+	}
+
+	public int modifyStudent(StudentDto student) {
+		// 비밀번호 암호화 (변경될 비밀번호 없으면 기존 비밀번호 그대로)
+		if(student.getPassword() == null || student.getPassword().equals("")) {
+			String pw = studentMapper.selectStudentByStudentNumber(student.getStudentNumber()).getPassword();
+			student.setPassword(pw);
+		} else {
+			student.setPassword(passwordEncoder.encode(student.getPassword()));
+		}
+		
+		return studentMapper.updateStudent(student);
+	}
+
+	public int removeStudent(int studentNumber) {
+		// 수강신청 테이블 정보 삭제
+		courseSignUpMapper.deleteSignUpByStudentNumber(studentNumber);
+		
+		return studentMapper.deleteStudent(studentNumber);
 	}
 
 	

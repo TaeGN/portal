@@ -20,4 +20,8 @@ public interface CourseMapper {
 
 	CourseDto selectCourseByClassCode(int classCode);
 
+	List<Integer> selectCourseByProfessorNumber(int professorNumber);
+
+	int deleteCourseByClassCode(int classCode);
+
 }

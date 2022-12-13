@@ -27,21 +27,37 @@ public class AdminLogService {
 //		return adminLogMapper.insertAdminLog(adminMember, messageLog, menu, category);
 //	}
 
-	public int registerAdminLogById(int id, String messageLog, String category) {
-		String menu = "adminMember";
-		return adminLogMapper.insertAdminLogById(id, messageLog, menu, category);
-	}
-	
 	
 	public List<AdminLogDto> getAdminLogAll() {
 		// TODO Auto-generated method stub
 		return adminLogMapper.selectAdminLogAll();
 	}
 
+	public int registerAdminLogById(int adminId, String log, String category) {
+		String menu = "adminMember";
+		return adminLogMapper.insertLog(adminId, log, menu, category);
+	}
+	
 
 	public int registerCourseLogById(int adminId, String log, String category) {
 		String menu = "course";
-		return adminLogMapper.insertCourseLogById(adminId, log, menu, category);
+		return adminLogMapper.insertLog(adminId, log, menu, category);
+	}
+
+
+	public int registerStudentLogById(int adminId, String log, String category) {
+		String menu = "student";
+		return adminLogMapper.insertLog(adminId, log, menu, category);
+	}
+
+	public int registerProfessorLogById(int adminId, String log, String category) {
+		String menu = "professor";
+		return adminLogMapper.insertLog(adminId, log, menu, category);
+	}
+
+	public int registerCourseInfoLogById(int adminId, String log, String category) {
+		String menu = "courseInfo";
+		return adminLogMapper.insertLog(adminId, log, menu, category);
 	}
 
 	

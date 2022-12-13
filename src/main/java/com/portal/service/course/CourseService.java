@@ -11,6 +11,8 @@ import com.portal.domain.course.CourseDto;
 import com.portal.domain.course.CourseTimeDto;
 import com.portal.domain.course.DepartmentDto;
 import com.portal.mapper.course.CourseMapper;
+import com.portal.mapper.courseSchedule.CourseScheduleMapper;
+import com.portal.mapper.courseSignUp.CourseSignUpMapper;
 
 @Service
 @Transactional
@@ -23,10 +25,10 @@ public class CourseService {
 	private ClassroomService classroomService;
 	
 	@Autowired
-	private DepartmentService departmentService;
+	private CourseScheduleMapper courseScheduleMapper;
 	
 	@Autowired
-	private CourseScheduleService courseScheduleService;
+	private CourseSignUpMapper courseSignUpMapper;
 
 	public List<CourseDto> getCourseAll() {
 		List<CourseDto> courseList = courseMapper.selectCourseAll();
@@ -61,5 +63,21 @@ public class CourseService {
 	public CourseDto getCourseByClassCode(int classCode) {
 		// TODO Auto-generated method stub
 		return courseMapper.selectCourseByClassCode(classCode);
+	}
+	
+	// professorNumber에 해당하는 Course 삭제 (CourseSchedule, CourseSignUp도 같이 삭제)
+	public int removeCourseByProfessorNumber(int professorNumber) {
+		List<Integer> classCodeList = courseMapper.selectCourseByProfessorNumber(professorNumber);
+		int cnt = 1;
+		for(int classCode : classCodeList) {
+			// CourseSchedule 삭제 
+			courseScheduleMapper.deleteCourseScheduleByClassCode(classCode);
+			// CourseSignUp 삭제
+			courseSignUpMapper.deleteCourseSignUpByClassCode(classCode);
+			// Course 삭제
+			cnt *= courseMapper.deleteCourseByClassCode(classCode);
+		}
+		
+		return cnt;
 	}
 }

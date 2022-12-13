@@ -1,16 +1,21 @@
 package com.portal.controller.sugang;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.portal.domain.course.CourseDto;
@@ -35,6 +40,25 @@ public class SugangController {
 		
 	}
 	
+	// 로그인 후 권한에 따른 페이지 이동
+	@GetMapping("success")
+	@PreAuthorize("isAuthenticated()")
+	public String success(Authentication authentication) {
+//		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+//		Iterator<? extends GrantedAuthority> iter = authorities.iterator();
+//		GrantedAuthority auth = iter.next();
+		String url = "";
+		if(authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("student"))) {
+			url = "/sugang/list";
+		} else if(authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("professor"))) {
+			url = "/sugang/list";
+		} else {
+			url = "/admin/board";
+		}
+		
+		return "redirect:" + url;
+	}
+	
 	@GetMapping("signUpNotice")
 	public void info(Model model) {
 		List<SignUpNoticeDto> signUpNoticeList = sugangService.getSignUpNoticeList();
@@ -50,36 +74,46 @@ public class SugangController {
 	}
 	
 	
-	@GetMapping("list")
-	public void list(SearchDto search, Model model, Authentication authentication) {
-		List<CourseDto> list = new ArrayList<>();
-		System.out.println(search);
-		System.out.println(authentication.getName());
-		if(authentication.getName() != null) {
-			list = sugangService.getSearchCourseListByUserId(search, authentication.getName()); 
-		} else {
-			list = sugangService.getSearchCourseList(search); 
-		}
-		System.out.println(list.get(0));
-		System.out.println(list.get(1));
-		model.addAttribute("courseList", list);
-	}
-	
-//	@PostMapping("list")
-//	public String list(SearchDto search, RedirectAttributes rttr, Authentication authentication) {
+//	@GetMapping("list")
+//	public void list(SearchDto search, Model model, Authentication authentication,
+//			@RequestParam(name = "page", defaultValue = "1") int page) {
 //		List<CourseDto> list = new ArrayList<>();
-//		System.out.println(search);
-//		System.out.println(authentication.getName());
+//		
+//		int count = 20;
+//		int startNum = (page - 1) * count; 
+//		search.setStartNum(startNum);
+//		search.setCount(count);
 //		if(authentication.getName() != null) {
 //			list = sugangService.getSearchCourseListByUserId(search, authentication.getName()); 
 //		} else {
 //			list = sugangService.getSearchCourseList(search); 
 //		}
-//		System.out.println(list.get(0));
-//		System.out.println(list.get(1));
-//		rttr.addFlashAttribute("courseList", list);
-//		return "redirect:/sugang/list";
+//		
+//		int maxPageNum = 
+//		
+//		model.addAttribute("courseList", list);
+//		model.addAttribute("page", page);
 //	}
+	
+	@GetMapping("list")
+	public void list(SearchDto search, Model model, Authentication authentication,
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+		List<CourseDto> list = new ArrayList<>();
+		if(authentication.getName() != null) {
+			list = sugangService.getSearchCourseListByUserId(search, authentication.getName()); 
+		} else {
+			list = sugangService.getSearchCourseList(search); 
+		}
+		
+		model.addAttribute("courseList", list);
+		
+		int maxPage = 0;
+		if(list.size() != 0) {
+			maxPage = (list.size() - 1) / 20 + 1;
+		}
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("page", page);
+	}
 	
 	
 	

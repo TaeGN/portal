@@ -28,6 +28,59 @@
         <hr>
               
         <li class="nav-item">
+		  <button class="btn btn-light" type="button" >
+		    회원
+			<i class="fa-solid fa-angle-down"></i>
+		  </button>
+        </li>
+	 	<li class="nav-item ms-4">
+	      <a id="memberCollapse" class="nav-link" aria-current="page" href="${studentLink }">학생관리</a>
+	    </li>
+	 	<li class="nav-item ms-4">
+	      <a id="memberCollapse" class="nav-link" aria-current="page" href="${professorLink }">교수관리</a>
+	    </li>	
+	 	<li class="nav-item ms-4">
+	      <a id="memberCollapse" class="nav-link" aria-current="page" href="#">수강신청</a>
+	    </li>	
+	    	    
+	    <hr>
+        
+        <li class="nav-item">
+		  <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#courseCollapse" aria-expanded="false" aria-controls="courseCollapse">
+		    강의
+			<i class="fa-solid fa-angle-down"></i>
+		  </button>
+        </li>
+	 	<li class="nav-item ms-4">
+	      <a id="courseCollapse" class="nav-link" aria-current="page" href="${courseLink }">강의 관리</a>
+	    </li>
+	 	<li class="nav-item ms-4">
+	      <a id="courseCollapse" class="nav-link" aria-current="page" href="${courseInfoLink }">강의 정보 관리</a>
+	    </li>		        
+ 	 	<li class="nav-item ms-4">
+	      <a id="courseCollapse" class="nav-link" aria-current="page" href="#">.......</a>
+	    </li>
+	    	    
+	    <hr>
+        
+        <li class="nav-item">
+		  <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#settingCollapse" aria-expanded="false" aria-controls="settingCollapse">
+		    설정
+			<i class="fa-solid fa-angle-down"></i>
+		  </button>
+        </li>
+	 	<li class="nav-item ms-4">
+	      <a id="settingCollapse" class="nav-link" aria-current="page" href="#">....관리</a>
+	    </li>
+	 	<li class="nav-item ms-4">
+	      <a id="settingCollapse" class="nav-link" aria-current="page" href="#">.......</a>
+	    </li>		        
+ 	 	<li class="nav-item ms-4">
+	      <a id="settingCollapse" class="nav-link" aria-current="page" href="#">.......</a>
+	    </li>		    	       
+ 	</ul>
+     	
+<%--      <li class="nav-item">
 		  <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#memberCollapse" aria-expanded="false" aria-controls="memberCollapse">
 		    회원
 			<i class="fa-solid fa-angle-down"></i>
@@ -77,16 +130,7 @@
 	    </li>		        
  	 	<li class="nav-item ms-4">
 	      <a id="settingCollapse" class="nav-link collapse" aria-current="page" href="#">.......</a>
-	    </li>		    	       
-<!--         <li class="nav-item">
-          <a class="nav-link disabled">Disabled</a>
-        </li> -->
-      </ul>
-<!--       <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form> -->
-     
+	    </li> --%>
       
   </div>
 </nav>
