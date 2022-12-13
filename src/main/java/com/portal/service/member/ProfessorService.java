@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.portal.domain.member.ProfessorDto;
 import com.portal.domain.member.StudentDto;
 import com.portal.mapper.member.ProfessorMapper;
+import com.portal.service.course.CourseService;
 
 @Service
 @Transactional
@@ -17,6 +18,9 @@ public class ProfessorService {
 	
 	@Autowired
 	private ProfessorMapper professorMapper;
+	
+	@Autowired
+	private CourseService courseService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -44,7 +48,7 @@ public class ProfessorService {
 	
 	public int setProfessorNumberByDepartmentId(int departmentId) {
 		int minProfessorNumber = 202200000 + (departmentId - 1) * 100;
-		int maxProfessorNumber = minProfessorNumber + 999;
+		int maxProfessorNumber = minProfessorNumber + 99;
 		ProfessorDto professor = professorMapper.selectMinProfessorNumberByDepartmentId(minProfessorNumber);
 		int professorNumber = 0;
 		if(professor != null && professor.getProfessorNumber() < maxProfessorNumber) {
@@ -54,5 +58,31 @@ public class ProfessorService {
 		}
 		return professorNumber;
 		
+	}
+
+	public ProfessorDto getProfessorByProfessorNumber(int professorNumber) {
+		// TODO Auto-generated method stub
+		return professorMapper.selectProfessorByProfessorNumber(professorNumber);
+	}
+
+	public int modifyProfessor(ProfessorDto professor) {
+		// 비밀번호 암호화 (변경될 비밀번호 없으면 기존 비밀번호 그대로)
+		if(professor.getPassword() == null || professor.getPassword().equals("")) {
+			String pw = professorMapper.selectProfessorByProfessorNumber(professor.getProfessorNumber()).getPassword();
+			professor.setPassword(pw);
+		} else {
+			professor.setPassword(passwordEncoder.encode(professor.getPassword()));
+		}
+		
+		// 
+		
+		return professorMapper.updateProfessor(professor);
+	}
+
+	public int removeProfessor(int professorNumber) {
+		// professorNumber에 해당하는 Course 삭제 (CourseSchedule, CourseSignUp도 같이 삭제)
+		int cnt = courseService.removeCourseByProfessorNumber(professorNumber);
+		
+		return professorMapper.deleteProfessorByProfessorNumber(professorNumber);
 	}
 }

@@ -4,6 +4,64 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.member.ProfessorMapper">
 
+		<delete id="deleteProfessorByProfessorNumber">
+		DELETE FROM Professor
+		WHERE professorNumber = #{professorNumber}
+		</delete>
+
+
+		<select id="selectProfessorByProfessorNumber" resultMap="selectProfessorByProfessorNumberMap">
+		SELECT 
+			p.professorNumber,
+			p.name,
+			p.contact,
+			p.email,
+			p.homepage,
+			p.firstResidentId,
+			p.lastResidentId,
+			p.loginId,
+			p.password,
+			d.id departmentId,
+            d.name departmentName,
+            d.collegeId,
+            c.name collegeName,
+            c.organizationId,
+            o.name organizationName
+		FROM Professor p
+		LEFT JOIN Department d ON p.departmentId = d.id
+        LEFT JOIN College c ON c.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = c.organizationId	
+        WHERE professorNumber = #{professorNumber}
+	</select>
+	
+	<resultMap type="com.portal.domain.member.ProfessorDto" id="selectProfessorByProfessorNumberMap">
+		<id column="professorNumber" property="professorNumber"/>
+		<result column="name" property="name"/>
+		<result column="contact" property="contact"/>
+		<result column="email" property="email"/>
+		<result column="homepage" property="homepage"/>
+		<result column="departmentId" property="departmentId"/>
+		<result column="firstResidentId" property="firstResidentId"/>
+		<result column="lastResidentId" property="lastResidentId"/>
+		<result column="loginId" property="loginId"/>
+		<result column="password" property="password"/>
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>	
+		</association>
+	</resultMap>
+
+
 	<select id="selectProfessorById" resultType="com.portal.domain.member.ProfessorDto">
 		SELECT 
 			p.professorNumber,
@@ -25,6 +83,21 @@
 		WHERE professorNumber >= #{minProfessorNumber}
 		LIMIT 0,1
 	</select>
+	
+	<update id="updateProfessor">
+	UPDATE Professor
+	SET 
+		name = #{name},
+		contact = #{contact},
+		email = #{email},
+		homepage = #{homepage},
+		departmentId = #{departmentId},
+		firstResidentId = #{firstResidentId},
+		lastResidentId = #{lastResidentId},
+		loginId = #{loginId},
+		password = #{password}
+	WHERE professorNumber = #{professorNumber}
+	</update>
 
 	<insert id="insertProfessor">
 		INSERT INTO Professor (professorNumber,name,contact,email,homepage,departmentId,firstResidentId,lastResidentId,loginId,password)

@@ -26,8 +26,6 @@
 			<table class="table">
 				<div class="d-flex">
 					<h1 class="me-auto">학생리스트</h1>
-					<%-- <c:url value="/student/register" var="registerLink"></c:url>
-					<a href="${registerLink }">학생 등록</a> --%>
 					<button onclick="RegisterStudent()" class="btn btn-link" type="button">
 						학생 등록
 					</button>
@@ -318,15 +316,6 @@ function RegisterStudent() {
 		`;
 	});
 }
-
-
-
-
-/* 
-document.querySelector("#selectDepartmentId1").addEventListener("change", function() {
-	setStudentNumberBySeleteDepartment();
-}); */
-
 
 
 function GetStudentInfo(studentNumber) {

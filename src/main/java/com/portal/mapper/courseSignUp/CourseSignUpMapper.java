@@ -25,4 +25,6 @@ public interface CourseSignUpMapper {
 
 	int deleteSignUpByStudentNumber(int studentNumber);
 
+	int deleteCourseSignUpByClassCode(int classCode);
+
 }

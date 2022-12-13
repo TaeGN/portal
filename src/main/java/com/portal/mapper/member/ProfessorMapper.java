@@ -17,4 +17,10 @@ public interface ProfessorMapper {
 
 	ProfessorDto selectProfessorById(String loginId);
 
+	ProfessorDto selectProfessorByProfessorNumber(int professorNumber);
+
+	int updateProfessor(ProfessorDto professor);
+
+	int deleteProfessorByProfessorNumber(int professorNumber);
+
 }

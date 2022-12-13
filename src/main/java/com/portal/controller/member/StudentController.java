@@ -94,13 +94,6 @@ public class StudentController {
 		model.addAttribute("studentList", list);
 	}
 	
-	@GetMapping("get")
-	@PreAuthorize("hasAnyAuthority('admin','member')")
-	public void get(@RequestParam(name = "q") int studentNumber, Model model, String username) {
-		StudentDto student = studentService.getStudentByStudentNumber(studentNumber);
-		model.addAttribute("student", student);
-	}
-	
 	@GetMapping("getInfo/{studentNumber}")
 	@PreAuthorize("hasAnyAuthority('admin','member')")
 	@ResponseBody
@@ -119,15 +112,6 @@ public class StudentController {
 		map.put("studentNumber", studentNumber);
 		return map;
 	}
-	
-//	@GetMapping("modify")
-//	@PreAuthorize("hasAnyAuthority('admin','member')")
-//	public void modify(int studentNumber, Model model) {
-//		StudentDto student = studentService.getStudentByStudentNumber(studentNumber);
-//		List<DepartmentDto> departmentList = departmentService.getDepartmentAll();
-//		model.addAttribute("departmentList", departmentList);
-//		model.addAttribute("student", student);
-//	}
 	
 	@GetMapping("modify/{studentNumber}")
 	@PreAuthorize("hasAnyAuthority('admin','member')")

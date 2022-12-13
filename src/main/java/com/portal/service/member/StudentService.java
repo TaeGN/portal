@@ -72,13 +72,13 @@ public class StudentService {
 	}
 
 	public int modifyStudent(StudentDto student) {
-		// 비밀번호 암호화
+		// 비밀번호 암호화 (변경될 비밀번호 없으면 기존 비밀번호 그대로)
 		if(student.getPassword() == null || student.getPassword().equals("")) {
-			student.setPassword(student.getFirstResidentId());
+			String pw = studentMapper.selectStudentByStudentNumber(student.getStudentNumber()).getPassword();
+			student.setPassword(pw);
+		} else {
+			student.setPassword(passwordEncoder.encode(student.getPassword()));
 		}
-		student.setPassword(passwordEncoder.encode(student.getPassword()));
-		
-		// 
 		
 		return studentMapper.updateStudent(student);
 	}

@@ -7,4 +7,6 @@ public interface CourseScheduleMapper {
 
 	int insertScheduleByClassCode(int classCode, String day, int startTimeId, int endTimeId);
 
+	int deleteCourseScheduleByClassCode(int classCode);
+
 }

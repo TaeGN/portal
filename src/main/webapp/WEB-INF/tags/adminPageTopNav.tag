@@ -28,6 +28,12 @@
 	          <a class="nav-link" href="${logoutLink }">로그아웃</a>
 	        </li>
         </c:if>
+                <c:if test="${not loggedIn }">
+	        <li class="nav-item">
+	        	<c:url value="/sugang/login" var="loginLink"></c:url>
+	          <a class="nav-link" href="${loginLink }">로그인</a>
+	        </li>
+        </c:if>
       </ul>
        
 <!--       <form class="d-flex" role="search">
