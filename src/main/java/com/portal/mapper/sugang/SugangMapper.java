@@ -12,8 +12,6 @@ import com.portal.domain.sugang.SearchDto;
 
 @Mapper
 public interface SugangMapper {
-	
-	List<CourseDto> selectCourseAll();
 
 	List<SignUpNoticeDto> selectSignUpNoticeAll();
 
@@ -23,6 +21,6 @@ public interface SugangMapper {
 
 	List<CourseDto> selectSearchCourseListByStudentNumber(SearchDto search);
 
-	List<CourseDto> selectCourseAllByStudentNumber(int studentNumber);
+	int selectSearchCourseAll(SearchDto search);
 
 }

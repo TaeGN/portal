@@ -44,8 +44,6 @@
 				<tbody>
 					<c:forEach items="${studentList }" var="student">
 						<tr>
-							<%-- <c:url value="/student/get?q=${student.studentNumber }" var="getLink"></c:url> --%>
-							<%-- <td><a href="${getLink }">${student.studentNumber }</a></td> --%>
 							<td>
 								<button onclick="GetStudentInfo(${student.studentNumber})" class="btn btn-link" type="button">
 									${student.studentNumber }

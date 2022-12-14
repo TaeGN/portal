@@ -22,32 +22,15 @@ public class SugangService {
 	@Autowired
 	private SugangMapper sugangMapper;
 	
-	@Autowired
-	private StudentService studentService;
-	
 	
 	public List<CourseDto> getSearchCourseList(SearchDto search) {
-		List<CourseDto> list = new ArrayList<>();
-		
-		if(search.getYear() == 0) {
-			list = sugangMapper.selectCourseAll();
-		} else {
-			list = sugangMapper.selectCourseBySearchDto(search);
-		}
-		return list;
+		// TODO Auto-generated method stub
+		return sugangMapper.selectCourseBySearchDto(search);
 	}
-
-	public List<CourseDto> getSearchCourseListByUserId(SearchDto search, String userId) {
-		StudentDto student = studentService.getStudentByStudentId(userId);
-		int studentNumber = student.getStudentNumber();
-		List<CourseDto> list = new ArrayList<>();
-		if(search.getYear() == 0) {
-			list = sugangMapper.selectCourseAllByStudentNumber(studentNumber);
-		} else {
-			search.setStudentNumber(studentNumber);
-			list = sugangMapper.selectSearchCourseListByStudentNumber(search);
-		}
-		return list;
+	
+	public List<CourseDto> getSearchCourseListByStudentNumber(SearchDto search) {
+		// TODO Auto-generated method stub
+		return sugangMapper.selectSearchCourseListByStudentNumber(search);
 	}
 
 	public List<SignUpNoticeDto> getSignUpNoticeList() {
@@ -60,6 +43,12 @@ public class SugangService {
 		// TODO Auto-generated method stub
 		return sugangMapper.selectSignUpNoticeTextById(id);
 	}
+
+	public int getTotalNumBySearchCourseList(SearchDto search) {
+		// TODO Auto-generated method stub
+		return sugangMapper.selectSearchCourseAll(search);
+	}
+
 
 
 

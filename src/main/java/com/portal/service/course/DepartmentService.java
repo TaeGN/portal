@@ -44,4 +44,19 @@ public class DepartmentService {
 		return departmentMapper.selectDepartmentAll();
 	}
 
+	public List<OrganizationDto> getOrganizationAll() {
+		// TODO Auto-generated method stub
+		return departmentMapper.selectOrganizationAll();
+	}
+
+	public List<CollegeDto> getCollegeByOrganizationId(int organizationId) {
+		// TODO Auto-generated method stub
+		return departmentMapper.selectCollegeByOrganizationId(organizationId);
+	}
+
+	public List<DepartmentDto> getDepartmentByCollegeId(int collegeId) {
+		// TODO Auto-generated method stub
+		return departmentMapper.selectDepartmentByCollegeId(collegeId);
+	}
+
 }

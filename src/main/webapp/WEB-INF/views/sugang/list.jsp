@@ -25,16 +25,23 @@
 <div class="d-flex">
 		조직
 	<div class="me-3">
-		<select name="organization" id="organizationId1" class="form-select" aria-label="Default select example">
-		  <option value="대학(학부/서울)" selected>대학(학부/서울)</option>
-		  <option value="대학원">대학원</option>
-<!-- 		  <option value="2">Two</option>
-		  <option value="3">Three</option> -->
+		<!-- <label for="" class="form-label">조직</label> -->
+		<select onchange="GetCollegeByOrganization(this.value)" name="organizationId" value="0" class="form-select" aria-label="Default select example">
+			<option value="0">전체</option>
+			<c:forEach items="${organizationList }" var="organization" >
+				<option value="${organization.id }">${organization.name }</option>
+			</c:forEach>
 		</select>
 	</div>
+	대학
+	<div id="collegeId1"></div>
+	학부
+	<div id="departmentId1"></div>
+	
 		년도
 	<div class="me-3">
 		<select name="year" id="yearId1" class="form-select" aria-label="Default select example">
+			<option value="0">전체</option>
 			<c:set var="nowYear" value="2022"></c:set>
 			<c:forEach var="i" begin="2000" end="${nowYear }" step="1">
 			  <option value="${nowYear - i + 2000 }">${nowYear - i + 2000 }</option>
@@ -44,10 +51,11 @@
 		학기
 	<div class="me-3">
 		<select name="semester" id="semesterId1" class="form-select" aria-label="Default select example">
+		<option value="전체">전체</option>
 		  <option value="1학기">1학기</option>
 		  <option value="여름학기">여름학기</option>
 		  <option value="2학기">2학기</option>
-		  <option value="겨울학기" selected="selected">겨울학기</option>
+		  <option value="겨울학기">겨울학기</option>
 		</select>
 	</div>
 		학년
@@ -63,23 +71,30 @@
 		</select>
 	</div>
 	
-	<input id="submitButton1" type="submit" value="조회">
-	<!-- <button type="button" class="btn btn-primary">Primary</button> -->
-	</div>
+
+
+</div>
 	
-	<div class="d-flex">
+<div class="d-flex">
+
 	이수구분
 	<div class="me-3">
 		<select name="courseClassification" class="form-select" aria-label="Default select example">
-		  <option value="전공심화" selected >전공심화</option>
-		  <option value="1">1</option>
-		  <option value="2">2</option>
-		  <option value="3">3</option>
-		  <option value="4">4</option>
-		  <option value="5">5</option>
+		  <option value="전체">전체</option>
+		  <option value="전공기초(필수)">전공기초(필수)</option>
+		  <option value="전공심화">전공심화</option>
+		  <option value="전공핵심">전공핵심</option>
+		  <option value="핵심교양">핵심교양</option>
+		  <option value="일반교양">일반교양</option>
+		  <option value="교양필수">교양필수</option>
 		</select>
 	</div>
+	
+	<div class="ms-auto me-3">
+		<input id="submitButton1" type="submit" value="조회">
 	</div>
+	
+</div>
 </form>
 
 <hr>
@@ -111,7 +126,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${courseList }" var="course" begin="${(page - 1) * 20 + 1 }" end="${page * 20 + 1 }">
+					<c:forEach items="${courseList }" var="course">
 						<tr>
 							<input type="hidden" name="studentId" value="${studentId }">
 							<c:url value="/course/getByClassCode" var="getByClassCodeLink">
@@ -166,65 +181,16 @@
 	</div>
 </div>
 
-<!-- courseInfoModal -->
-<div class="modal fade" id="courseInfoModal" tabindex="-1" aria-labelledby="courseInfoModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="courseInfoModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div id="modalBodyId1" class="modal-body modal-dialog modal-dialog-scrollable">
-        <div class="container-md">
-				<div class="row">
-					<div class="col">
-						<table class="table">
-						<input id="courseInfoModalBody" type="hidden" name="courseInfo" >
-							<tr>
-								<td rowspan="4">과목</td>
-								<td rowspan="2">CourseName</td>
-								<td id="courseNameId" rowspan="2">${courseName }</td>
-								<td>과목구분</td>
-								<td>${courseInfo.courseClassification }</td>
-							</tr>
-							<tr>
-								<td>학점</td>
-								<td>${courseInfo.credit }</td>
-							</tr>
-							<tr>
-								<td rowspan="2">Department</td>
-								<td rowspan="2">${courseInfo.department.name }</td>
-								<td>강의</td>
-								<td>${courseInfo.theory }</td>
-							</tr>
-							<tr>
-								<td>실습</td>
-								<td>${courseInfo.practice }</td>
-							</tr>
-	
-						</table>
-					</div>
-				</div>
-			</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <nav aria-label="Page navigation example">
   <ul class="pagination justify-content-center">
     <li class="page-item disabled">
       <a class="page-link">Previous</a>
     </li>
     <c:forEach var="i" begin="${page > 5 ? page - 4 : 1 }" end="${page < maxPage - 4 ? page + 4 : maxPage}">
-    <c:url value="#" var="paginationLink">
+    <c:url value="/sugang/list" var="paginationLink">
     	<c:param name="page" value="${i }"></c:param>
     </c:url>
-   	 <li class="page-item"><a class="page-link" href="${paginationLink }">1</a></li>
+   	 <li class="page-item"><a class="page-link" href="${paginationLink }">${i }</a></li>
     </c:forEach>
       <a class="page-link" href="#">Next</a>
     </li>
@@ -260,6 +226,56 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
 const ctx = "${pageContext.request.contextPath}";
+const college1 = document.querySelector("#collegeId1");
+const department1 = document.querySelector("#departmentId1");
+
+GetCollegeByOrganization(0);
+
+function GetCollegeByOrganization(organizationId) {
+	fetch(ctx + "/sugang/getCollege/" + organizationId)
+	.then(res => res.json())
+	.then(data => {
+		const collegeList = data.collegeList;
+		
+		let collegeOption = `<option value="0">전체</option>`;
+		
+		for(var college of collegeList) {
+			collegeOption += `<option value="\${college.id }">\${college.name }</option>`
+		}
+		
+		college1.innerHTML = `
+			<div class="me-3">
+				<select onchange="GetDepartmentByCollege(this.value)" name="collegeId" value="0" class="form-select" aria-label="Default select example">
+					\${collegeOption}
+				</select>
+			</div>
+		`;
+	});
+	
+	GetDepartmentByCollege(0);
+}
+
+function GetDepartmentByCollege(collegeId) {
+	fetch(ctx + "/sugang/getDepartment/" + collegeId)
+	.then(res => res.json())
+	.then(data => {
+		const departmentList = data.departmentList;
+		
+		let departmentOption = `<option value="0">전체</option>`;
+		
+		for(var department of departmentList) {
+			departmentOption += `<option value="\${department.id }">\${department.name }</option>`
+		}
+		
+		department1.innerHTML = `
+			<div class="me-3">
+				<select name="departmentId" value="0" class="form-select" aria-label="Default select example">
+					\${departmentOption}
+				</select>
+			</div>
+		`;
+	});
+}
 
 
 function GetCourseInfo(classNumber) {
