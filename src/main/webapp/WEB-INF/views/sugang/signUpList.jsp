@@ -63,11 +63,12 @@
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
 							<td>${course.maxPersonnel }</td>
-							<td>
+							<td>${course.dayTime }</td>
+							<%-- <td>
 								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
 									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime } <br>
 								</c:forEach>
-							</td>
+							</td> --%>
 							<td>${course.classroom }</td>
 							<td>${course.department.name }</td>
 						</tr>
@@ -77,6 +78,14 @@
 		</div>
 	</div>
 </div>
+
+</div>
+
+
+
+<c:url value="/sugang/signUpList" var="currentPageLink"></c:url>
+
+<my:paginationNav></my:paginationNav>
 
 <!-- cancelCourseSignUpConfirmToast -->
 <div class="toast" id="cancelCourseSignUpConfirmToast">
@@ -89,6 +98,7 @@
     	
     </div>
 </div>
+
 
 
 

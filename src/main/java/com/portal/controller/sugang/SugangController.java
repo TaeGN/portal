@@ -17,22 +17,28 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.portal.domain.classroom.BuildingDto;
 import com.portal.domain.course.CollegeDto;
 import com.portal.domain.course.CourseDto;
+import com.portal.domain.course.CourseScheduleDto;
 import com.portal.domain.course.DepartmentDto;
 import com.portal.domain.course.OrganizationDto;
 import com.portal.domain.member.StudentDto;
 import com.portal.domain.sugang.SignUpNoticeDto;
 import com.portal.domain.sugang.SearchDto;
+import com.portal.service.course.ClassroomService;
 import com.portal.service.course.CourseSignUpService;
 import com.portal.service.course.DepartmentService;
+import com.portal.service.member.ProfessorService;
 import com.portal.service.member.StudentService;
 import com.portal.service.sugang.SugangService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @Controller
@@ -50,6 +56,12 @@ public class SugangController {
 	
 	@Autowired
 	private StudentService studentService;
+	
+	@Autowired
+	private ClassroomService classroomService;
+	
+	@Autowired
+	private ProfessorService professorService;
 	
 	@GetMapping("login")
 	public void login() {
@@ -91,11 +103,22 @@ public class SugangController {
 	public void list(SearchDto search, Model model, Authentication authentication,
 			@RequestParam(name = "page", defaultValue = "1") int page) {
 		
-		
 		int count = 10;
 		int startNum = (page - 1) * count; 
 		search.setStartNum(startNum);
 		search.setCount(count);
+		
+		if(search.getBuilding() != null && search.getBuilding().size() == 2) {
+			search.setClassroom("%" + search.getBuilding().get(0) + " " + search.getBuilding().get(1) + "%");
+		}
+		
+		if(search.getCourseName() != null && !search.getCourseName().equals("")) {
+			search.setCourseName("%" + search.getCourseName() + "%");
+		}
+		
+		if(search.getProfessorName() != null && !search.getProfessorName().equals("")) {
+			search.setProfessorName("%" + search.getProfessorName() + "%");
+		}
 		
 		List<CourseDto> courseList = new ArrayList<>();
 		
@@ -114,11 +137,72 @@ public class SugangController {
 		int maxPage = (totalNum - 1) / count + 1;
 		
 		List<OrganizationDto> organizationList = departmentService.getOrganizationAll(); 
+		List<BuildingDto> buildingList = classroomService.getBuildingAll();
 		
 		model.addAttribute("courseList", courseList);
+		model.addAttribute("buildingList", buildingList);
 		model.addAttribute("organizationList", organizationList);
+		model.addAttribute("search", search);
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("page", page);
+	}
+	
+	@PostMapping("getSearchCourse")
+	@ResponseBody
+	public Map<String, Object> getSearchCourse(@RequestBody Map<String, String> req,
+			Authentication authentication) {
+		Map<String, Object> map = new HashMap<>(req);
+		
+		System.out.println(req);
+		ObjectMapper mapper = new ObjectMapper();
+		SearchDto search = mapper.convertValue(req,SearchDto.class);
+		System.out.println(search);
+		
+		
+		int count = 10;
+		int startNum = (Integer.parseInt(req.get("page")) - 1) * count; 
+		int endNum = startNum + count - 1; 
+		search.setStartNum(startNum);
+		search.setEndNum(endNum);
+		search.setCount(count);
+		
+			
+			String[] buildings = search.getBuildingStr().split(",");
+			if(search.getBuildingStr() != null && buildings.length == 2) {
+				search.setClassroom("%" + buildings[0] + " " + buildings[1] + "%");
+			}
+			
+			if(search.getCourseName() != null && !search.getCourseName().equals("")) {
+				search.setCourseName("%" + search.getCourseName() + "%");
+			}
+			
+			if(search.getProfessorName() != null && !search.getProfessorName().equals("")) {
+				search.setProfessorName("%" + search.getProfessorName() + "%");
+			}
+			
+			List<CourseDto> courseList = new ArrayList<>();
+			
+			if(authentication.getName() != null) {
+				StudentDto student = studentService.getStudentByStudentId(authentication.getName());
+				search.setStudentNumber(student.getStudentNumber());
+				// 로그인 상태
+				courseList = sugangService.getSearchCourseListByStudentNumber(search); 
+			} else {
+				// 비로그인 상태
+				courseList = sugangService.getSearchCourseList(search); 
+			}
+			
+			
+			int totalNum = sugangService.getTotalNumBySearchCourseList(search);
+			int maxPage = (totalNum - 1) / count + 1;
+			
+			map.put("courseList", courseList);
+			map.put("search", search);
+			map.put("maxPage", maxPage);
+			map.put("page", search.getPage());
+		
+		
+		return map;
 	}
 	
 	
@@ -126,18 +210,46 @@ public class SugangController {
 	// 희망수업 리스트
 	@GetMapping("desireList")
 	@PreAuthorize("hasAnyAuthority('student')")
-	public void desireList(Model model, Authentication authentication) {
-		String userId = authentication.getName();
-		List<CourseDto> desireList = courseSignUpService.getCourseByUserId(userId);
+	public void desireList(Model model, Authentication authentication,
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		
+		int count = 10;
+		int startNum = (page - 1) * count; 
+		
+		StudentDto student = studentService.getStudentByStudentId(authentication.getName());
+		int studentNumber = student.getStudentNumber();
+		List<CourseDto> desireList = courseSignUpService.getCourseByStudentNumber(studentNumber, startNum, count);
+		
+		int totalNum = courseSignUpService.getCountDesireByStudentNumber(studentNumber);
+		int maxPage = (totalNum - 1) / count + 1;
+		
+		
 		model.addAttribute("desireList", desireList);
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("page", page);
 	}
 	
 	@GetMapping("signUpList")
 	@PreAuthorize("hasAnyAuthority('student')")
-	public void signUpList(Model model, Authentication authentication) {
-		String userId = authentication.getName();
-		List<CourseDto> signUpList = courseSignUpService.getSignUpAllByUserId(userId);
+	public void signUpList(Model model, Authentication authentication,
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		
+		int count = 10;
+		int startNum = (page - 1) * count; 
+		
+		StudentDto student = studentService.getStudentByStudentId(authentication.getName());
+		int studentNumber = student.getStudentNumber();
+		List<CourseDto> signUpList = courseSignUpService.getSignUpAllByStudentNumber(studentNumber, startNum, count);
+		
+		int totalNum = courseSignUpService.getCountSignUpByStudentNumber(studentNumber);
+		int maxPage = (totalNum - 1) / count + 1;
+		
+		
 		model.addAttribute("signUpList", signUpList);
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("page", page);		
 	}
 	
 	

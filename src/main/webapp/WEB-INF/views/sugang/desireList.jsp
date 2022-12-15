@@ -36,7 +36,7 @@
 						<th>수업번호</th>
 						<th>학수번호</th>
 						<th>교과목명</th>
-						<th>희망수업삭제</th>
+						<th>희망삭제</th>
 						<th>교강사</th>
 						<th>학점</th>
 						<th>강의</th>
@@ -81,11 +81,12 @@
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
 							<td>${course.maxPersonnel }</td>
-							<td>
+							<td>${course.dayTime }</td>
+							<%-- <td>
 								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
 									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime } <br>
 								</c:forEach>
-							</td>
+							</td> --%>
 							<td>${course.classroom }</td>
 							<td>${course.department.name }</td>
 						</tr>
@@ -95,6 +96,12 @@
 		</div>
 	</div>
 </div>
+</div>
+
+
+<c:url value="/sugang/desireList" var="currentPageLink"></c:url>
+
+<my:paginationNav></my:paginationNav>
 
 <!-- cancelCourseSignUpConfirmToast -->
 <div class="toast" id="cancelCourseSignUpConfirmToast">

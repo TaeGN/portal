@@ -43,9 +43,12 @@ public class CourseSignUpService {
 		return courseSignUpMapper.selectClassCodeByStudentNumber(student.getStudentNumber());
 	}
 
-	public List<CourseDto> getCourseByUserId(String userId) {
-		StudentDto student = studentService.getStudentByStudentId(userId);
-		return courseSignUpMapper.selectCourseByStudentNumber(student.getStudentNumber());
+	public List<CourseDto> getCourseByStudentNumber(int studentNumber, int startNum, int count) {
+		return courseSignUpMapper.selectCourseByStudentNumber(studentNumber, startNum, count);
+	}
+	
+	public List<CourseDto> getSignUpAllByStudentNumber(int studentNumber, int startNum, int count) {
+		return courseSignUpMapper.selectSignUpAllByStudentNumber(studentNumber, startNum, count);
 	}
 	
 	// signUp true로 변경
@@ -72,10 +75,17 @@ public class CourseSignUpService {
 		return cnt;
 	}
 
-	public List<CourseDto> getSignUpAllByUserId(String userId) {
-		StudentDto student = studentService.getStudentByStudentId(userId);
-		return courseSignUpMapper.selectSignUpAllByStudentNumber(student.getStudentNumber());
+	public int getCountDesireByStudentNumber(int studentNumber) {
+		// TODO Auto-generated method stub
+		return courseSignUpMapper.selectCountDesireByStudentNumber(studentNumber);
 	}
+
+	public int getCountSignUpByStudentNumber(int studentNumber) {
+		// TODO Auto-generated method stub
+		return courseSignUpMapper.selectCountSignUpByStudentNumber(studentNumber);
+	}
+
+
 
 	
 }
