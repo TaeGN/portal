@@ -31,4 +31,6 @@ public interface CourseSignUpMapper {
 
 	int selectCountSignUpByStudentNumber(int studentNumber);
 
+	int selectCountSignUpByClassCode(int classCode);
+
 }

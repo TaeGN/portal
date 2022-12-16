@@ -199,7 +199,6 @@ public class SugangController {
 			map.put("courseList", courseList);
 			map.put("search", search);
 			map.put("maxPage", maxPage);
-			map.put("page", search.getPage());
 		
 		
 		return map;
@@ -228,6 +227,29 @@ public class SugangController {
 		model.addAttribute("desireList", desireList);
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("page", page);
+	}
+	
+	@PostMapping("getDesireList")
+	@PreAuthorize("hasAnyAuthority('student')")
+	@ResponseBody
+	public Map<String, Object> getSearchCourse(@RequestBody Map<String, String> req) {
+		String studentId = req.get("studentId");
+		int page = Integer.parseInt(req.get("page"));
+		
+		int count = 10;
+		int startNum = (page - 1) * count; 
+		
+		StudentDto student = studentService.getStudentByStudentId(studentId);
+		int studentNumber = student.getStudentNumber();
+		List<CourseDto> desireList = courseSignUpService.getCourseByStudentNumber(studentNumber, startNum, count);
+		
+		int totalNum = courseSignUpService.getCountDesireByStudentNumber(studentNumber);
+		int maxPage = (totalNum - 1) / count + 1;
+		System.out.println(desireList);
+		Map<String, Object> map = new HashMap<>();
+		map.put("desireList", desireList);
+		map.put("maxPage", maxPage);
+		return map;
 	}
 	
 	@GetMapping("signUpList")

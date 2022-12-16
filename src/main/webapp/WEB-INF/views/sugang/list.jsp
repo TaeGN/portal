@@ -188,19 +188,19 @@
 				<tbody id="sugangListBodyId">
 					<c:forEach items="${courseList }" var="course">
 						<tr>
-							<c:url value="/course/getByClassCode" var="getByClassCodeLink">
+<%-- 							<c:url value="/course/getByClassCode" var="getByClassCodeLink">
 								<c:param name="classCode" value="${course.classCode }"></c:param>
 							</c:url>
 							<c:url value="/course/getByClassNumber" var="getByClassNumberLink">
 								<c:param name="classNumber" value="${course.classNumber }"></c:param>
-							</c:url>
+							</c:url> --%>
 							<sec:authorize access="isAuthenticated()">
 								<c:if test="${hasStudentAdmin }">
 									<c:if test="${course.desire eq 'false'}">
-										<td><button onclick="InsertCourseDesire(${course.classCode}, ${studentId})" class="btn btn-primary" value="${course.classCode }">신청</button></td>
+										<td><button onclick="InsertCourseDesire(${course.classCode}, ${studentId}, ${page })" class="btn btn-primary" value="${course.classCode }">신청</button></td>
 									</c:if>
 									<c:if test="${course.desire eq 'true' }">
-										<td><button onclick="DeleteCourseDesire(${course.classCode}, ${studentId})" class="btn btn-danger" value="${course.classCode }">취소</button></td>
+										<td><button onclick="DeleteCourseDesire(${course.classCode}, ${studentId}, ${page })" class="btn btn-danger" value="${course.classCode }">취소</button></td>
 									</c:if>
 								</c:if>
 							</sec:authorize>
@@ -268,30 +268,6 @@
 </div>
 
 
-<!-- deleteCourseDesireToast -->
-<div class="toast" id="deleteCourseDesireToast">
-    <div class="toast-header">
-        <strong id="deleteCourseDesireToastStrong" class="me-auto"><i class="bi-gift-fill"></i></strong>
-        <small id="deleteCourseDesireToastSmall">방금 전</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-    </div>
-    <div id="deleteCourseDesireToastBody" class="toast-body">
-    	
-    </div>
-</div>
-
-<!-- insertCourseDesireToast -->
-<div class="toast" id="insertCourseDesireToast">
-    <div class="toast-header">
-        <strong id="insertCourseDesireToastStrong" class="me-auto"><i class="bi-gift-fill"></i></strong>
-        <small id="insertCourseDesireToastSmall">방금 전</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-    </div>
-    <div id="insertCourseDesireToastBody" class="toast-body">
-    	
-    </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
 const ctx = "${pageContext.request.contextPath}";
@@ -299,8 +275,11 @@ const college1 = document.querySelector("#collegeId1");
 const department1 = document.querySelector("#departmentId1");
 const sugangListBody = document.querySelector("#sugangListBodyId");
 const sugangList1 = document.querySelector("#sugangListId1");
-const searchForm1 = document.querySelector("#searchFormId1");
 const pagination1 = document.querySelector("#paginationId1");
+const searchForm1 = document.querySelector("#searchFormId1");
+const toast1 = document.querySelector("#toastId1");
+const toastStrong1 = document.querySelector("#toastStrongId1");
+const toastBody1 = document.querySelector("#toastBodyId1");
 
 GetCollegeByOrganization(0);
 
@@ -350,14 +329,7 @@ function SearchCourse(studentId, page) {
 			
 			
 			courseOptions += `
-		<tr>
-			<c:url value="/course/getByClassCode" var="getByClassCodeLink">
-				<c:param name="classCode" value="\${course.classCode }"></c:param>
-			</c:url>
-			<c:url value="/course/getByClassNumber" var="getByClassNumberLink">
-				<c:param name="classNumber" value="\${course.classNumber }"></c:param>
-			</c:url>
-			
+		<tr>			
 			\${desireButton }
 			
 			<td>\${course.grade }</td>
@@ -560,13 +532,12 @@ function DeleteCourseDesire(classCode, studentId, page) {
 	})
 	.then(res => res.json())
 	.then(data => {
-		document.querySelector("#deleteCourseDesireToastStrong").innerText = data.message;
-		document.querySelector("#deleteCourseDesireToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
-		
+		// 페이지 새로고침
 		SearchCourse(studentId, page); 
-
-		const deleteCourseDesireToast = document.querySelector("#deleteCourseDesireToast");
-		const toast = new bootstrap.Toast(deleteCourseDesireToast);
+		
+		toastStrong1.innerText = data.message;
+		toastBody1.innerText = "학번 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
+		const toast = new bootstrap.Toast(toast1);
  		toast.show();
 	});
 };
@@ -584,14 +555,12 @@ function InsertCourseDesire(classCode, studentId, page) {
 	})
 	.then(res => res.json())
 	.then(data => {
-		document.querySelector("#insertCourseDesireToastStrong").innerText = data.message;
-		document.querySelector("#insertCourseDesireToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
-	
 		// 페이지 새로고침
 		SearchCourse(studentId, page); 
 		
-		const insertCourseDesireToast = document.querySelector("#insertCourseDesireToast");
-		const toast = new bootstrap.Toast(insertCourseDesireToast);
+		toastStrong1.innerText = data.message;
+		toastBody1.innerText = "학번 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
+		const toast = new bootstrap.Toast(toast1);
  		toast.show();
 	});
 };

@@ -19,18 +19,17 @@
     </li> 
     
     <c:forEach var="i" begin="${(page - 1) / 10 + 1 }" end="${page + 9 < maxPage ? page + 9 : maxPage}">
-<%-- 	     <c:url value="${currentPageLink }" var="paginationLink">
+ 	    <c:url value="${currentPageLink }" var="paginationLink">
 	    	<c:param name="page" value="${i }"></c:param>
-	    </c:url>  --%>
-	    <button onclick="SearchCourse(${studentId}, ${i})" class="page-link"></button>
-	   	<li class="page-item ${page eq i ? 'active' : ''}"><a class="page-link" href="${currentPageLink}">${i }</a></li>
+	    </c:url>
+	   	<li class="page-item ${page eq i ? 'active' : ''}"><a class="page-link" href="${paginationLink}">${i }</a></li>
     </c:forEach>
  
   
      <li class="page-item ${((page - 1) / 10) * 10 + 11 > maxPage ? 'disabled' : ''}">
-    	<%-- <c:url value="${currentPageLink }" var="backPageLink">
+    	 <c:url value="${currentPageLink }" var="backPageLink">
 	    	<c:param name="page" value="${((page - 1) / 10) * 10 + 11 }"></c:param>
-	    </c:url> --%>	
+	    </c:url>	
     	<a class="page-link" href="${backPageLink }"><i class="fa-solid fa-angle-right"></i></a>
     </li>
     

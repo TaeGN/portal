@@ -13,6 +13,22 @@
 <sec:authorize access="isAuthenticated()" var="loggedIn" />
 <sec:authorize access="hasAnyAuthority('admin','member','course','courseInfo')" var="admin" />
 
+<!-- toast -->
+<div aria-live="polite" aria-atomic="true" class="position-relative ms-auto">
+  <div class="toast-container top-0 end-0 p-3">
+	<div id="toastId1" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+	    <div class="toast-header">
+	        <strong id="toastStrongId1" class="me-auto"><i class="bi-gift-fill"></i></strong>
+	        <small id="toastSmallId1">방금 전</small>
+	        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+	    </div>
+	    <div id="toastBodyId1" class="toast-body">
+	    	
+	    </div>
+	</div>
+  </div>
+</div>
+
 <nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid d-flex">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-row">
@@ -23,14 +39,8 @@
           수강신청
         </li>
       </ul>
+
       <ul class="navbar-nav mb-2 mb-lg-0 flex-row">
-<%--        <li class="nav-item me-3">
-         <sec:authentication property="name" var="username"/>
-        <c:url value="/admin/get" var="getLink">
-        	<c:param name="username" value="${username }"></c:param>
-        </c:url>
-          <a class="nav-link active" aria-current="page" href="${getLink }">내정보</a>
-        </li> --%>
         <c:if test="${loggedIn }">
 	        <li class="nav-item">
 	          <a class="nav-link" href="${logoutLink }">로그아웃</a>
@@ -55,14 +65,11 @@
     </button> -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-<!--         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li> -->
-        <li class="nav-item">
-          <a class="nav-link" href="${listLink }">수강편람</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link" href="${signUpNoticeLink }">수강안내</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${listLink }">수강편람</a>
         </li>
         <c:if test="${loggedIn }">
 	        <li class="nav-item">
@@ -76,3 +83,4 @@
     </div>
   </div>
 </nav>
+

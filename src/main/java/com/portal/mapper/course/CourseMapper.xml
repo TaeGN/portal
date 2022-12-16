@@ -52,9 +52,12 @@
 			c.maxPersonnel,
             c.year,
             c.semester,
-            cs.day,
+            GROUP_CONCAT(DISTINCT cs.day,' ',
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId),'-',
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId)) day,
+<!--             cs.day,
             (SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId) startTime,
-			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId) endTime,
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId) endTime, -->
 			c.classroom,
 			c.departmentId,
             d.name departmentName,
@@ -97,6 +100,7 @@
 		<result column="semester" property="semester"/>
 		<result column="classroom" property="classroom"/>
 		<result column="departmentId" property="departmentId"/>
+		<result column="day" property="dayTime"/>
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
 			<id column="departmentId" property="id"/>
@@ -147,12 +151,12 @@
 			</association>
 		</association>
 		
-		<collection property="courseSchedule" javaType="java.util.ArrayList" ofType="com.portal.domain.course.CourseScheduleDto">
+<!-- 		<collection property="courseSchedule" javaType="java.util.ArrayList" ofType="com.portal.domain.course.CourseScheduleDto">
 			<result column="classCode" property="classCode"/>
 			<result column="day" property="day"/>
 			<result column="startTime" property="startTime"/>
 			<result column="endTime" property="endTime"/>
-		</collection>
+		</collection> -->
 	</resultMap>
 	
 	
