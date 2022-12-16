@@ -7,5 +7,6 @@ public class DepartmentDto {
 	private int id;
 	private String name;
 	private int collegeId;
+	private String contact;
 	private CollegeDto college;
 }

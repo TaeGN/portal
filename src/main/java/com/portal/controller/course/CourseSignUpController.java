@@ -101,13 +101,7 @@ public class CourseSignUpController {
 		StudentDto student = studentService.getStudentByStudentId(studentId);
 		int studentNumber = student.getStudentNumber();
 		
-		int cnt = courseSignUpService.courseSignUp(studentNumber, classCode);
-		String message = "";
-		if(cnt == 1) {
-			message = "수강신청 완료";
-		} else {
-			message = "수강신청 실패";
-		}
+		String message = courseSignUpService.courseSignUp(studentNumber, classCode);
 		
 		map.put("message", message);
 		map.put("studentNumber", studentNumber);

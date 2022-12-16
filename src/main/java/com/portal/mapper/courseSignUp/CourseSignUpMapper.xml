@@ -3,6 +3,26 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.courseSignUp.CourseSignUpMapper">
+
+	<select id="selectCountSignUpByClassCode" resultType="int">
+		SELECT count(*)
+		FROM CourseSignUp
+		WHERE classCode = #{classCode}
+		AND signUp = 1	
+	</select>
+	
+	<select id="selectCountSignUpByStudentNumber" resultType="int">
+		SELECT count(*)
+		FROM CourseSignUp
+		WHERE studentNumber = #{studentNumber}
+		AND signUp = 1
+	</select>
+	
+	<select id="selectCountDesireByStudentNumber" resultType="int">
+		SELECT count(*)
+		FROM CourseSignUp
+		WHERE studentNumber = #{studentNumber}
+	</select>
 	
 	<delete id="deleteCourseSignUpByClassCode">
 		DELETE FROM CourseSignUp
@@ -52,9 +72,9 @@
 			c.maxPersonnel,
             c.year,
             c.semester,
-            cs.day,
-            (SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId) startTime,
-			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId) endTime,
+			GROUP_CONCAT(DISTINCT cs.day,' ',
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId),'-',
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId)) day,
 			c.classroom,
 			c.departmentId,
             d.name departmentName,
@@ -88,7 +108,9 @@
 		JOIN CourseSignUp s ON c.classCode = s.classCode
 		WHERE s.studentNumber = #{studentNumber}
 		AND s.signUp = '1'
+		GROUP BY c.classCode
 		ORDER BY c.classCode
+		LIMIT #{startNum}, #{count}
 	</select>
 	
 	<resultMap type="com.portal.domain.course.CourseDto" id="selectSignUpAllByStudentNumberMap">
@@ -102,6 +124,7 @@
 		<result column="desire" property="desire"/>
 		<result column="signUp" property="signUp"/>
 		<result column="departmentId" property="departmentId"/>
+		<result column="day" property="dayTime"/>
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
 			<id column="departmentId" property="id"/>
@@ -149,13 +172,6 @@
 				</association>	
 			</association>
 		</association>
-		
-		<collection property="courseSchedule" javaType="java.util.ArrayList" ofType="com.portal.domain.course.CourseScheduleDto">
-			<result column="classCode" property="classCode"/>
-			<result column="day" property="day"/>
-			<result column="startTime" property="startTime"/>
-			<result column="endTime" property="endTime"/>
-		</collection>
 	</resultMap>
 
 
@@ -172,9 +188,6 @@
 			c.maxPersonnel,
             c.year,
             c.semester,
-			cs.day,
-            (SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId) startTime,
-			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId) endTime,
 			c.classroom,
 			c.departmentId,
             d.name departmentName,
@@ -182,6 +195,9 @@
             l.name collegeName,
             l.organizationId,
             o.name organizationName,
+            GROUP_CONCAT(DISTINCT cs.day,' ',
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId),'-',
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId)) day,
             if(ifnull(s.classCode,0), 'true', 'false') desire,
             if(s.signUp, 'true', 'false') signUp,
             (SELECT count(*) FROM CourseSignUp u GROUP BY u.classCode HAVING u.classCode = c.classCode) countDesire,
@@ -210,7 +226,9 @@
         LEFT JOIN Organization po ON po.id = pl.organizationId	
 		JOIN CourseSignUp s ON c.classCode = s.classCode
 		WHERE s.studentNumber = #{studentNumber}
+		GROUP BY c.classCode
 		ORDER BY c.classCode
+		LIMIT #{startNum}, #{count}
 	</select>
 	
 	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseByStudentNumberMap">
@@ -226,6 +244,7 @@
 		<result column="countDesire" property="countDesire"/>
 		<result column="countSignUp" property="countSignUp"/>
 		<result column="departmentId" property="departmentId"/>
+		<result column="day" property="dayTime"/>
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
 			<id column="departmentId" property="id"/>
@@ -274,12 +293,12 @@
 			</association>
 		</association>
 		
-		<collection property="courseSchedule" javaType="java.util.ArrayList" ofType="com.portal.domain.course.CourseScheduleDto">
+<!-- 		<collection property="courseSchedule" javaType="java.util.ArrayList" ofType="com.portal.domain.course.CourseScheduleDto">
 			<result column="classCode" property="classCode"/>
 			<result column="day" property="day"/>
 			<result column="startTime" property="startTime"/>
 			<result column="endTime" property="endTime"/>
-		</collection>
+		</collection> -->
 	</resultMap>
 
 	<select id="selectClassCodeByStudentNumber" resultType="integer">

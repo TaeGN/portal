@@ -18,6 +18,7 @@ public class CourseDto {
 	private List<Integer> startTimeId;
 	private List<Integer> endTimeId;
 	private List<String> day;
+	private String dayTime;
 	private String classroom;
 	private String building;
 	private String room;
@@ -29,5 +30,5 @@ public class CourseDto {
 	private DepartmentDto department;
 	private CourseInfoDto courseInfo;
 	private ProfessorDto professor;
-	private List<CourseScheduleDto> courseSchedule;
+//	private List<CourseScheduleDto> courseSchedule;
 }

@@ -4,6 +4,40 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.course.DepartmentMapper">
 
+	<select id="selectDepartmentByCollegeId" resultType="com.portal.domain.course.DepartmentDto">
+		SELECT
+			id,
+            name,
+            contact,
+            collegeId
+		FROM Department
+		<if test="collegeId != null and collegeId != 0">
+			WHERE collegeId = #{collegeId}
+		</if>
+	</select>
+
+
+	<select id="selectCollegeByOrganizationId" resultType="com.portal.domain.course.CollegeDto">
+		SELECT
+			id,
+            name,
+            contact,
+            organizationId
+		FROM College
+		<if test="organizationId != null and organizationId != 0">
+		WHERE organizationId = #{organizationId}
+		</if>
+	</select>
+
+
+	<select id="selectOrganizationAll" resultType="com.portal.domain.course.OrganizationDto">
+		SELECT
+			id,
+            name,
+            contact
+		FROM Organization
+	</select>
+
 	<select id="selectDepartmentAll" resultMap="selectDepartmentAllMap">
 		SELECT
 			d.id departmentId,

@@ -20,6 +20,12 @@ public interface DepartmentMapper {
 	DepartmentDto selectDepartmentIdByName(String departmentName);
 
 	List<DepartmentDto> selectDepartmentAll();
+
+	List<OrganizationDto> selectOrganizationAll();
+
+	List<CollegeDto> selectCollegeByOrganizationId(int organizationId);
+
+	List<DepartmentDto> selectDepartmentByCollegeId(int collegeId);
 	
 	
 }

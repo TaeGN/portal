@@ -21,36 +21,74 @@
 <sec:authorize access="hasAuthority('student')" var="hasStudentAdmin"></sec:authorize>
 
 <my:sugangNavBar></my:sugangNavBar>
-<form action="" method="get" >
-<div class="d-flex">
+<form action="" method="get" id="searchFormId1">
+<div class="d-flex mb-3 mt-3">
+	<label class="form-label">
 		조직
+	</label>
 	<div class="me-3">
-		<select name="organization" id="organizationId1" class="form-select" aria-label="Default select example">
-		  <option value="대학(학부/서울)" selected>대학(학부/서울)</option>
-		  <option value="대학원">대학원</option>
-<!-- 		  <option value="2">Two</option>
-		  <option value="3">Three</option> -->
+		<!-- <label for="" class="form-label">조직</label> -->
+		<select onchange="GetCollegeByOrganization(this.value)" name="organizationId" value="0" class="form-select" aria-label="Default select example">
+			<option value="0">전체</option>
+			<c:forEach items="${organizationList }" var="organization" >
+				<option value="${organization.id }">${organization.name }</option>
+			</c:forEach>
 		</select>
 	</div>
+	<label class="form-label">
+		대학
+	</label>
+	<div id="collegeId1"></div>
+	
+	<label class="form-label">
+		학부
+	</label>
+	<div id="departmentId1"></div>
+	
+	<label class="form-label">
+		이수구분
+	</label>
+	<div class="me-3">
+		<select name="courseClassification" class="form-select" aria-label="Default select example">
+		  <option value="전체">전체</option>
+		  <option value="전공기초">전공기초(필수)</option>
+		  <option value="전공심화">전공심화</option>
+		  <option value="전공핵심">전공핵심</option>
+		  <option value="핵심교양">핵심교양</option>
+		  <option value="일반교양">일반교양</option>
+		  <option value="교양필수">교양필수</option>
+		</select>
+	</div>
+	
+	<label class="form-label">
 		년도
+	</label>
 	<div class="me-3">
 		<select name="year" id="yearId1" class="form-select" aria-label="Default select example">
+			<option value="0">전체</option>
 			<c:set var="nowYear" value="2022"></c:set>
 			<c:forEach var="i" begin="2000" end="${nowYear }" step="1">
 			  <option value="${nowYear - i + 2000 }">${nowYear - i + 2000 }</option>
 			</c:forEach>
 		</select>
 	</div>
+	
+	<label class="form-label">
 		학기
+	</label>
 	<div class="me-3">
 		<select name="semester" id="semesterId1" class="form-select" aria-label="Default select example">
+		<option value="전체">전체</option>
 		  <option value="1학기">1학기</option>
 		  <option value="여름학기">여름학기</option>
 		  <option value="2학기">2학기</option>
-		  <option value="겨울학기" selected="selected">겨울학기</option>
+		  <option value="겨울학기">겨울학기</option>
 		</select>
 	</div>
+	
+	<label class="form-label">
 		학년
+	</label>
 	<div class="me-3">
 		<select name="grade" id="gradeId1" class="form-select" aria-label="Default select example">
 		  <option selected value="전체">전체</option>
@@ -63,26 +101,63 @@
 		</select>
 	</div>
 	
-	<input id="submitButton1" type="submit" value="조회">
-	<!-- <button type="button" class="btn btn-primary">Primary</button> -->
+	<div class="ms-auto me-3">
+		<c:url var="goListLink" value="/sugang/list"></c:url>
+		<a class="btn btn-success" href="${goListLink }">초기화</a>
 	</div>
+
+</div>
+
 	
-	<div class="d-flex">
-	이수구분
+<div class="d-flex mb-3">
+	<label class="form-label">
+		강의동
+	</label>
 	<div class="me-3">
-		<select name="courseClassification" class="form-select" aria-label="Default select example">
-		  <option value="전공심화" selected >전공심화</option>
-		  <option value="1">1</option>
-		  <option value="2">2</option>
-		  <option value="3">3</option>
-		  <option value="4">4</option>
-		  <option value="5">5</option>
+		<select name=building value="전체" class="form-select" aria-label="Default select example">
+			<option value="전체">전체</option>
+			<c:forEach items="${buildingList }" var="building2" >
+				<option value="${building2.campus },${building2.name }">${building2.campus } ${building2.name }</option>
+			</c:forEach>
 		</select>
 	</div>
+
+
+	<label class="form-label">
+		학수번호 
+	</label>
+	<div class="me-3">
+		<input class="form-control" name="classNumber" type="text" value="">
 	</div>
+	
+ 	<label class="form-label">
+		교과목명 
+	</label>
+	<div class="me-3">
+		<input class="form-control" name="courseName" type="text" value="">
+	</div>
+
+
+ 	<label class="form-label">
+		교강사 
+	</label>
+	<div class="me-3">
+		<input class="form-control" name="professorName" type="text" value="">
+	</div>
+	
+	
+	<div class="ms-auto me-3">
+		<button onclick="SearchCourse(${studentId}, this.value)" class="btn btn-primary" id="submitButton1" type="button" value="1">조회</button>
+	</div>
+	
+</div>
+
+
 </form>
 
 <hr>
+
+<input type="hidden" name="studentId" value="${studentId }">
 
 <div id="sugangListId1" >
 	<div class="row">
@@ -110,23 +185,22 @@
 						<th>관장학과</th>
 					</tr>
 				</thead>
-				<tbody>
-					<c:forEach items="${courseList }" var="course" begin="${(page - 1) * 20 + 1 }" end="${page * 20 + 1 }">
+				<tbody id="sugangListBodyId">
+					<c:forEach items="${courseList }" var="course">
 						<tr>
-							<input type="hidden" name="studentId" value="${studentId }">
-							<c:url value="/course/getByClassCode" var="getByClassCodeLink">
+<%-- 							<c:url value="/course/getByClassCode" var="getByClassCodeLink">
 								<c:param name="classCode" value="${course.classCode }"></c:param>
 							</c:url>
 							<c:url value="/course/getByClassNumber" var="getByClassNumberLink">
 								<c:param name="classNumber" value="${course.classNumber }"></c:param>
-							</c:url>
+							</c:url> --%>
 							<sec:authorize access="isAuthenticated()">
 								<c:if test="${hasStudentAdmin }">
 									<c:if test="${course.desire eq 'false'}">
-										<td><button onclick="InsertCourseDesire(${course.classCode}, ${studentId})" class="btn btn-primary" value="${course.classCode }">신청</button></td>
+										<td><button onclick="InsertCourseDesire(${course.classCode}, ${studentId}, ${page })" class="btn btn-primary" value="${course.classCode }">신청</button></td>
 									</c:if>
 									<c:if test="${course.desire eq 'true' }">
-										<td><button onclick="DeleteCourseDesire(${course.classCode}, ${studentId})" class="btn btn-danger" value="${course.classCode }">취소</button></td>
+										<td><button onclick="DeleteCourseDesire(${course.classCode}, ${studentId}, ${page })" class="btn btn-danger" value="${course.classCode }">취소</button></td>
 									</c:if>
 								</c:if>
 							</sec:authorize>
@@ -138,9 +212,6 @@
 								</button>
 							</td>
 							<td>
-								<%-- <button onclick="GetCourseInfo('${course.classNumber }')" id="classNumberButton" class="btn btn-light" data-classNumber="${course.classNumber }" data-courseName="${course.courseInfo.courseName }" data-courseClassification="${course.courseInfo.courseClassification }" data-credit="${course.courseInfo.credit }" data-theory="${course.courseInfo.theory }" data-practice="${course.courseInfo.practice }" data-summary="${course.courseInfo.summary }" data-bs-toggle="modal" data-bs-target="#courseInfoModal">
-								  ${course.classNumber } <i class="fa-solid fa-magnifying-glass"></i>
-								</button> --%>
 								<button onclick='GetCourseInfo("${course.classNumber}")' type="button" class="btn btn-light">
 								  ${course.classNumber } <i class="fa-solid fa-magnifying-glass"></i>
 								</button>
@@ -151,11 +222,12 @@
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
 							<td>${course.maxPersonnel }</td>
-							<td>
+							<td>${course.dayTime }</td>
+<%-- 							<td>
 								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
 									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime } <br>
 								</c:forEach>
-							</td>
+							</td> --%>
 							<td>${course.classroom }</td>
 							<td>${course.department.name }</td>
 						</tr>
@@ -166,100 +238,275 @@
 	</div>
 </div>
 
-<!-- courseInfoModal -->
-<div class="modal fade" id="courseInfoModal" tabindex="-1" aria-labelledby="courseInfoModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="courseInfoModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div id="modalBodyId1" class="modal-body modal-dialog modal-dialog-scrollable">
-        <div class="container-md">
-				<div class="row">
-					<div class="col">
-						<table class="table">
-						<input id="courseInfoModalBody" type="hidden" name="courseInfo" >
-							<tr>
-								<td rowspan="4">과목</td>
-								<td rowspan="2">CourseName</td>
-								<td id="courseNameId" rowspan="2">${courseName }</td>
-								<td>과목구분</td>
-								<td>${courseInfo.courseClassification }</td>
-							</tr>
-							<tr>
-								<td>학점</td>
-								<td>${courseInfo.credit }</td>
-							</tr>
-							<tr>
-								<td rowspan="2">Department</td>
-								<td rowspan="2">${courseInfo.department.name }</td>
-								<td>강의</td>
-								<td>${courseInfo.theory }</td>
-							</tr>
-							<tr>
-								<td>실습</td>
-								<td>${courseInfo.practice }</td>
-							</tr>
-	
-						</table>
-					</div>
-				</div>
-			</div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+<div id="paginationId1">
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+
+			    <li class="page-item ${page eq 1 ? 'disabled' : ''}">
+				    <button onclick="SearchCourse(${studentId}, 1)" class="page-link"><i class="fa-solid fa-angles-left"></i></button>
+			    </li>
+
+			    <li class="page-item ${page <= 10 ? 'disabled' : ''}">
+				    <button onclick="SearchCourse(${studentId},${(page - 1) - (page - 1) % 10 })" class="page-link"><i class="fa-solid fa-angle-left"></i></button>
+			    </li> 
+			    
+    			<c:forEach var="i" begin="${(page - 1) / 10 + 1 }" end="${page + 9 < maxPage ? page + 9 : maxPage}">
+	    			<li class="page-item ${page eq i ? 'active' : ''}">
+				    	<button onclick="SearchCourse(${studentId}, ${i })" class="page-link">${i }</button>
+				    </li>
+    			</c:forEach>
+			  
+			     <li class="page-item ${((page - 1) / 10) * 10 + 11 > maxPage ? 'disabled' : ''}">
+				    <button onclick="SearchCourse(${studentId}, ${((page - 1) / 10) * 10 + 11 })" class="page-link"><i class="fa-solid fa-angle-right"></i></button>
+			    </li>
+			    
+			    <li class="page-item \${page eq maxPage ? 'disabled' : ''}">
+				    <button onclick="SearchCourse(${studentId}, ${maxPage })" class="page-link"><i class="fa-solid fa-angles-right"></i></button>
+			    </li>
+			  </ul>
+			</nav>	
 </div>
 
-<nav aria-label="Page navigation example">
-  <ul class="pagination justify-content-center">
-    <li class="page-item disabled">
-      <a class="page-link">Previous</a>
-    </li>
-    <c:forEach var="i" begin="${page > 5 ? page - 4 : 1 }" end="${page < maxPage - 4 ? page + 4 : maxPage}">
-    <c:url value="#" var="paginationLink">
-    	<c:param name="page" value="${i }"></c:param>
-    </c:url>
-   	 <li class="page-item"><a class="page-link" href="${paginationLink }">1</a></li>
-    </c:forEach>
-      <a class="page-link" href="#">Next</a>
-    </li>
-  </ul>
-</nav>
-
-
-
-<!-- deleteCourseDesireToast -->
-<div class="toast" id="deleteCourseDesireToast">
-    <div class="toast-header">
-        <strong id="deleteCourseDesireToastStrong" class="me-auto"><i class="bi-gift-fill"></i></strong>
-        <small id="deleteCourseDesireToastSmall">방금 전</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-    </div>
-    <div id="deleteCourseDesireToastBody" class="toast-body">
-    	
-    </div>
-</div>
-
-<!-- insertCourseDesireToast -->
-<div class="toast" id="insertCourseDesireToast">
-    <div class="toast-header">
-        <strong id="insertCourseDesireToastStrong" class="me-auto"><i class="bi-gift-fill"></i></strong>
-        <small id="insertCourseDesireToastSmall">방금 전</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
-    </div>
-    <div id="insertCourseDesireToastBody" class="toast-body">
-    	
-    </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
 const ctx = "${pageContext.request.contextPath}";
+const college1 = document.querySelector("#collegeId1");
+const department1 = document.querySelector("#departmentId1");
+const sugangListBody = document.querySelector("#sugangListBodyId");
+const sugangList1 = document.querySelector("#sugangListId1");
+const pagination1 = document.querySelector("#paginationId1");
+const searchForm1 = document.querySelector("#searchFormId1");
+const toast1 = document.querySelector("#toastId1");
+const toastStrong1 = document.querySelector("#toastStrongId1");
+const toastBody1 = document.querySelector("#toastBodyId1");
+
+GetCollegeByOrganization(0);
+
+function SearchCourse(studentId, page) {
+	var formValues = document.querySelector("#searchFormId1");
+	const search = {
+			organizationId : formValues.elements[0].value,
+			collegeId : formValues.elements[1].value,
+			departmentId : formValues.elements[2].value,
+			courseClassification : formValues.elements[3].value,
+			year : formValues.elements[4].value,
+			semester : formValues.elements[5].value,
+			grade : formValues.elements[6].value,
+			buildingStr : formValues.elements[7].value,
+			classNumber : formValues.elements[8].value,
+			courseName : formValues.elements[9].value,
+			professorName : formValues.elements[10].value,
+			studentId : studentId,
+			page : page
+	};
+	
+	fetch(ctx + "/sugang/getSearchCourse", {
+		method : "post",
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(search)
+	})
+	.then(res => res.json())
+	.then(map => {
+		const courseList = map.courseList;
+		const search = map.search;
+		const maxPage = map.maxPage;
+		
+		let courseOptions = ``;
+		
+		for(var course of courseList) {
+			
+			var desire = course.desire;
+			let desireButton = ``;
+			
+			if(desire == 'false') {
+				desireButton = `<td><button onclick="InsertCourseDesire(\${course.classCode}, \${studentId}, \${page})" class="btn btn-primary" value="\${course.classCode }">신청</button></td>`;
+			} else {
+				desireButton = `<td><button onclick="DeleteCourseDesire(\${course.classCode}, \${studentId}, \${page})" class="btn btn-danger" value="\${course.classCode }">취소</button></td>`;
+			}
+			
+			
+			courseOptions += `
+		<tr>			
+			\${desireButton }
+			
+			<td>\${course.grade }</td>
+			<td>\${course.courseInfo.courseClassification }</td>
+			<td>
+				<button onclick="GetSyllabus(\${course.classCode})" type="button" class="btn btn-link">
+				  \${course.classCode } <i class="fa-solid fa-magnifying-glass"></i>
+				</button>
+			</td>
+			<td>
+				<button onclick='GetCourseInfo("\${course.classNumber}")' type="button" class="btn btn-light">
+				  \${course.classNumber } <i class="fa-solid fa-magnifying-glass"></i>
+				</button>
+			</td>
+			<td>\${course.courseInfo.courseName }</td>
+			<td>\${course.professor.name }</td>
+			<td>\${course.courseInfo.credit }</td>
+			<td>\${course.courseInfo.theory }</td>
+			<td>\${course.courseInfo.practice }</td>
+			<td>\${course.maxPersonnel }</td>
+			<td>\${course.dayTime }</td>
+			<td>\${course.classroom }</td>
+			<td>\${course.department.name }</td>
+		</tr>`
+		}
+		
+		sugangList1.innerHTML = `
+		<div class="row">
+			<div class="col">
+				<table class="table table-bordered">
+					<thead>
+						<tr class="table-secondary">
+							<th>수강희망</th>
+							<th>학년</th>
+							<th>이수구분</th>
+							<th>수업번호</th>
+							<th>학수번호</th>
+							<th>교과목명</th>
+							<th>교강사</th>
+							<th>학점</th>
+							<th>강의</th>
+							<th>실습</th>
+							<th>수강정원</th>
+							<th>수업시간</th>
+							<th>강의실</th>
+							<th>관장학과</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+						\${courseOptions}
+					
+					</tbody>
+				</table>
+			</div>
+		</div>
+		`;
+		
+		const startPage = parseInt((page - 1) / 10) + 1;
+		const endPage = (page + 9) < maxPage ? page + 9 : maxPage;
+		
+		var val2 = '';
+		var val3 = '';
+		var val4 = '';
+		var val5 = '';
+		
+		if(page == 1) {
+			var val2 = 'disabled';
+		}
+		
+		if(page <= 10) {
+			var val3 = 'disabled';
+		} 		
+		
+		if(((page - 1) / 10) * 10 + 11 > maxPage) {
+			var val4 = 'disabled';
+		} 
+		
+		if(page == maxPage) {
+			var val5 = 'disabled';
+		} 		
+
+		
+		let pageOptions = ``;
+		for(var i = startPage; i <= endPage; i++ ) {
+			var val1 = ``;
+			if(page == i) {
+				var val1 = 'active'
+			}
+			
+			pageOptions += `
+				<li class="page-item \${val1}">
+			    	<button onclick="SearchCourse(\${studentId}, \${i })" class="page-link">\${i }</button>
+			    </li>`;
+		}
+		
+		
+		pagination1.innerHTML = `
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+
+			    <li class="page-item \${val2}">
+				    <button onclick="SearchCourse(\${studentId}, 1)" class="page-link"><i class="fa-solid fa-angles-left"></i></button>
+			    </li>
+
+			    <li class="page-item \${val3}">
+				    <button onclick="SearchCourse(\${studentId},\${(page - 1) - (page - 1) % 10 })" class="page-link"><i class="fa-solid fa-angle-left"></i></button>
+			    </li> 
+			    
+			    \${pageOptions}
+			  
+			     <li class="page-item \${val4}">
+				    <button onclick="SearchCourse(\${studentId}, \${((page - 1) / 10) * 10 + 11 })" class="page-link"><i class="fa-solid fa-angle-right"></i></button>
+			    </li>
+			    
+			    <li class="page-item \${val5}">
+				    <button onclick="SearchCourse(\${studentId}, \${maxPage })" class="page-link"><i class="fa-solid fa-angles-right"></i></button>
+			    </li>
+			  </ul>
+			</nav>		
+		`;
+		
+ 		let pppp = `<li class="page-item \${val4}">
+		    <button onclick="SearchCourse(\${studentId}, \${((page - 1) / 10) * 10 + 11 })" class="page-link"><i class="fa-solid fa-angle-right"></i></button>
+		    </li>`
+		    
+		console.log("pageOptions : " + pageOptions);
+		console.log("pppp : " + pppp); 
+		
+	});
+}
+
+function GetCollegeByOrganization(organizationId) {
+	fetch(ctx + "/sugang/getCollege/" + organizationId)
+	.then(res => res.json())
+	.then(data => {
+		const collegeList = data.collegeList;
+		
+		let collegeOption = `<option value="0">전체</option>`;
+		
+		for(var college of collegeList) {
+			collegeOption += `<option value="\${college.id }">\${college.name }</option>`
+		}
+		
+		college1.innerHTML = `
+			<div class="me-3">
+				<select onchange="GetDepartmentByCollege(this.value)" name="collegeId" value="0" class="form-select" aria-label="Default select example">
+					\${collegeOption}
+				</select>
+			</div>
+		`;
+	});
+	
+	GetDepartmentByCollege(0);
+}
+
+function GetDepartmentByCollege(collegeId) {
+	fetch(ctx + "/sugang/getDepartment/" + collegeId)
+	.then(res => res.json())
+	.then(data => {
+		const departmentList = data.departmentList;
+		
+		let departmentOption = `<option value="0">전체</option>`;
+		
+		for(var department of departmentList) {
+			departmentOption += `<option value="\${department.id }">\${department.name }</option>`
+		}
+		
+		department1.innerHTML = `
+			<div class="me-3">
+				<select name="departmentId" value="0" class="form-select" aria-label="Default select example">
+					\${departmentOption}
+				</select>
+			</div>
+		`;
+	});
+}
 
 
 function GetCourseInfo(classNumber) {
@@ -274,7 +521,7 @@ function GetSyllabus(classCode) {
 }
 
 // signUp table에서 제거
-function DeleteCourseDesire(classCode, studentId) {
+function DeleteCourseDesire(classCode, studentId, page) {
 	const data = {classCode, studentId};
 	fetch(ctx + "/courseSignUp/remove", {
 		method : "delete",
@@ -285,20 +532,19 @@ function DeleteCourseDesire(classCode, studentId) {
 	})
 	.then(res => res.json())
 	.then(data => {
-		document.querySelector("#deleteCourseDesireToastStrong").innerText = data.message;
-		document.querySelector("#deleteCourseDesireToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
+		// 페이지 새로고침
+		SearchCourse(studentId, page); 
 		
- 		location.reload(); 
-
-		const deleteCourseDesireToast = document.querySelector("#deleteCourseDesireToast");
-		const toast = new bootstrap.Toast(deleteCourseDesireToast);
+		toastStrong1.innerText = data.message;
+		toastBody1.innerText = "학번 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
+		const toast = new bootstrap.Toast(toast1);
  		toast.show();
 	});
 };
 
 
 // signUp table에 추가
-function InsertCourseDesire(classCode, studentId) {
+function InsertCourseDesire(classCode, studentId, page) {
 	const data = {classCode, studentId};
 	fetch(ctx + "/courseSignUp/register", {
 		method : "post",
@@ -309,14 +555,12 @@ function InsertCourseDesire(classCode, studentId) {
 	})
 	.then(res => res.json())
 	.then(data => {
-		document.querySelector("#insertCourseDesireToastStrong").innerText = data.message;
-		document.querySelector("#insertCourseDesireToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
-	
 		// 페이지 새로고침
-		location.reload();
+		SearchCourse(studentId, page); 
 		
-		const insertCourseDesireToast = document.querySelector("#insertCourseDesireToast");
-		const toast = new bootstrap.Toast(insertCourseDesireToast);
+		toastStrong1.innerText = data.message;
+		toastBody1.innerText = "학번 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
+		const toast = new bootstrap.Toast(toast1);
  		toast.show();
 	});
 };

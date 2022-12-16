@@ -13,7 +13,7 @@ public interface CourseSignUpMapper {
 
 	List<Integer> selectClassCodeByStudentNumber(int studentNumber);
 
-	List<CourseDto> selectCourseByStudentNumber(int studentNumber);
+	List<CourseDto> selectCourseByStudentNumber(int studentNumber, int startNum, int count);
 
 	int deleteCourseSignUp(int studentNumber, int classCode);
 
@@ -21,10 +21,16 @@ public interface CourseSignUpMapper {
 
 	int updateCourseSignUpFalse(int studentNumber, int classCode);
 
-	List<CourseDto> selectSignUpAllByStudentNumber(int studentNumber);
+	List<CourseDto> selectSignUpAllByStudentNumber(int studentNumber, int startNum, int count);
 
 	int deleteSignUpByStudentNumber(int studentNumber);
 
 	int deleteCourseSignUpByClassCode(int classCode);
+
+	int selectCountDesireByStudentNumber(int studentNumber);
+
+	int selectCountSignUpByStudentNumber(int studentNumber);
+
+	int selectCountSignUpByClassCode(int classCode);
 
 }

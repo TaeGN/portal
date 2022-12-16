@@ -4,6 +4,33 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.courseSchedule.CourseScheduleMapper">
 
+
+	<select id="selectCourseScheduleByStudentSignUp" resultType="com.portal.domain.course.CourseScheduleDto">
+		SELECT 
+			csd.classCode,
+			csd.day,
+			csd.startTimeId,
+			csd.endTimeId
+		FROM
+			CourseSchedule csd
+		JOIN CourseSignUp csu ON csd.classCode = csu.classCode AND csu.signUp = 1
+		WHERE csu.studentNumber = #{studentNumber}
+		ORDER BY day;
+	</select>
+
+
+	<select id="selectCourseScheduleByClassCode" resultType="com.portal.domain.course.CourseScheduleDto">
+		SELECT 
+			classCode,
+			day,
+			startTimeId,
+			endTimeId
+		FROM
+			CourseSchedule
+		WHERE
+			classCode = #{classCode}
+	</select>
+
 	<delete id="deleteCourseScheduleByClassCode">
 	DELETE FROM CourseSchedule
 	WHERE classCode = #{classCode}

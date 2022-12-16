@@ -8,4 +8,6 @@ public class CourseScheduleDto {
 	private String day;
 	private String startTime;
 	private String endTime;
+	private int startTimeId;
+	private int endTimeId;
 }
