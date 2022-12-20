@@ -15,12 +15,15 @@
         </li>
       </ul>
       <ul class="navbar-nav mb-2 mb-lg-0 flex-row">
+<!--         <li class="nav-item me-3">
+          <button onclick="GetAdminLog(1)" type="button" class="nav-link btn btn-light" >관리자로그</button>
+        </li> -->
         <li class="nav-item me-3">
         <sec:authentication property="name" var="username"/>
         <c:url value="/admin/get" var="getLink">
         	<c:param name="username" value="${username }"></c:param>
         </c:url>
-          <a class="nav-link active" aria-current="page" href="${getLink }">내정보</a>
+          <a class="nav-link" aria-current="page" href="${getLink }">내정보</a>
         </li>
         <c:if test="${loggedIn }">
 	        <li class="nav-item">

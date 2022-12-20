@@ -20,6 +20,13 @@
 </head>
 <body>
 	<my:sugangNavBar></my:sugangNavBar>
+	
+	<div class="mt-3 ms-3">
+		<h5><i class="fa-solid fa-angle-right"></i> 수강안내</h5>
+	</div>
+	
+	<hr>
+	
 	<div class="container-md">
 		<div class="row">
 			<div class="col">

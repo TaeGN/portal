@@ -15,4 +15,12 @@ public interface CourseInfoMapper {
 
 	CourseInfoDto selectCourseInfoByClassNumber(String classNumber);
 
+	int updateCourseInfo(CourseInfoDto courseInfo);
+
+	int deleteCourseInfoByClassNumber(String classNumber);
+
+	List<CourseInfoDto> selectCourseInfoAllByPageInfo(int startNum, int count);
+
+	int selectCountCourseInfoAll();
+
 }

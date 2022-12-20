@@ -21,6 +21,13 @@
 <sec:authorize access="hasAuthority('student')" var="hasStudentAdmin"></sec:authorize>
 
 <my:sugangNavBar></my:sugangNavBar>
+
+<div class="mt-3 ms-3">
+	<h5><i class="fa-solid fa-angle-right"></i> 수강편람</h5>
+</div>
+
+<hr>
+
 <form action="" method="get" id="searchFormId1">
 <div class="d-flex mb-3 mt-3">
 	<label class="form-label">
@@ -188,12 +195,6 @@
 				<tbody id="sugangListBodyId">
 					<c:forEach items="${courseList }" var="course">
 						<tr>
-<%-- 							<c:url value="/course/getByClassCode" var="getByClassCodeLink">
-								<c:param name="classCode" value="${course.classCode }"></c:param>
-							</c:url>
-							<c:url value="/course/getByClassNumber" var="getByClassNumberLink">
-								<c:param name="classNumber" value="${course.classNumber }"></c:param>
-							</c:url> --%>
 							<sec:authorize access="isAuthenticated()">
 								<c:if test="${hasStudentAdmin }">
 									<c:if test="${course.desire eq 'false'}">
@@ -223,11 +224,6 @@
 							<td>${course.courseInfo.practice }</td>
 							<td>${course.maxPersonnel }</td>
 							<td>${course.dayTime }</td>
-<%-- 							<td>
-								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
-									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime } <br>
-								</c:forEach>
-							</td> --%>
 							<td>${course.classroom }</td>
 							<td>${course.department.name }</td>
 						</tr>

@@ -25,7 +25,11 @@
 		<div class="col">
 			<table class="table">
 				<div class="d-flex">
-					<h1 class="me-auto">학생리스트</h1>
+					<div class="mt-3 ms-3 mb-3 me-auto">
+						<h3><i class="fa-solid fa-angle-right"></i> 학생 정보</h3>
+					</div>
+					
+					<hr>
 					<button onclick="RegisterStudent()" class="btn btn-link" type="button">
 						학생 등록
 					</button>
@@ -60,6 +64,10 @@
 				</tbody>
 			</table>
 		</div>
+		<div id="paginationId1">
+		<c:url value="/student/list" var="currentPageLink"></c:url>
+		<my:paginationNav></my:paginationNav>
+		</div>		
 	</div>
 </div>
 
@@ -68,9 +76,9 @@
 	
 	</div>
 	
-	<div id="modifyStudentId1"></div>
+	<div class="me-3" id="modifyStudentId1"></div>
 </c:if>
-
+<div class="ms-auto" id="adminLogId1"></div>
 </div>
 
 
@@ -123,7 +131,6 @@
 const ctx = "${pageContext.request.contextPath}";
 const modifyStudent1 = document.querySelector("#modifyStudentId1");
 
-
 // 수정확인 버튼 클릭하면 수정 form 전송
 document.querySelector("#modifyConfirmButton").addEventListener("click", function() {
 	document.querySelector("#modifyForm").submit();
@@ -134,17 +141,181 @@ document.querySelector("#removeConfirmButton").addEventListener("click", functio
 	document.querySelector("#removeForm").submit();
 });
 
+
+
+/* <tr>
+<td>\${adminLog.id }</td>
+<td>\${adminLog.menu } - \${adminLog.category }</td>
+<td>\${adminLog.log }</td>
+<td>\${adminLog.adminId }-\${adminLog.adminName }</td>
+<td>\${adminLog.inserted }</td>
+</tr> */
+
+const adminLog1 = document.querySelector("#adminLogId1");
+function GetAdminLog(page) {
+	fetch(ctx + "/admin/getAdminLog/" + page)
+	.then(res => res.json())
+	.then(data => {
+		const adminLogList = data.adminLogList;
+		const maxPage = data.maxPage;
+		
+		let adminLogBody = ``;
+		
+		for(var adminLog of adminLogList) {
+			adminLogBody += `
+				<tr>
+					<td>\${adminLog.id }. \${adminLog.log }</td>
+					<td>\${adminLog.adminId }-\${adminLog.adminName }</td>
+				</tr>			
+			`;
+		}
+		
+		
+		const startPage = parseInt((page - 1) / 10) + 1;
+		const endPage = (page + 9) < maxPage ? page + 9 : maxPage;
+		
+		var val2 = '';
+		var val3 = '';
+		var val4 = '';
+		var val5 = '';
+		
+		if(page == 1) {
+			var val2 = 'disabled';
+		}
+		
+		if(page <= 10) {
+			var val3 = 'disabled';
+		} 		
+		
+		if(((page - 1) / 10) * 10 + 11 > maxPage) {
+			var val4 = 'disabled';
+		} 
+		
+		if(page == maxPage) {
+			var val5 = 'disabled';
+		} 		
+
+		
+		let pageOptions = ``;
+		for(var i = startPage; i <= endPage; i++ ) {
+			var val1 = ``;
+			if(page == i) {
+				var val1 = 'active'
+			}
+			
+			pageOptions += `
+				<li class="page-item \${val1}">
+				<button onclick="GetAdminLog(\${i})" class="page-link">\${i }</button>
+			    </li>`;
+		}
+		
+		
+		let pagination1 = `
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+
+			    <li class="page-item \${val2}">
+				    <button onclick="GetAdminLog(1)" class="page-link"><i class="fa-solid fa-angles-left"></i></button>
+			    </li>
+
+			    <li class="page-item \${val3}">
+				    <button onclick="GetAdminLog(\${(page - 1) - (page - 1) % 10 })" class="page-link"><i class="fa-solid fa-angle-left"></i></button>
+			    </li> 
+			    
+			    \${pageOptions}
+			  
+			     <li class="page-item \${val4}">
+				    <button onclick="GetAdminLog(\${((page - 1) / 10) * 10 + 11 })" class="page-link"><i class="fa-solid fa-angle-right"></i></button>
+			    </li>
+			    
+			    <li class="page-item \${val5}">
+				    <button onclick="GetAdminLog(\${maxPage })" class="page-link"><i class="fa-solid fa-angles-right"></i></button>
+			    </li>
+			  </ul>
+			</nav>		
+		`;
+		
+		adminLog1.innerHTML = `
+		<div class="row">
+			<div class="col">
+				<table class="table">
+					<div class="mt-3 ms-3 mb-3 me-auto">
+						<h3><i class="fa-solid fa-angle-right"></i> 관리자 로그</h3>
+					</div>			
+					<thead>
+						<tr>
+							<th>로그</th>
+							<th>관리자명</th>
+						</tr>
+					</thead>
+					<tbody>
+						\${adminLogBody}				
+					</tbody>
+				</table>
+			</div>
+			\${pagination1}
+		</div>`;	
+
+		
+	});
+}
+
+
+function GetDepartmentByCollege(collegeId) {
+	fetch(ctx + "/sugang/getDepartment/" + collegeId)
+	.then(res => res.json())
+	.then(data => {
+		const departmentList = data.departmentList;
+		
+		let departmentOption = `<option value=""> </option>`;
+		
+		for(var department of departmentList) {
+			departmentOption += `<option value="\${department.id }">\${department.name }</option>`
+		}
+		
+		document.querySelector("#departmentId1").innerHTML = `
+			<div>
+				<select onchange="SetStudentNumberByDepartment(this.value)" name="departmentId" class="form-select" aria-label="Default select example">
+					\${departmentOption}
+				</select>
+			</div>
+		`;
+	});
+}
+
+function GetCollegeByOrganization(organizationId) {
+	fetch(ctx + "/sugang/getCollege/" + organizationId)
+	.then(res => res.json())
+	.then(data => {
+		const collegeList = data.collegeList;
+		let collegeOption = `<option value="0"> </option>`;
+		
+		for(var college of collegeList) {
+			collegeOption += `<option value="\${college.id }">\${college.name }</option>`
+		}
+		
+		document.querySelector("#collegeId1").innerHTML = `
+			<div>
+				<select onchange="GetDepartmentByCollege(this.value)" name="collegeId" class="form-select" aria-label="Default select example">
+					\${collegeOption}
+				</select>
+			</div>
+		`;
+	});
+	GetDepartmentByCollege(0);
+}
+
 function ModifyStudent(studentNumber) {
 	fetch(ctx + "/student/modify/" + studentNumber)
 	.then(res => res.json())
 	.then(data => {
-		const departmentList = data.departmentList;
 		const student = data.student;
+		const organizationList = data.organizationList;
 		
-		let departmentOption = ``;
+		let organizationOption = `<option value="0"> </option>`;
 		
-		for(var department of departmentList) {
-			departmentOption += `<option value="\${department.id }">\${department.name } - \${department.college.name } - \${department.college.organization.name }</option>`
+		for(var organization of organizationList) {
+			organizationOption += `<option value="\${organization.id }">\${organization.name }</option>`
 		}
 		
 		document.querySelector("#modifyStudentId1").innerHTML = `
@@ -162,14 +333,25 @@ function ModifyStudent(studentNumber) {
 						<input class="form-control" name="studentNumber" type="number" value="\${student.studentNumber }" readonly="readonly">
 					</div>
 					
-						<div class="mb-3">
-							<label for="" class="form-label">학부</label>
-							<select name="departmentId" class="form-select" aria-label="Default select example">
-									
-							\${departmentOption}
-							
+					<label for="" class="form-label">학부</label>
+					<div class="mb-3 d-flex">
+						<div id="organizationId1">
+							<select onchange="GetCollegeByOrganization(this.value)" name="organizationId" value="0" class="form-select" aria-label="Default select example">
+								\${organizationOption}
+							</select>	
+						</div>
+						<div id="collegeId1">
+							<select name="collegeId" value="0" class="form-select" aria-label="Default select example" >
+								<option value=""> </option>
 							</select>
 						</div>
+						
+						<div id="departmentId1">
+							<select name="departmentId1" value="0" class="form-select" aria-label="Default select example" >
+								<option value=""> </option>
+							</select>
+						</div>
+					</div>
 					
 						<div class="mb-3">
 							<label for="" class="form-label">학년</label>
@@ -224,13 +406,14 @@ function ModifyStudent(studentNumber) {
 				</div>
 			</div>
 		`;
-
+	GetCollegeByOrganization(0);
 	});
 }
 
 
 //register에서 department에 따른 studentNumber 자동 할당
 function SetStudentNumberByDepartment(departmentId) {
+	console.log(departmentId);
 	fetch(ctx + "/student/setStudentNumber", {
 		method : "post",
 		headers : {
@@ -251,13 +434,13 @@ function RegisterStudent() {
 	fetch(ctx + "/student/register")
 	.then(res => res.json())
 	.then(data => {
-		const departmentList = data.departmentList;
 		const studentNumber = data.studentNumber;
+		const organizationList = data.organizationList;
 		
-		let departmentOption = ``;
+		let organizationOption = `<option value="0"> </option>`;
 		
-		for(var department of departmentList) {
-			departmentOption += `<option value="\${department.id }">\${department.name } - \${department.college.name } - \${department.college.organization.name }</option>`
+		for(var organization of organizationList) {
+			organizationOption += `<option value="\${organization.id }">\${organization.name }</option>`
 		}
 		
 		document.querySelector("#studentInfoByStudentNumber").innerHTML = `
@@ -268,12 +451,23 @@ function RegisterStudent() {
 					</div>
 					<form id="registerForm1" action="\${ctx}/student/register" method="post" enctype="multipart/form-data">
 					
-						<div class="mb-3">
-							<label for="" class="form-label">학부</label>
-							<select onchange="SetStudentNumberByDepartment(this.value)" id="departmentId1" name="departmentId" value="1" class="form-select" aria-label="Default select example">
-							\${departmentOption}
+					<label for="" class="form-label">학부</label>
+					<div class="mb-3 d-flex">
+						<div id="organizationId1">
+							<select onchange="GetCollegeByOrganization(this.value)" name="organizationId" value="1" class="form-select" aria-label="Default select example">
+								\${organizationOption}
+							</select>	
+						</div>
+						<div id="collegeId1">
+							<select name="collegeId" value="1" class="form-select" aria-label="Default select example" >
 							</select>
 						</div>
+						
+						<div id="departmentId1">
+							<select onchange="SetStudentNumberByDepartment(this.value)" name="departmentId" value="1" class="form-select" aria-label="Default select example" >
+							</select>
+						</div>
+					</div>
 						
 						<div class="mb-3">
 							<label for="" class="form-label">학번</label>
@@ -312,6 +506,7 @@ function RegisterStudent() {
 				</div>
 			</div>
 		`;
+	GetCollegeByOrganization(0);
 	});
 }
 
@@ -342,7 +537,7 @@ function GetStudentInfo(studentNumber) {
 						<label class="form-label">
 							학부 
 						</label>
-						<input class="form-control" type="text" value="\${student.department.name } - \${student.department.college.name } - \${student.department.college.organization.name }" readonly>
+						<input class="form-control" type="text" value="\${student.department.college.organization.name } - \${student.department.college.name } - \${student.department.name }" readonly>
 					</div>	
 					
 					<div class="mb-3">
@@ -384,6 +579,7 @@ function GetStudentInfo(studentNumber) {
 		`
 	});
 }
+
 </script>
 </body>
 </html>

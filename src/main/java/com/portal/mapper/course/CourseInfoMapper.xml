@@ -4,6 +4,23 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.course.CourseInfoMapper">
 
+	<delete id="deleteCourseInfoByClassNumber">
+	DELETE FROM CourseInfo
+	WHERE classNumber = #{classNumber}
+	</delete>
+
+	<update id="updateCourseInfo">
+		UPDATE CourseInfo
+		SET
+			courseName = #{courseName},
+			courseClassification = #{courseClassification},
+			credit = #{credit},
+			theory = #{theory},
+			practice = #{practice},
+			summary = #{summary}
+		WHERE classNumber = ${classNumber} 
+	</update>
+
 	<select id="selectCourseInfoByClassNumber" resultType="com.portal.domain.course.CourseInfoDto">
 	SELECT
 		classNumber, 
@@ -17,6 +34,27 @@
 	WHERE classNumber = #{classNumber}
 	</select>
 	
+
+	<select id="selectCountCourseInfoAll" resultType="int">
+	SELECT count(*)
+	FROM CourseInfo
+	</select>
+
+
+	<select id="selectCourseInfoAllByPageInfo" resultType="com.portal.domain.course.CourseInfoDto">
+	SELECT
+		classNumber, 
+		courseName, 
+		courseClassification, 
+		credit, 
+		theory, 
+		practice, 
+		summary
+	FROM CourseInfo
+	ORDER BY classNumber
+	LIMIT #{startNum},#{count}
+	</select>
+
 	<select id="selectCourseInfoAll" resultType="com.portal.domain.course.CourseInfoDto">
 	SELECT
 		classNumber, 

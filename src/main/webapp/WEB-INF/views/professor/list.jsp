@@ -25,7 +25,11 @@
 		<div class="col">
 			<table class="table">
 				<div class="d-flex">
-					<h1 class="me-auto">교수리스트</h1>
+				    <div class="mt-3 ms-3 mb-3 me-auto">
+						<h3><i class="fa-solid fa-angle-right"></i> 교수 정보</h3>
+					</div>
+					
+					<hr>
 					<button onclick="RegisterProfessor()" class="btn btn-link" type="button">
 						교수 등록
 					</button>
@@ -58,11 +62,15 @@
 				</tbody>
 			</table>
 		</div>
+		<div id="paginationId1">
+		<c:url value="/professor/list" var="currentPageLink"></c:url>
+		<my:paginationNav></my:paginationNav>
+		</div>
 	</div>
 </div>
 <c:if test="${hasAuthority }">
 	<div class="me-5" id="professorInfoByProfessorNumber"></div>
-	<div id="modifyProfessorId1"></div>
+	<div class="me-3" id="modifyProfessorId1"></div>
 </c:if>
 </div>
 
@@ -122,20 +130,65 @@ document.querySelector("#removeConfirmButton").addEventListener("click", functio
 	document.querySelector("#removeForm").submit();
 });
 
+
+function GetDepartmentByCollege(collegeId) {
+	fetch(ctx + "/sugang/getDepartment/" + collegeId)
+	.then(res => res.json())
+	.then(data => {
+		const departmentList = data.departmentList;
+		
+		let departmentOption = `<option value=""> </option>`;
+		
+		for(var department of departmentList) {
+			departmentOption += `<option value="\${department.id }">\${department.name }</option>`
+		}
+		
+		document.querySelector("#departmentId1").innerHTML = `
+			<div>
+				<select onchange="SetProfessorNumberByDepartment(this.value)" name="departmentId" class="form-select" aria-label="Default select example">
+					\${departmentOption}
+				</select>
+			</div>
+		`;
+	});
+}
+
+function GetCollegeByOrganization(organizationId) {
+	fetch(ctx + "/sugang/getCollege/" + organizationId)
+	.then(res => res.json())
+	.then(data => {
+		const collegeList = data.collegeList;
+		let collegeOption = `<option value="0"> </option>`;
+		
+		for(var college of collegeList) {
+			collegeOption += `<option value="\${college.id }">\${college.name }</option>`
+		}
+		
+		document.querySelector("#collegeId1").innerHTML = `
+			<div>
+				<select onchange="GetDepartmentByCollege(this.value)" name="collegeId" class="form-select" aria-label="Default select example">
+					\${collegeOption}
+				</select>
+			</div>
+		`;
+	});
+	GetDepartmentByCollege(0);
+}
+
 function ModifyProfessor(professorNumber) {
 	fetch(ctx + "/professor/modify/" + professorNumber)
 	.then(res => res.json())
 	.then(data => {
-		const departmentList = data.departmentList;
 		const professor = data.professor;
+		const organizationList = data.organizationList;
 		
-		let departmentOption = ``;
+		let organizationOption = `<option value="0"> </option>`;
 		
-		for(var department of departmentList) {
-			departmentOption += `<option value="\${department.id }">\${department.name } - \${department.college.name } - \${department.college.organization.name }</option>`
+		for(var organization of organizationList) {
+			organizationOption += `<option value="\${organization.id }">\${organization.name }</option>`
 		}
 		
-		modifyProfessor1.innerHTML = `
+		document.querySelector("#modifyProfessorId1").innerHTML = `
 
 			<div class="row">
 				<div class="col">
@@ -148,42 +201,53 @@ function ModifyProfessor(professorNumber) {
 							<input id="professorNumberId1" value="\${professor.professorNumber }" type="number" class="form-control" name="professorNumber" readonly>
 						</div>
 					
-						<div class="mb-3">
-							<label for="" class="form-label">학부</label>
-							<select name="departmentId" class="form-select" aria-label="Default select example">
-								\${departmentOption}
-							</select>
+						<label for="" class="form-label">학부</label>
+						<div class="mb-3 d-flex">
+							<div>
+								<select onchange="GetCollegeByOrganization(this.value)" name="organizationId" value="0" class="form-select" aria-label="Default select example">
+									\${organizationOption}
+								</select>	
+							</div>
+							<div id="collegeId1">
+								<select name="collegeId" value="0" class="form-select" aria-label="Default select example" >
+								</select>
+							</div>
+							
+							<div id="departmentId1">
+								<select name="departmentId" value="0" class="form-select" aria-label="Default select example" >
+								</select>
+							</div>
 						</div>
 						
 					
 						<div class="mb-3">
 							<label for="" class="form-label">이름</label>
-							<input id="" type="text" value="\${professor.name }" class="form-control" name="name">
+							<input type="text" value="\${professor.name }" class="form-control" name="name">
 						</div>
 						
 						<div class="mb-3">
 							<label for="" class="form-label">아이디</label>
-							<input id="" type="text" class="form-control" value="\${professor.loginId }" name="loginId">
+							<input type="text" class="form-control" value="\${professor.loginId }" name="loginId">
 						</div>
 						
 						<div class="mb-3">
 							<label for="" class="form-label">비밀번호</label>
-							<input id="" type="text" class="form-control" value="" name="password">
+							<input type="text" class="form-control" value="" name="password">
 						</div>
 						
 						<div class="mb-3">
 							<label for="" class="form-label">연락처</label>
-							<input id="" type="text" class="form-control" value="\${professor.contact }" name="contact">
+							<input type="text" class="form-control" value="\${professor.contact }" name="contact">
 						</div>
 						
 						<div class="mb-3">
 							<label for="" class="form-label">이메일</label>
-							<input id="" type="email" class="form-control" value="\${professor.email }" name="email">
+							<input type="email" class="form-control" value="\${professor.email }" name="email">
 						</div>
 						
 						<div class="mb-3">
 							<label for="" class="form-label">홈페이지</label>
-							<input id="" type="url" class="form-control" value="\${professor.homepage }" name="homepage">
+							<input type="url" class="form-control" value="\${professor.homepage }" name="homepage">
 						</div>
 					
 						
@@ -206,12 +270,12 @@ function ModifyProfessor(professorNumber) {
 				</div>
 			</div>
 		`;
-
+		GetCollegeByOrganization(0);
 	});
 }
 
 
-//register에서 department에 따른 studentNumber 자동 할당
+//register에서 department에 따른 professorNumber 자동 할당
 function SetProfessorNumberByDepartment(departmentId) {
 	fetch(ctx + "/professor/setProfessorNumber", {
 		method : "post",
@@ -233,14 +297,15 @@ function RegisterProfessor() {
 	fetch(ctx + "/professor/register")
 	.then(res => res.json())
 	.then(data => {
-		const departmentList = data.departmentList;
 		const professorNumber = data.professorNumber;
+		const organizationList = data.organizationList;
 		
-		let departmentOption = ``;
+		let organizationOption = `<option value="0"> </option>`;
 		
-		for(var department of departmentList) {
-			departmentOption += `<option value="\${department.id }">\${department.name } - \${department.college.name } - \${department.college.organization.name }</option>`
+		for(var organization of organizationList) {
+			organizationOption += `<option value="\${organization.id }">\${organization.name }</option>`
 		}
+		console.log(organizationOption)
 		
 		document.querySelector("#professorInfoByProfessorNumber").innerHTML = `
 		<div class="row">
@@ -250,12 +315,23 @@ function RegisterProfessor() {
 				</div>
 				<form id="registerForm1" action="\${ctx}/professor/register" method="post" enctype="multipart/form-data">
 				
-					<div class="mb-3">
-						<label for="" class="form-label">학부</label>
-						<select onchange="SetProfessorNumberByDepartment(this.value)" id="selectDepartmentId1" name="departmentId" class="form-select" aria-label="Default select example">
-							\${departmentOption}
+				<label for="" class="form-label">학부</label>
+				<div class="mb-3 d-flex">
+					<div id="organizationId1">
+						<select onchange="GetCollegeByOrganization(this.value)" name="organizationId" value="1" class="form-select" aria-label="Default select example">
+							\${organizationOption}
+						</select>	
+					</div>
+					<div id="collegeId1">
+						<select name="collegeId" value="1" class="form-select" aria-label="Default select example" >
 						</select>
 					</div>
+					
+					<div id="departmentId1">
+						<select onchange="SetProfessorNumberByDepartment(this.value)" name="departmentId" value="1" class="form-select" aria-label="Default select example" >
+						</select>
+					</div>
+				</div>
 					
 					
 					<div class="mb-3">
@@ -265,32 +341,32 @@ function RegisterProfessor() {
 				
 					<div class="mb-3">
 						<label for="" class="form-label">이름</label>
-						<input id="" required="required" type="text" class="form-control" name="name">
+						<input required="required" type="text" class="form-control" name="name">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">아이디</label>
-						<input id="" type="text" class="form-control" name="loginId">
+						<input type="text" class="form-control" name="loginId">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">비밀번호</label>
-						<input id="" type="text" class="form-control" name="password">
+						<input type="text" class="form-control" name="password">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">연락처</label>
-						<input id="" type="text" class="form-control" name="contact">
+						<input type="text" class="form-control" name="contact">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">이메일</label>
-						<input id="" type="email" class="form-control" name="email">
+						<input type="email" class="form-control" name="email">
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">홈페이지</label>
-						<input id="" type="url" class="form-control" name="homepage">
+						<input type="url" class="form-control" name="homepage">
 					</div>
 					
 					
@@ -308,6 +384,7 @@ function RegisterProfessor() {
 			</div>
 		</div>
 		`;
+		GetCollegeByOrganization(0);
 	});
 }
 
@@ -330,7 +407,7 @@ function GetProfessorInfo(professorNumber) {
 					
 					<div class="mb-3">
 						<label for="" class="form-label">교수번호</label>
-						<input id="professorNumberId1" value="\${professor.professorNumber }" type="number" class="form-control" name="professorNumber" readonly>
+						<input value="\${professor.professorNumber }" type="number" class="form-control" name="professorNumber" readonly>
 					</div>
 					
 					<div class="mb-3">
@@ -341,32 +418,32 @@ function GetProfessorInfo(professorNumber) {
 				
 					<div class="mb-3">
 						<label for="" class="form-label">이름</label>
-						<input id="" type="text" value="\${professor.name }" class="form-control" name="name" readonly>
+						<input type="text" value="\${professor.name }" class="form-control" name="name" readonly>
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">아이디</label>
-						<input id="" type="text" class="form-control" value="\${professor.loginId }" name="loginId" readonly>
+						<input type="text" class="form-control" value="\${professor.loginId }" name="loginId" readonly>
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">비밀번호</label>
-						<input id="" type="text" class="form-control" value="*******" name="password" readonly>
+						<input type="text" class="form-control" value="*******" name="password" readonly>
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">연락처</label>
-						<input id="" type="text" class="form-control" value="\${professor.contact }" name="contact" readonly>
+						<input type="text" class="form-control" value="\${professor.contact }" name="contact" readonly>
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">이메일</label>
-						<input id="" type="email" class="form-control" value="\${professor.email }" name="email" readonly>
+						<input type="email" class="form-control" value="\${professor.email }" name="email" readonly>
 					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">홈페이지</label>
-						<input id="" type="url" class="form-control" value="\${professor.homepage }" name="homepage" readonly>
+						<input type="url" class="form-control" value="\${professor.homepage }" name="homepage" readonly>
 					</div>
 				
 					

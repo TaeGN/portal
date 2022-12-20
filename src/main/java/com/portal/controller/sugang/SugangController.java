@@ -276,7 +276,6 @@ public class SugangController {
 	
 	
 	@GetMapping("getCollege/{organizationId}")
-	@PreAuthorize("hasAnyAuthority('student')")
 	@ResponseBody
 	public Map<String, Object> getCollege(@PathVariable int organizationId) {
 		Map<String, Object> map = new HashMap<>();
@@ -288,7 +287,6 @@ public class SugangController {
 	}
 	
 	@GetMapping("getDepartment/{collegeId}")
-	@PreAuthorize("hasAnyAuthority('student')")
 	@ResponseBody
 	public Map<String, Object> getDepartment(@PathVariable int collegeId) {
 		Map<String, Object> map = new HashMap<>();

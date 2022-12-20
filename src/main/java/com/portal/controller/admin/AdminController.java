@@ -1,6 +1,8 @@
 package com.portal.controller.admin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,12 +12,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.portal.domain.admin.AdminLogDto;
 import com.portal.domain.admin.AdminMemberDto;
+import com.portal.domain.course.CourseDto;
 import com.portal.mapper.admin.AdminMapper;
 import com.portal.service.admin.AdminLogService;
 import com.portal.service.admin.AdminService;
@@ -41,12 +47,42 @@ public class AdminController {
 		return "redirect:/admin/board";
 	}
 	
+	
+	static int count = 10;
 	// 대시보드
 	@GetMapping("board")
 	@PreAuthorize("isAuthenticated()")
-	public void board(Model model) {
-		List<AdminLogDto> list = adminLogService.getAdminLogAll();
+	public void board(Model model,
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		int startNum = (page - 1) * count; 
+		
+		List<AdminLogDto> list = adminLogService.getAdminLogAll(startNum, count);
+		int totalNum = adminLogService.getCountAdminLogAll();
+		int maxPage = (totalNum - 1) / count + 1;
+		System.out.println(totalNum);
+		
 		model.addAttribute("adminLogList", list);
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("page", page);
+	}
+	
+	@GetMapping("getAdminLog/{page}")
+	@PreAuthorize("isAuthenticated()")
+	@ResponseBody
+	public Map<String, Object> getAdminLog(@PathVariable int page) {
+		int startNum = (page - 1) * count; 
+		
+		List<AdminLogDto> adminLogList = adminLogService.getAdminLogAll(startNum, count);
+		int totalNum = adminLogService.getCountAdminLogAll();
+		int maxPage = (totalNum - 1) / count + 1;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("adminLogList", adminLogList);
+		map.put("maxPage", maxPage);
+		
+		
+		return map;
 	}
 	
 	@PostMapping("remove")
@@ -145,9 +181,21 @@ public class AdminController {
 	// 관리자 리스트
 	@GetMapping("list")
 	@PreAuthorize("hasAuthority('admin')")
-	public void member(Model model) {
-		List<AdminMemberDto> list = adminService.getAdminMemberList();
-		System.out.println(list);
+	public void member(Model model,
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		int startNum = (page - 1) * count; 
+		
+		List<AdminMemberDto> list = adminService.getAdminMemberList(startNum, count);
+		int totalNum = list.size();
+		int maxPage = (totalNum - 1) / count + 1;
+		
+		int endNum = startNum + count - 1;
+		
+		model.addAttribute("startNum", startNum);
+		model.addAttribute("endNum", endNum);
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("page", page);
 		model.addAttribute("adminMemberList", list);
 	}
 }

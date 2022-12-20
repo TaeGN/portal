@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -12,15 +14,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.portal.domain.course.CourseDto;
+import com.portal.domain.course.CourseScheduleDto;
 import com.portal.domain.course.CourseSignUpDto;
+import com.portal.domain.course.CourseSignUpScheduleDto;
+import com.portal.domain.course.CourseTimeDto;
 import com.portal.domain.member.StudentDto;
+import com.portal.service.course.CourseScheduleService;
 import com.portal.service.course.CourseService;
 import com.portal.service.course.CourseSignUpService;
 import com.portal.service.member.StudentService;
@@ -37,7 +46,105 @@ public class CourseSignUpController {
 	
 	@Autowired
 	private StudentService studentService;
+	
+	@Autowired
+	private CourseScheduleService courseScheduleService;
+			
+	
+	@GetMapping("getSignUpSchedule/{studentId}")
+	@PreAuthorize("hasAnyAuthority('admin','student')")
+	public String signUpSchedule(@PathVariable String studentId, Model model,
+			Authentication authentication) {
+		if(authentication.getName().equals(studentId)) {
+			
+		}
 		
+		List<String> emptyList = new ArrayList<>();
+		for(int i = 0; i < 24; i++) {
+			emptyList.add(""); 
+		}
+		Map<String, List<String>> map = new HashMap<>();
+		map.put("Monday", emptyList);
+		map.put("Tuesday", emptyList);
+		map.put("Wednesday", emptyList);
+		map.put("Thursday", emptyList);
+		map.put("Friday", emptyList);
+		map.put("Saturday", emptyList);
+		map.put("Sunday", emptyList);
+		
+		List<CourseScheduleDto> signUpScheduleList = courseSignUpService.getSignUpScheduleByStudentId(studentId);
+		for(CourseScheduleDto courseSchedule : signUpScheduleList) {
+			String day = courseSchedule.getDay();
+//			if(!map.containsKey(day)) {
+//				map.put(day, new ArrayList<>(emptyList));
+//			}
+			List<String> list = new ArrayList<>(map.get(day));
+			for(int i = courseSchedule.getStartTimeId(); i < courseSchedule.getEndTimeId(); i++) {
+				list.set(i - 1, courseSchedule.getCourseName());
+			}
+			System.out.println("list : "+list +" :" + day);
+			map.put(day, list);
+		}
+		
+		List<CourseTimeDto> courseTimeList2 = courseScheduleService.getCourseTimeList();
+		List<String> courseTimeList = new ArrayList<>();
+		for(int i = 0; i < 24; i++) {
+			CourseTimeDto courseTime1 = courseTimeList2.get(i);
+			CourseTimeDto courseTime2 = courseTimeList2.get(i + 1);
+			String time = courseTime1.getTime() + " - " + courseTime2.getTime();
+			courseTimeList.add(time);
+		}
+		map.put("courseTimeList", courseTimeList);
+		for(String key : map.keySet()) {
+			System.out.println(key + " : " + map.get(key).size());
+		}
+		
+		System.out.println("map : " + map);
+		
+		List<CourseSignUpScheduleDto> signUpSchedule = new ArrayList<>();
+		for(int i = 0; i < 24; i++) {
+			CourseSignUpScheduleDto courseSignUpSchedule = new CourseSignUpScheduleDto();
+			
+			courseSignUpSchedule.setTime(map.get("courseTimeList").get(i));
+			courseSignUpSchedule.setMonday(map.get("Monday").get(i));
+			courseSignUpSchedule.setTuesday(map.get("Tuesday").get(i));
+			courseSignUpSchedule.setWednesday(map.get("Wednesday").get(i));
+			courseSignUpSchedule.setThursday(map.get("Thursday").get(i));
+			courseSignUpSchedule.setFriday(map.get("Friday").get(i));
+			courseSignUpSchedule.setSaturday(map.get("Saturday").get(i));
+			courseSignUpSchedule.setSunday(map.get("Sunday").get(i));
+			
+			System.out.println("courseSignUpSchedule : " + courseSignUpSchedule);
+			signUpSchedule.add(courseSignUpSchedule);
+		}
+		
+		System.out.println("signUpSchedule : " + signUpSchedule);
+		
+		model.addAttribute("signUpSchedule", signUpSchedule);
+		return "courseSignUp/signUpSchedule";
+	}
+	
+//	@GetMapping("signUpSchedule")
+//	public void signUpSchedule(HttpServletRequest req, Model model) {
+//		String studentId = (String)RequestContextUtils.getInputFlashMap(req).get("studentId");
+//		List<CourseScheduleDto> signUpScheduleList = courseSignUpService.getSignUpScheduleByStudentId(studentId);
+//		List<String> emptyList = new ArrayList<>();
+//		for(int i = 0; i < 25; i++) {
+//			emptyList.add(""); 
+//		}
+//		Map<String, List<String>> map = Map.of("Monday", emptyList, "Tuesday", emptyList, "Wednesday", emptyList, "Thursday", emptyList, "Friday", emptyList, "Saturday", emptyList, "Sunday", emptyList);
+//		for(CourseScheduleDto courseSchedule : signUpScheduleList) {
+//			String day = courseSchedule.getDay();
+//			List<String> list = map.get(day);
+//			for(int i = courseSchedule.getStartTimeId(); i < courseSchedule.getEndTimeId(); i++) {
+//				list.set(i - 1, courseSchedule.getCourseName());
+//			}
+//			map.put(day, list);
+//		}
+//		
+//		System.out.println(map);
+//		model.addAttribute("signUpSchedule", map);
+//	}
 	
 	@PostMapping("register")
 	@ResponseBody

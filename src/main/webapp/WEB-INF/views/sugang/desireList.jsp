@@ -17,6 +17,12 @@
 <sec:authorize access="hasAuthority('student')" var="hasStudentAdmin"></sec:authorize>
 
 <my:sugangNavBar></my:sugangNavBar>
+<div class="mt-3 ms-3">
+	<h5><i class="fa-solid fa-angle-right"></i> 희망수업</h5>
+</div>
+
+<hr>
+
 <div class="d-flex">
 <div id="sugangListId1"  data-studentId="${studentId }">
 	<div class="row">

@@ -4,6 +4,11 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.member.StudentMapper">
 	
+	<select id="selectCountStudentAll" resultType="int">
+		SELECT count(*)
+		FROM Student
+	</select>
+	
 	<delete id="deleteStudent">
 		DELETE FROM Student
 		WHERE studentNumber = #{studentNumber}
@@ -33,6 +38,54 @@
 		VALUES (#{studentNumber},#{departmentId},#{grade},#{studentName},#{studentNumber},#{password},#{firstResidentId},#{lastResidentId});
 	</insert>
 	
+
+	<select id="selectStudentByPageInfo" resultMap="selectStudentByPageInfoMap">
+		SELECT 
+			s.studentNumber, 
+			s.studentName, 
+			s.grade,
+			s.id, 
+			s.password,
+			s.firstResidentId,
+			s.lastResidentId,
+			s.departmentId,
+            d.name departmentName,
+            d.collegeId,
+            c.name collegeName,
+            c.organizationId,
+            o.name organizationName
+		 FROM Student s
+         LEFT JOIN Department d ON s.departmentId = d.id
+         LEFT JOIN College c ON c.id = d.collegeId
+         LEFT JOIN Organization o ON o.id = c.organizationId
+         ORDER BY s.studentNumber
+         LIMIT #{startNum},#{count}
+	</select>
+	
+	<resultMap type="com.portal.domain.member.StudentDto" id="selectStudentByPageInfoMap">
+		<id column="studentNumber" property="studentNumber"/>
+		<result column="studentName" property="studentName"/>
+		<result column="grade" property="grade"/>
+		<result column="id" property="id"/>
+		<result column="password" property="password"/>
+		<result column="firstResidentId" property="firstResidentId"/>
+		<result column="lastResidentId" property="lastResidentId"/>
+		<result column="departmentId" property="departmentId"/>
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>
+		</association>
+	</resultMap>
 	
 	<select id="selectStudentByStudentId" resultMap="selectStudentByStudentIdMap">
 		SELECT 

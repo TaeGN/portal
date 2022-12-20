@@ -40,9 +40,9 @@ public class AdminService {
 		return cnt1 * cnt2;
 	}
 
-	public List<AdminMemberDto> getAdminMemberList() {
+	public List<AdminMemberDto> getAdminMemberList(int startNum, int count) {
 		// TODO Auto-generated method stub
-		return adminMapper.selectAdminMemberAll();
+		return adminMapper.selectAdminMemberAll(startNum, count);
 	}
 
 	public AdminMemberDto getAdminMemberByUserName(String username) {

@@ -79,10 +79,20 @@ public class ProfessorService {
 		return professorMapper.updateProfessor(professor);
 	}
 
-	public int removeProfessor(int professorNumber) {
+	public int removeProfessor(int professorNumber, String username) {
 		// professorNumber에 해당하는 Course 삭제 (CourseSchedule, CourseSignUp도 같이 삭제)
-		int cnt = courseService.removeCourseByProfessorNumber(professorNumber);
+		int cnt = courseService.removeCourseByProfessorNumber(professorNumber, username);
 		
 		return professorMapper.deleteProfessorByProfessorNumber(professorNumber);
+	}
+
+	public List<ProfessorDto> getProfessorByPageInfo(int startNum, int count) {
+		// TODO Auto-generated method stub
+		return professorMapper.selectProfessorByPageInfo(startNum, count);
+	}
+
+	public int getCountProfessorAll() {
+		// TODO Auto-generated method stub
+		return professorMapper.selectCountProfessorAll();
 	}
 }

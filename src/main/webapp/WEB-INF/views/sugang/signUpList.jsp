@@ -17,6 +17,11 @@
 <sec:authorize access="hasAuthority('student')" var="hasStudentAdmin"></sec:authorize>
 
 <my:sugangNavBar></my:sugangNavBar>
+<div class="mt-3 ms-3 d-flex">
+	<h5><i class="fa-solid fa-angle-right"></i> 신청내역</h5>
+	<button onclick="GetSignUpSchedule(this.value)" value="${studentId }" type="button" class="btn btn-primary ms-auto">신청과목시간표보기</button>
+</div>
+<hr>
 <div class="d-flex">
 <div id="sugangListId1" data-studentId="${studentId }">
 	<div class="row">
@@ -55,8 +60,16 @@
 								</sec:authorize>
 							</td>
 							<td>${course.courseInfo.courseClassification }</td>
-							<td><a href="${getLink }">${course.classCode }</a></td>
-							<td>${course.classNumber }</td>
+							<td>
+								<button onclick="GetSyllabus(${course.classCode})" type="button" class="btn btn-link">
+								  ${course.classCode } <i class="fa-solid fa-magnifying-glass"></i>
+								</button>
+							</td>
+							<td>
+								<button onclick='GetCourseInfo("${course.classNumber}")' type="button" class="btn btn-light">
+								  ${course.classNumber } <i class="fa-solid fa-magnifying-glass"></i>
+								</button>
+							</td>
 							<td>${course.courseInfo.courseName }</td>
 							<td>${course.professor.name }</td>
 							<td>${course.courseInfo.credit }</td>
@@ -105,6 +118,22 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
 const ctx = "${pageContext.request.contextPath}";
+
+function GetSignUpSchedule(studentId) {
+	window.open(ctx + "/courseSignUp/getSignUpSchedule/" + studentId, "myWindow", 'width=800,height=600');
+	window.close();
+}
+
+function GetCourseInfo(classNumber) {
+	window.open(ctx + "/courseInfo/getCourseInfo/" + classNumber, "myWindow", 'width=800,height=600');
+	window.close();
+}
+
+
+function GetSyllabus(classCode) {
+	window.open(ctx + "/course/getSyllabus/" + classCode, "myWindow", 'width=800,height=600');
+	window.close();
+}
 
 //signUp table에서 signUp false로 변경
 function CancelCourseSignUpConfirm(classCode, studentId) {

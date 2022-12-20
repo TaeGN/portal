@@ -4,6 +4,11 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.member.ProfessorMapper">
 
+	<select id="selectCountProfessorAll" resultType="int">
+		SELECT count(*)
+		FROM Professor
+	</select>
+
 		<delete id="deleteProfessorByProfessorNumber">
 		DELETE FROM Professor
 		WHERE professorNumber = #{professorNumber}
@@ -103,6 +108,60 @@
 		INSERT INTO Professor (professorNumber,name,contact,email,homepage,departmentId,firstResidentId,lastResidentId,loginId,password)
 		VALUES (#{professorNumber},#{name},#{contact},#{email},#{homepage},#{departmentId},#{firstResidentId},#{lastResidentId},#{loginId},#{password})
 	</insert>
+
+
+	<select id="selectProfessorByPageInfo" resultMap="selectProfessorByPageInfoMap">
+		SELECT 
+			p.professorNumber,
+			p.name,
+			p.contact,
+			p.email,
+			p.homepage,
+			p.firstResidentId,
+			p.lastResidentId,
+			p.loginId,
+			p.password,
+			d.id departmentId,
+            d.name departmentName,
+            d.collegeId,
+            c.name collegeName,
+            c.organizationId,
+            o.name organizationName
+		FROM Professor p
+		LEFT JOIN Department d ON p.departmentId = d.id
+        LEFT JOIN College c ON c.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = c.organizationId	
+        ORDER BY p.professorNumber
+        LIMIT #{startNum},#{count}
+	</select>
+	
+	<resultMap type="com.portal.domain.member.ProfessorDto" id="selectProfessorByPageInfoMap">
+		<id column="professorNumber" property="professorNumber"/>
+		<result column="name" property="name"/>
+		<result column="contact" property="contact"/>
+		<result column="email" property="email"/>
+		<result column="homepage" property="homepage"/>
+		<result column="departmentId" property="departmentId"/>
+		<result column="firstResidentId" property="firstResidentId"/>
+		<result column="lastResidentId" property="lastResidentId"/>
+		<result column="loginId" property="loginId"/>
+		<result column="password" property="password"/>
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>	
+		</association>
+	</resultMap>
+	
 	
 	<select id="selectProfessorAll" resultMap="selectProfessorAllMap">
 		SELECT 

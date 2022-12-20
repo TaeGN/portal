@@ -3,6 +3,39 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.course.CourseMapper">
+	
+	<update id="updateCourseByClassCode">
+		UPDATE Course
+		SET
+			classNumber = #{classNumber},
+			departmentId = #{departmentId},
+			grade = #{grade},
+			year = #{year},
+			semester = #{semester},
+			maxPersonnel = #{maxPersonnel},
+			classroom = #{classroom},
+			professorNumber = #{professorNumber}
+		WHERE
+			classCode = #{classCode}
+	</update>
+
+	<select id="selectCourseByClassNumber" resultType="int">
+		SELECT classCode
+		FROM Course
+		WHERE classNumber = #{classNumber}
+	</select>
+
+	<select id="selectCourseTimeByStartTimeid" resultType="com.portal.domain.course.CourseTimeDto">
+		SELECT id, time
+		FROM CourseTime	
+		LIMIT #{startTimeId},100
+	</select>
+
+	<select id="selectCountCourseAll" resultType="int">
+		SELECT count(*)
+		FROM Course c
+	</select>
+
 	<delete id="deleteCourseByClassCode">
 		DELETE FROM Course
 		WHERE classCode = #{classCode}
@@ -54,10 +87,10 @@
             c.semester,
             GROUP_CONCAT(DISTINCT cs.day,' ',
 			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId),'-',
-			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId)) day,
-<!--             cs.day,
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId)) dayTime,
+             cs.day,
             (SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId) startTime,
-			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId) endTime, -->
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId) endTime, 
 			c.classroom,
 			c.departmentId,
             d.name departmentName,
@@ -89,9 +122,130 @@
 		LEFT JOIN College pl ON pl.id = pd.collegeId
         LEFT JOIN Organization po ON po.id = pl.organizationId	
 		WHERE c.classCode = #{classCode}
+		GROUP BY c.classCode
 	</select>
 	
 	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseByClassCodeMap">
+		<id column="classCode" property="classCode"></id>
+		<result column="classNumber" property="classNumber"/>
+		<result column="grade" property="grade"/>
+		<result column="maxPersonnel" property="maxPersonnel"/>
+		<result column="year" property="year"/>
+		<result column="semester" property="semester"/>
+		<result column="classroom" property="classroom"/>
+		<result column="departmentId" property="departmentId"/>
+		<result column="dayTime" property="dayTime"/>
+		
+		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+			<id column="departmentId" property="id"/>
+			<result column="departmentName" property="name"/>
+			<result column="collegeId" property="collegeId"/>
+			<association property="college" javaType="com.portal.domain.course.CollegeDto">
+				<id column="collegeId" property="id"/>
+				<result column="collegeName" property="name"/>
+				<result column="organizationId" property="organizationId"/>
+				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+					<id column="organizationId" property="id"/>
+					<result column="organizationName" property="name"/>
+				</association>
+			</association>	
+		</association>
+		
+		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
+			<id column="classNumber" property="classNumber"/>
+			<result column="courseClassification" property="courseClassification"/>
+			<result column="courseName" property="courseName"/>
+			<result column="credit" property="credit"/>
+			<result column="theory" property="theory"/>
+			<result column="practice" property="practice"/>
+			<result column="summary" property="summary"/>
+		</association>
+		
+		<association property="professor" javaType="com.portal.domain.member.ProfessorDto">
+			<id column="professorNumber" property="professorNumber"/>
+			<result column="professorName" property="name"/>
+			<result column="professorContact" property="contact"/>
+			<result column="professorEmail" property="email"/>
+			<result column="professorHomepage" property="homepage"/>
+			<result column="professorInserted" property="inserted"/>
+			<result column="professorDepartmentId" property="departmentId"/>
+			<association property="department" javaType="com.portal.domain.course.DepartmentDto">
+				<id column="departmentId" property="id"/>
+				<result column="professorDepartmentName" property="name"/>
+				<result column="professorCollegeId" property="collegeId"/>
+				<association property="college" javaType="com.portal.domain.course.CollegeDto">
+					<id column="professorCollegeId" property="id"/>
+					<result column="professorCollegeName" property="name"/>
+					<result column="professorOragnizationId" property="organizationId"/>
+					<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
+						<id column="professorOragnizationId" property="id"/>
+						<result column="professorOrganizationName" property="name"/>
+					</association>
+				</association>	
+			</association>
+		</association>
+		
+ 		<collection property="courseSchedule" javaType="java.util.ArrayList" ofType="com.portal.domain.course.CourseScheduleDto">
+			<result column="classCode" property="classCode"/>
+			<result column="day" property="day"/>
+			<result column="startTime" property="startTime"/>
+			<result column="endTime" property="endTime"/>
+		</collection> 
+	</resultMap>
+	
+	
+	<select id="selectCourseAll" resultMap="selectCourseAllMap">
+		SELECT 
+            c.grade,
+            i.courseClassification,
+			c.classCode,
+			c.classNumber,
+			i.courseName,
+			i.credit,
+			i.theory,
+			i.practice,
+			c.maxPersonnel,
+            c.year,
+            c.semester,
+            GROUP_CONCAT(DISTINCT cs.day,' ',
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId),'-',
+			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId)) day,
+			c.classroom,
+			c.departmentId,
+            d.name departmentName,
+            d.collegeId,
+            l.name collegeName,
+            l.organizationId,
+            o.name organizationName,
+            i.summary,
+            c.professorNumber,
+            p.name professorName,
+            p.contact professorContact,
+            p.email professorEmail,
+            p.homepage professorHomepage,
+            p.inserted professorInserted,
+            p.departmentId professorDepartmentId,
+            pd.name professorDepartmentName,
+            pd.collegeId professorCollegeId,
+            pl.name professorCollegeName,
+            pl.organizationId professorOragnizationId,
+            po.name professorOrganizationName
+		FROM Course	c
+		LEFT JOIN Department d ON c.departmentId = d.id
+		LEFT JOIN College l ON l.id = d.collegeId
+        LEFT JOIN Organization o ON o.id = l.organizationId	
+		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber
+		LEFT JOIN CourseSchedule cs ON c.classCode = cs.classCode
+		LEFT JOIN Professor p ON c.professorNumber = p.professorNumber
+		LEFT JOIN Department pd ON p.departmentId = pd.id
+		LEFT JOIN College pl ON pl.id = pd.collegeId
+        LEFT JOIN Organization po ON po.id = pl.organizationId
+        GROUP BY c.classCode
+		ORDER BY c.classCode
+		LIMIT #{startNum}, #{count}
+	</select>
+	
+	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseAllMap">
 		<id column="classCode" property="classCode"></id>
 		<result column="classNumber" property="classNumber"/>
 		<result column="grade" property="grade"/>
@@ -150,132 +304,8 @@
 				</association>	
 			</association>
 		</association>
-		
-<!-- 		<collection property="courseSchedule" javaType="java.util.ArrayList" ofType="com.portal.domain.course.CourseScheduleDto">
-			<result column="classCode" property="classCode"/>
-			<result column="day" property="day"/>
-			<result column="startTime" property="startTime"/>
-			<result column="endTime" property="endTime"/>
-		</collection> -->
 	</resultMap>
-	
-	
-	<select id="selectCourseAll" resultMap="selectCourseAllMap">
-		SELECT 
-            c.grade,
-            i.courseClassification,
-			c.classCode,
-			c.classNumber,
-			i.courseName,
-			i.credit,
-			i.theory,
-			i.practice,
-			c.maxPersonnel,
-            c.year,
-            c.semester,
-            cs.day,
-            (SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.startTimeId) startTime,
-			(SELECT ct.time FROM CourseTime ct WHERE ct.id = cs.endTimeId) endTime,
-			c.classroom,
-			c.departmentId,
-            d.name departmentName,
-            d.collegeId,
-            l.name collegeName,
-            l.organizationId,
-            o.name organizationName,
-            i.summary,
-            c.professorNumber,
-            p.name professorName,
-            p.contact professorContact,
-            p.email professorEmail,
-            p.homepage professorHomepage,
-            p.inserted professorInserted,
-            p.departmentId professorDepartmentId,
-            pd.name professorDepartmentName,
-            pd.collegeId professorCollegeId,
-            pl.name professorCollegeName,
-            pl.organizationId professorOragnizationId,
-            po.name professorOrganizationName
-		FROM Course	c
-		LEFT JOIN Department d ON c.departmentId = d.id
-		LEFT JOIN College l ON l.id = d.collegeId
-        LEFT JOIN Organization o ON o.id = l.organizationId	
-		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber
-		LEFT JOIN CourseSchedule cs ON c.classCode = cs.classCode
-		LEFT JOIN Professor p ON c.professorNumber = p.professorNumber
-		LEFT JOIN Department pd ON p.departmentId = pd.id
-		LEFT JOIN College pl ON pl.id = pd.collegeId
-        LEFT JOIN Organization po ON po.id = pl.organizationId
-		ORDER BY c.classCode
-		<!-- GROUP BY c.classCode -->
-	</select>
-	
-	<resultMap type="com.portal.domain.course.CourseDto" id="selectCourseAllMap">
-		<id column="classCode" property="classCode"></id>
-		<result column="classNumber" property="classNumber"/>
-		<result column="grade" property="grade"/>
-		<result column="maxPersonnel" property="maxPersonnel"/>
-		<result column="year" property="year"/>
-		<result column="semester" property="semester"/>
-		<result column="classroom" property="classroom"/>
-		<result column="departmentId" property="departmentId"/>
-		
-		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
-			<id column="departmentId" property="id"/>
-			<result column="departmentName" property="name"/>
-			<result column="collegeId" property="collegeId"/>
-			<association property="college" javaType="com.portal.domain.course.CollegeDto">
-				<id column="collegeId" property="id"/>
-				<result column="collegeName" property="name"/>
-				<result column="organizationId" property="organizationId"/>
-				<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
-					<id column="organizationId" property="id"/>
-					<result column="organizationName" property="name"/>
-				</association>
-			</association>	
-		</association>
-		
-		<association property="courseInfo" javaType="com.portal.domain.course.CourseInfoDto">
-			<id column="classNumber" property="classNumber"/>
-			<result column="courseClassification" property="courseClassification"/>
-			<result column="courseName" property="courseName"/>
-			<result column="credit" property="credit"/>
-			<result column="theory" property="theory"/>
-			<result column="practice" property="practice"/>
-			<result column="summary" property="summary"/>
-		</association>
-		
-		<association property="professor" javaType="com.portal.domain.member.ProfessorDto">
-			<id column="professorNumber" property="professorNumber"/>
-			<result column="professorName" property="name"/>
-			<result column="professorContact" property="contact"/>
-			<result column="professorEmail" property="email"/>
-			<result column="professorHomepage" property="homepage"/>
-			<result column="professorInserted" property="inserted"/>
-			<result column="professorDepartmentId" property="departmentId"/>
-			<association property="department" javaType="com.portal.domain.course.DepartmentDto">
-				<id column="departmentId" property="id"/>
-				<result column="professorDepartmentName" property="name"/>
-				<result column="professorCollegeId" property="collegeId"/>
-				<association property="college" javaType="com.portal.domain.course.CollegeDto">
-					<id column="professorCollegeId" property="id"/>
-					<result column="professorCollegeName" property="name"/>
-					<result column="professorOragnizationId" property="organizationId"/>
-					<association property="organization" javaType="com.portal.domain.course.OrganizationDto">
-						<id column="professorOragnizationId" property="id"/>
-						<result column="professorOrganizationName" property="name"/>
-					</association>
-				</association>	
-			</association>
-		</association>
-		
-		<collection property="courseSchedule" javaType="java.util.ArrayList" ofType="com.portal.domain.course.CourseScheduleDto">
-			<result column="classCode" property="classCode"/>
-			<result column="day" property="day"/>
-			<result column="startTime" property="startTime"/>
-			<result column="endTime" property="endTime"/>
-		</collection>
-	</resultMap>
+
 
 </mapper>
 

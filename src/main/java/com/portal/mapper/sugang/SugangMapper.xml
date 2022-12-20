@@ -12,7 +12,6 @@
 		LEFT JOIN College l ON l.id = d.collegeId
         LEFT JOIN Organization o ON o.id = l.organizationId
 		LEFT JOIN CourseInfo i ON c.classNumber = i.classNumber 
-		LEFT JOIN CourseSchedule cs ON c.classCode = cs.classCode
         LEFT JOIN Professor p ON c.professorNumber = p.professorNumber	
 		WHERE c.classCode > 0
 		<if test="organizationId != 0">
