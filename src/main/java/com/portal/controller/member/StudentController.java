@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.portal.domain.admin.AdminMemberDto;
+import com.portal.domain.course.CourseDto;
 import com.portal.domain.course.DepartmentDto;
+import com.portal.domain.course.OrganizationDto;
 import com.portal.domain.member.StudentDto;
 import com.portal.mapper.admin.AdminMapper;
 import com.portal.service.admin.AdminLogService;
@@ -58,10 +60,10 @@ public class StudentController {
 	@ResponseBody
 	public Map<String, Object> register() {
 		Map<String, Object> map = new HashMap<>();
-		List<DepartmentDto> departmentList = departmentService.getDepartmentAll();
+		List<OrganizationDto> organizationList = departmentService.getOrganizationAll(); 
 		int studentNumber = studentService.setStudentNumberByDepartmentId(1);
 		map.put("studentNumber", studentNumber);
-		map.put("departmentList", departmentList);
+		map.put("organizationList", organizationList);
 		return map;
 	}
 	
@@ -89,9 +91,19 @@ public class StudentController {
 	
 	@GetMapping("list")
 	@PreAuthorize("hasAnyAuthority('admin','member')")
-	public void list(Model model) {
-		List<StudentDto> list= studentService.studentList();
-		model.addAttribute("studentList", list);
+	public void list(Model model,
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		int count = 10;
+		int startNum = (page - 1) * count; 
+		
+		List<StudentDto> studentList = studentService.getStudentByPageInfo(startNum, count);
+		int totalNum = studentService.getCountCourseAll();
+		int maxPage = (totalNum - 1) / count + 1;
+		
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("page", page);
+		model.addAttribute("studentList", studentList);
 	}
 	
 	@GetMapping("getInfo/{studentNumber}")
@@ -119,8 +131,8 @@ public class StudentController {
 	public Map<String, Object> modify(@PathVariable int studentNumber) {
 		Map<String, Object> map = new HashMap<>();
 		StudentDto student = studentService.getStudentByStudentNumber(studentNumber);
-		List<DepartmentDto> departmentList = departmentService.getDepartmentAll();
-		map.put("departmentList", departmentList);
+		List<OrganizationDto> organizationList = departmentService.getOrganizationAll(); 
+		map.put("organizationList", organizationList);
 		map.put("student", student);
 		return map;
 	}

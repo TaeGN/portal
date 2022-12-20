@@ -30,5 +30,5 @@ public class CourseDto {
 	private DepartmentDto department;
 	private CourseInfoDto courseInfo;
 	private ProfessorDto professor;
-//	private List<CourseScheduleDto> courseSchedule;
+	private List<CourseScheduleDto> courseSchedule;
 }

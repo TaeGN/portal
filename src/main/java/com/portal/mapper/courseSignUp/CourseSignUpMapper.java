@@ -3,6 +3,7 @@ package com.portal.mapper.courseSignUp;
 import java.util.List;
 
 import com.portal.domain.course.CourseDto;
+import com.portal.domain.course.CourseScheduleDto;
 import com.portal.domain.course.CourseSignUpDto;
 
 public interface CourseSignUpMapper {
@@ -32,5 +33,7 @@ public interface CourseSignUpMapper {
 	int selectCountSignUpByStudentNumber(int studentNumber);
 
 	int selectCountSignUpByClassCode(int classCode);
+
+	List<CourseScheduleDto> selectSignUpScheduleByStudentNumber(int studentNumber);
 
 }

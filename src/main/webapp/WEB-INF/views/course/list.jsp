@@ -13,14 +13,17 @@
 </head>
 <body>
 <my:adminPageTopNav></my:adminPageTopNav>
-
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
 	<div class="row">
 		<div class="col">
 			<table class="table">
 				<div class="d-flex">
-					<h1 class="me-auto">강의리스트</h1>
+					<div class="mt-3 ms-3 mb-3 me-auto">
+						<h3><i class="fa-solid fa-angle-right"></i> 강의 정보</h3>
+					</div>
+					
+					<hr>
 					<c:url value="/course/register" var="registerLink"></c:url>
 					<a href="${registerLink }">새 강의 등록</a>
 				</div>
@@ -40,7 +43,7 @@
 						<th>학점</th>
 						<th>강의</th>
 						<th>실습</th>
-						<th>수업시간</th>
+						<th class="dayTime1">수업시간</th>
 						<th>강의실</th>
 						<th>수강정원</th>
 						<th>관장학과</th>
@@ -55,13 +58,13 @@
 							<td>${course.grade }</td>
 							<td>${course.courseInfo.courseClassification }</td>
 							<td>
-								<button id="classCodeButtonId1" type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#classInfoModal">
-								  ${course.classCode }
+								<button onclick="GetSyllabus(${course.classCode})" type="button" class="btn btn-link">
+								  ${course.classCode } <i class="fa-solid fa-magnifying-glass"></i>
 								</button>
 							</td>
 							<td>
-								<button id="classNumberButtonId1" type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#courseInfoModal">
-								  ${course.classNumber }
+								<button onclick='GetCourseInfo("${course.classNumber}")' type="button" class="btn btn-light">
+								  ${course.classNumber } <i class="fa-solid fa-magnifying-glass"></i>
 								</button>
 							</td>
 							<td>${course.courseInfo.courseName }</td>
@@ -69,11 +72,7 @@
 							<td>${course.courseInfo.credit }</td>
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
-							<td>
-								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
-									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime }
-								</c:forEach>
-							</td>
+							<td class="dayTime1">${course.dayTime }</td>
 							<td>${course.classroom }</td>
 							<td>${course.maxPersonnel }</td>
 							<td>${course.department.name }</td>
@@ -82,6 +81,10 @@
 					</c:forEach>				
 				</tbody>
 			</table>
+		</div>
+		<div id="paginationId1">
+		<c:url value="/course/list" var="currentPageLink"></c:url>
+		<my:paginationNav></my:paginationNav>
 		</div>
 	</div>
 </div>
@@ -143,24 +146,133 @@
     </div>
   </div>
 </div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script type="text/javascript">
 const ctx = "${pageContext.request.contextPath}";
 
-/* const classNumberButton1 = document.querySelector("#classNumberButtonId1");
-classNumberButton1.addEventListener("click", function() {
-	const classNumber = classNumberButton1.value;
-	fetch(ctx + "/courseInfo/getInfo", {
-		headers : {
-			"Content-Type" : "application/json"
-		},
-		body : JSON.stringify(classNumber)
-	})
+const adminLog1 = document.querySelector("#adminLogId1");
+document.querySelectorAll(".dayTime1").innerHTML = "";
+function GetAdminLog(page) {
+	fetch(ctx + "/admin/getAdminLog/" + page)
 	.then(res => res.json())
 	.then(data => {
+		const adminLogList = data.adminLogList;
+		const maxPage = data.maxPage;
 		
-	})
-}); */
+		let adminLogBody = ``;
+		
+		for(var adminLog of adminLogList) {
+			adminLogBody += `
+				<tr>
+					<td>\${adminLog.id }. \${adminLog.log }</td>
+					<td>\${adminLog.adminId }-\${adminLog.adminName }</td>
+				</tr>			
+			`;
+		}
+		
+		
+		const startPage = parseInt((page - 1) / 10) + 1;
+		const endPage = (page + 9) < maxPage ? page + 9 : maxPage;
+		
+		var val2 = '';
+		var val3 = '';
+		var val4 = '';
+		var val5 = '';
+		
+		if(page == 1) {
+			var val2 = 'disabled';
+		}
+		
+		if(page <= 10) {
+			var val3 = 'disabled';
+		} 		
+		
+		if(((page - 1) / 10) * 10 + 11 > maxPage) {
+			var val4 = 'disabled';
+		} 
+		
+		if(page == maxPage) {
+			var val5 = 'disabled';
+		} 		
+
+		
+		let pageOptions = ``;
+		for(var i = startPage; i <= endPage; i++ ) {
+			var val1 = ``;
+			if(page == i) {
+				var val1 = 'active'
+			}
+			
+			pageOptions += `
+				<li class="page-item \${val1}">
+				<button onclick="GetAdminLog(\${i})" class="page-link">\${i }</button>
+			    </li>`;
+		}
+		
+		
+		let pagination1 = `
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+
+			    <li class="page-item \${val2}">
+				    <button onclick="GetAdminLog(1)" class="page-link"><i class="fa-solid fa-angles-left"></i></button>
+			    </li>
+
+			    <li class="page-item \${val3}">
+				    <button onclick="GetAdminLog(\${(page - 1) - (page - 1) % 10 })" class="page-link"><i class="fa-solid fa-angle-left"></i></button>
+			    </li> 
+			    
+			    \${pageOptions}
+			  
+			     <li class="page-item \${val4}">
+				    <button onclick="GetAdminLog(\${((page - 1) / 10) * 10 + 11 })" class="page-link"><i class="fa-solid fa-angle-right"></i></button>
+			    </li>
+			    
+			    <li class="page-item \${val5}">
+				    <button onclick="GetAdminLog(\${maxPage })" class="page-link"><i class="fa-solid fa-angles-right"></i></button>
+			    </li>
+			  </ul>
+			</nav>		
+		`;
+		
+		adminLog1.innerHTML = `
+		<div class="row">
+			<div class="col">
+				<table class="table">
+					<div class="mt-3 ms-3 mb-3 me-auto">
+						<h3><i class="fa-solid fa-angle-right"></i> 관리자 로그</h3>
+					</div>			
+					<thead>
+						<tr>
+							<th>로그</th>
+							<th>관리자명</th>
+						</tr>
+					</thead>
+					<tbody>
+						\${adminLogBody}				
+					</tbody>
+				</table>
+			</div>
+			\${pagination1}
+		</div>`;	
+
+		
+	});
+}
+
+function GetCourseInfo(classNumber) {
+	window.open(ctx + "/courseInfo/getCourseInfo/" + classNumber, "myWindow", 'width=800,height=600');
+	window.close();
+}
+
+
+function GetSyllabus(classCode) {
+	window.open(ctx + "/course/getSyllabus/" + classCode, "myWindow", 'width=800,height=600');
+	window.close();
+}
+
 </script>
 </body>
 </html>

@@ -90,6 +90,16 @@ public class StudentService {
 		return studentMapper.deleteStudent(studentNumber);
 	}
 
+	public List<StudentDto> getStudentByPageInfo(int startNum, int count) {
+		// TODO Auto-generated method stub
+		return studentMapper.selectStudentByPageInfo(startNum, count);
+	}
+
+	public int getCountCourseAll() {
+		// TODO Auto-generated method stub
+		return studentMapper.selectCountStudentAll();
+	}
+
 	
 	
 }

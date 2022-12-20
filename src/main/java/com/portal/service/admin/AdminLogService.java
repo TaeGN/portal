@@ -28,9 +28,9 @@ public class AdminLogService {
 //	}
 
 	
-	public List<AdminLogDto> getAdminLogAll() {
+	public List<AdminLogDto> getAdminLogAll(int startNum, int count) {
 		// TODO Auto-generated method stub
-		return adminLogMapper.selectAdminLogAll();
+		return adminLogMapper.selectAdminLogAll(startNum, count);
 	}
 
 	public int registerAdminLogById(int adminId, String log, String category) {
@@ -58,6 +58,11 @@ public class AdminLogService {
 	public int registerCourseInfoLogById(int adminId, String log, String category) {
 		String menu = "courseInfo";
 		return adminLogMapper.insertLog(adminId, log, menu, category);
+	}
+
+	public int getCountAdminLogAll() {
+		// TODO Auto-generated method stub
+		return adminLogMapper.selectCountAdminLogAll();
 	}
 
 	

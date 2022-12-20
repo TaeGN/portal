@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -29,6 +30,7 @@ import com.portal.domain.course.CourseDto;
 import com.portal.domain.course.CourseInfoDto;
 import com.portal.domain.course.CourseTimeDto;
 import com.portal.domain.course.DepartmentDto;
+import com.portal.domain.course.OrganizationDto;
 import com.portal.domain.member.ProfessorDto;
 import com.portal.domain.member.StudentDto;
 import com.portal.mapper.admin.AdminMapper;
@@ -107,16 +109,25 @@ public class CourseController {
 	
 	@GetMapping("list")
 	@PreAuthorize("@adminSecurity.checkAdminAuthority(authentication)")
-	public void list(Model model, Authentication authentication) {
-		List<CourseDto> courseList = courseService.getCourseAll();
+	public void list(Model model, Authentication authentication,
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		int count = 10;
+		int startNum = (page - 1) * count; 
+		
+		List<CourseDto> courseList = courseService.getCourseAll(startNum, count);
+		int totalNum = courseService.getCountCourseAll();
+		int maxPage = (totalNum - 1) / count + 1;
+		
 		model.addAttribute("courseList", courseList);
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("page", page);
 	}
 	
 	@GetMapping("register")
 	@PreAuthorize("hasAnyAuthority('admin','course')")
 	public void register(Model model) {
 		
-//		List<ClassroomDto> classroomList = classroomService.getClassroom();
 		List<BuildingDto> buildingList = classroomService.getBuildingAll();
 		List<RoomDto> roomListByFirstBuilding = classroomService.getClassroomByBuildingId(buildingList.get(0).getId(), buildingList.get(0).getCampus());
 		List<DepartmentDto> departmentList = departmentService.getDepartmentAll();
@@ -124,7 +135,6 @@ public class CourseController {
 		List<CourseInfoDto> courseInfoList = courseInfoService.getCourseInfoAll(); 
 		List<ProfessorDto> professorList = professorService.getProfessorAll();
 		
-//		model.addAttribute("classroomList", classroomList);
 		model.addAttribute("buildingList", buildingList);
 		model.addAttribute("roomListByFirstBuilding", roomListByFirstBuilding);
 		model.addAttribute("departmentList", departmentList);
@@ -172,13 +182,61 @@ public class CourseController {
 	@PreAuthorize("hasAnyAuthority('admin','course')")
 	public void get(int classCode, Model model) {
 		CourseDto course = courseService.getCourseByClassCode(classCode);
+		List<CourseTimeDto> courseTimeList = courseService.getCourseTimeAll();
+		model.addAttribute("courseTimeList", courseTimeList);
 		model.addAttribute("course", course);
 	}
 	
-	@GetMapping("modify")
+	
+	
+	@GetMapping("modify/{classCode}")
+	@PreAuthorize("hasAnyAuthority('admin','course')")
+	@ResponseBody
+	public Map<String, Object> modify(@PathVariable int classCode) {
+		Map<String, Object> map = new HashMap<>();
+		CourseDto course = courseService.getCourseByClassCode(classCode);
+		List<OrganizationDto> organizationList = departmentService.getOrganizationAll(); 
+		List<BuildingDto> buildingList = classroomService.getBuildingAll();
+		List<ProfessorDto> professorList = professorService.getProfessorAll();
+		List<CourseInfoDto> courseInfoList = courseInfoService.getCourseInfoAll();
+		List<RoomDto> roomListByFirstBuilding = classroomService.getClassroomByBuildingId(buildingList.get(0).getId(), buildingList.get(0).getCampus());
+		
+		map.put("roomListByFirstBuilding", roomListByFirstBuilding);
+		map.put("professorList", professorList);
+		map.put("courseInfoList", courseInfoList);
+		map.put("buildingList", buildingList);
+		map.put("course", course);
+		map.put("organizationList", organizationList);
+		return map;
+	}
+	
+	@PostMapping("modify")
+	@PreAuthorize("hasAnyAuthority('admin','course')")
+	public String modify(CourseDto course, Authentication authentication) {
+		
+		// course 수정
+		int cnt = courseService.modifyCourse(course, authentication.getName());
+
+		
+		return "redirect:/course/list";
+	}
+	
+/*	@GetMapping("modify")
 	@PreAuthorize("hasAnyAuthority('admin','course')")
 	public void modify(int classCode, Model model) {
 		CourseDto course = courseService.getCourseByClassCode(classCode);
 		model.addAttribute("course", course);
+	}*/
+	
+	@GetMapping("getEndTime/{startTimeId}")
+	@PreAuthorize("hasAnyAuthority('admin','course')")
+	@ResponseBody
+	public Map<String, Object> getEndTime(@PathVariable int startTimeId) {
+		List<CourseTimeDto> courseTimeList = courseService.getCourseTimeByStartTimeId(startTimeId);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("courseTimeList", courseTimeList);
+		
+		return map;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.portal.domain.course.CourseScheduleDto;
+import com.portal.domain.course.CourseTimeDto;
 
 @Mapper
 public interface CourseScheduleMapper {
@@ -16,5 +17,7 @@ public interface CourseScheduleMapper {
 	List<CourseScheduleDto> selectCourseScheduleByClassCode(int classCode);
 
 	List<CourseScheduleDto> selectCourseScheduleByStudentSignUp(int studentNumber);
+
+	List<CourseTimeDto> selectCourseTimeAll();
 
 }

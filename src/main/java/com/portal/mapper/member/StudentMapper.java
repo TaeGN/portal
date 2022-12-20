@@ -24,4 +24,8 @@ public interface StudentMapper {
 	int updateStudent(StudentDto student);
 
 	int deleteStudent(int studentNumber);
+
+	List<StudentDto> selectStudentByPageInfo(int startNum, int count);
+
+	int selectCountStudentAll();
 }

@@ -160,6 +160,12 @@ public class CourseSignUpService {
 		return courseSignUpMapper.selectCountSignUpByStudentNumber(studentNumber);
 	}
 
+	public List<CourseScheduleDto> getSignUpScheduleByStudentId(String studentId) {
+		int studentNumber  = studentService.getStudentByStudentId(studentId).getStudentNumber();
+		
+		return courseSignUpMapper.selectSignUpScheduleByStudentNumber(studentNumber);
+	}
+
 
 
 	

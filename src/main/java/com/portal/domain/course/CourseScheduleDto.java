@@ -10,4 +10,5 @@ public class CourseScheduleDto {
 	private String endTime;
 	private int startTimeId;
 	private int endTimeId;
+	private String courseName;
 }

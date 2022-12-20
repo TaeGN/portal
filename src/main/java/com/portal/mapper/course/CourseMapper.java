@@ -10,7 +10,7 @@ import com.portal.domain.course.CourseTimeDto;
 @Mapper
 public interface CourseMapper {
 
-	List<CourseDto> selectCourseAll();
+	List<CourseDto> selectCourseAll(int startNum, int count);
 
 	int insertCourse(CourseDto course);
 
@@ -23,5 +23,14 @@ public interface CourseMapper {
 	List<Integer> selectCourseByProfessorNumber(int professorNumber);
 
 	int deleteCourseByClassCode(int classCode);
+
+	int selectCountCourseAll();
+
+	List<CourseTimeDto> selectCourseTimeByStartTimeid(int i);
+
+	List<Integer> selectCourseByClassNumber(String classNumber);
+
+	int updateCourseByClassCode(CourseDto course);
+
 
 }

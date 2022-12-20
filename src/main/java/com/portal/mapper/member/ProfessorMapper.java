@@ -23,4 +23,8 @@ public interface ProfessorMapper {
 
 	int deleteProfessorByProfessorNumber(int professorNumber);
 
+	List<ProfessorDto> selectProfessorByPageInfo(int startNum, int count);
+
+	int selectCountProfessorAll();
+
 }

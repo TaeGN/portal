@@ -10,8 +10,10 @@ import com.portal.domain.admin.AdminMemberDto;
 @Mapper
 public interface AdminLogMapper {
 
-	List<AdminLogDto> selectAdminLogAll();
+	List<AdminLogDto> selectAdminLogAll(int startNum, int count);
 
 	int insertLog(int adminId, String log, String menu, String category);
+
+	int selectCountAdminLogAll();
 
 }

@@ -4,6 +4,12 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.admin.AdminLogMapper">
 
+	<select id="selectCountAdminLogAll" resultType="int">
+		SELECT count(*) FROM AdminLog l
+		JOIN AdminMember m ON l.adminId = m.id
+		ORDER BY l.id DESC;
+	</select>
+
 	<insert id="insertLog">
 		INSERT INTO AdminLog (adminId, log, menu, category)
 		VALUES (#{adminId},#{log},#{menu},#{category})	
@@ -21,6 +27,7 @@
 		FROM AdminLog l
 		JOIN AdminMember m ON l.adminId = m.id
 		ORDER BY l.id DESC
+		LIMIT #{startNum},#{count}
 	</select>
 	
 </mapper>

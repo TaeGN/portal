@@ -59,7 +59,7 @@
 					
 					<div id="courseScheduleId1" class="mb-3">
 						<label for="" class="form-label">
-							수업시간 <button onclick="AddCourseSchedule()" type="button" class="btn btn-primary"><i class="fa-solid fa-plus"></i></button>
+							수업시간 
 						</label>
 						<div class="d-flex">
 							<select name="day" class="form-select" aria-label="Default select example">
@@ -71,19 +71,24 @@
 								<option value="Saturday">토</option>
 								<option value="Sunday">일</option>
 							</select>
-							<select name="startTimeId" class="form-select" aria-label="Default select example">
-								<c:forEach items="${courseTimeList }" var="courseTime">
+							<select onchange="SelectStartTime(this.value)" name="startTimeId" class="form-select" aria-label="Default select example">
+								<c:forEach items="${courseTimeList }" var="courseTime" end="23">
 									<option value="${courseTime.id }">${courseTime.time }</option>
 								</c:forEach>
 							</select>
-							<select name="endTimeId" class="form-select" aria-label="Default select example">
-								<c:forEach items="${courseTimeList }" var="courseTime">
+							<select id="selectEndTimeId1"  name="endTimeId" class="form-select" aria-label="Default select example">
+								<c:forEach items="${courseTimeList }" var="courseTime" begin="1">
 									<option value="${courseTime.id }">${courseTime.time }</option>
 								</c:forEach>
 							</select>
-							<button type="button" disabled="disabled" class="btn btn-light">
-								<i class="fa-solid fa-xmark"></i>
-							</button>
+							<div id="buttonId1" class="d-flex">
+								<button id="" type="button" disabled="disabled" class="btn btn-light">
+									<i class="fa-solid fa-xmark"></i>
+								</button>
+								<button onclick="AddCourseSchedule(this.value + 1)" value="1" type="button" class="btn btn-primary">
+									<i class="fa-solid fa-plus"></i>
+								</button>
+							</div>
 						</div>
 					</div>
 					
@@ -136,9 +141,28 @@
 <script>
 const ctx = "${pageContext.request.contextPath}";
 
-function AddCourseSchedule() {
+function SelectStartTime(startTimeId) {
+	const selectEndTime = document.querySelector("#selectEndTimeId1");
+	fetch(ctx + "/course/getEndTime/" + startTimeId)
+	.then(res => res.json())
+	.then(map => {
+		
+		const courseTimeList = map.courseTimeList;
+		let endTimeOptions = ``;
+		for(let courseTime of courseTimeList) {
+			endTimeOptions += `<option value="\${courseTime.id }">\${courseTime.time }</option>`;
+		} 
+		
+		selectEndTime1.innerHTML = `
+			\${endTimeOptions}
+		`;
+	})
+}
+
+function AddCourseSchedule(num) {
+	console.log(num);
 	document.querySelector("#courseScheduleId1").insertAdjacentHTML("beforeend",`
-			<div class="d-flex">
+			<div id="dayTimeId + \${num}" class="d-flex">
 				<select name="day" class="form-select" aria-label="Default select example">
 					<option value="Monday">월</option>
 					<option value="Tuesday">화</option>
@@ -148,25 +172,29 @@ function AddCourseSchedule() {
 					<option value="Saturday">토</option>
 					<option value="Sunday">일</option>
 				</select>
-				<select name="startTimeId" class="form-select" aria-label="Default select example">
-					<c:forEach items="${courseTimeList }" var="courseTime">
-						<option value="${courseTime.id }">${courseTime.time }</option>
-					</c:forEach>
-				</select>
-				<select name="endTimeId" class="form-select" aria-label="Default select example">
-					<c:forEach items="${courseTimeList }" var="courseTime">
-						<option value="${courseTime.id }">${courseTime.time }</option>
-					</c:forEach>
-				</select>
-				<button onclick="DeleteCourseSchedule()" type="button" class="btn btn-light">
-					<i class="fa-solid fa-xmark"></i>
-				</button>
+					<select onchange="SelectStartTime(this.value)" name="startTimeId" class="form-select" aria-label="Default select example">
+						<c:forEach items="${courseTimeList }" var="courseTime" end="23">
+							<option value="${courseTime.id }">${courseTime.time }</option>
+						</c:forEach>
+					</select>
+					<select id="selectEndTimeId1"  name="endTimeId" class="form-select" aria-label="Default select example">
+						<c:forEach items="${courseTimeList }" var="courseTime" begin="1">
+							<option value="${courseTime.id }">${courseTime.time }</option>
+						</c:forEach>
+					</select>
+					<button onclick="DeleteCourseSchedule(this)" value="\${num}" type="button" class="btn btn-light">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+					<button onclick="AddCourseSchedule(this.value + 1)" value="\${num}" type="button" class="btn btn-primary">
+						<i class="fa-solid fa-plus"></i>
+					</button>
 			</div>
 			`);
 }
 
-function DeleteCourseSchedule() {
-
+function DeleteCourseSchedule(ths) {
+	var ths = ths;
+	ths.parents("div").remove();
 	/* this.wrap('<div></div>').remove(); */
 }
 

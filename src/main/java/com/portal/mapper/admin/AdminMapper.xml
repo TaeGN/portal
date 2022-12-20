@@ -43,6 +43,7 @@
 	</resultMap>
 
 	
+	
 	<select id="selectAdminMemberAll" resultMap="adminMemberAll">
 		SELECT m.id, m.name, adminMemberId, password, authority 
 		FROM AdminMember m 

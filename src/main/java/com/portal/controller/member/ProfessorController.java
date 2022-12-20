@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.portal.domain.admin.AdminMemberDto;
+import com.portal.domain.course.CourseDto;
 import com.portal.domain.course.DepartmentDto;
+import com.portal.domain.course.OrganizationDto;
 import com.portal.domain.member.ProfessorDto;
 import com.portal.domain.member.StudentDto;
 import com.portal.mapper.admin.AdminMapper;
@@ -42,8 +45,18 @@ public class ProfessorController {
 	private AdminLogService adminLogService;
 	
 	@GetMapping("list")
-	public void list(Model model) {
-		List<ProfessorDto> professorList = professorService.getProfessorAll();
+	public void list(Model model,
+			@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		int count = 10;
+		int startNum = (page - 1) * count; 
+		
+		List<ProfessorDto> professorList = professorService.getProfessorByPageInfo(startNum, count);
+		int totalNum = professorService.getCountProfessorAll();
+		int maxPage = (totalNum - 1) / count + 1;
+		
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("page", page);
 		model.addAttribute("professorList", professorList);
 	}
 	
@@ -52,10 +65,10 @@ public class ProfessorController {
 	@ResponseBody
 	public Map<String, Object> modify(@PathVariable int professorNumber) {
 		Map<String, Object> map = new HashMap<>();
-		List<DepartmentDto> departmentList = departmentService.getDepartmentAll();
+		List<OrganizationDto> organizationList = departmentService.getOrganizationAll(); 
 		ProfessorDto professor = professorService.getProfessorByProfessorNumber(professorNumber);
 		map.put("professor", professor);
-		map.put("departmentList", departmentList);
+		map.put("organizationList", organizationList);
 		return map;
 	}
 	
@@ -84,7 +97,7 @@ public class ProfessorController {
 	@PostMapping("remove")
 	@PreAuthorize("hasAnyAuthority('admin','member')")
 	public String modify(int professorNumber, Authentication authentication) {
-			int cnt = professorService.removeProfessor(professorNumber);
+			int cnt = professorService.removeProfessor(professorNumber, authentication.getName());
 			
 			String messageLog = "";
 			if(cnt == 1) {
@@ -108,10 +121,10 @@ public class ProfessorController {
 	@ResponseBody
 	public Map<String, Object> register() {
 		Map<String, Object> map = new HashMap<>();
-		List<DepartmentDto> departmentList = departmentService.getDepartmentAll();
+		List<OrganizationDto> organizationList = departmentService.getOrganizationAll(); 
 		int professorNumber = professorService.setProfessorNumberByDepartmentId(1);
 		map.put("professorNumber", professorNumber);
-		map.put("departmentList", departmentList);
+		map.put("organizationList", organizationList);
 		return map;
 	}
 	

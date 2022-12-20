@@ -16,7 +16,7 @@ public interface AdminMapper {
 
 	int selectLastAdminMemberById();
 
-	List<AdminMemberDto> selectAdminMemberAll();
+	List<AdminMemberDto> selectAdminMemberAll(int startNum, int count);
 	
 	AdminMemberDto selectAdminMemberByUserName(String username);
 
@@ -25,5 +25,6 @@ public interface AdminMapper {
 	int deleteAdminMemberById(int id);
 
 	int deleteAdminAuthorityByAdminId(int id);
+
 	
 }

@@ -16,11 +16,16 @@
 
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
+<div>
 	<div class="row">
 		<div class="col">
 			<table class="table">
 				<div class="d-flex">
-					<h1 class="me-auto">관리자리스트</h1>
+					<div class="mt-3 ms-3 mb-3 me-auto">
+						<h3><i class="fa-solid fa-angle-right"></i> 관리자 정보</h3>
+					</div>
+					
+					<hr>
 					<c:url value="/admin/register" var="registerLink"></c:url>
 					<a href="${registerLink }">새 관리자 등록</a>
 				</div>
@@ -39,7 +44,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${adminMemberList }" var="adminMember">
+					<c:forEach items="${adminMemberList }" var="adminMember" begin="${startNum }" end="${endNum }">
 						<tr>
 							<c:url value="/admin/get" var="getLink">
 								<c:param name="username" value="${adminMember.adminMemberId }"></c:param>
@@ -58,8 +63,139 @@
 				</tbody>
 			</table>
 		</div>
+		<div id="paginationId1">
+		<c:url value="/admin/list" var="currentPageLink"></c:url>
+		<my:paginationNav></my:paginationNav>
+		</div>
 	</div>
 </div>
+	<div class="ms-auto" id="adminLogId1"></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script>
+const ctx = "${pageContext.request.contextPath}";
+const adminLog1 = document.querySelector("#adminLogId1");
+
+
+
+/* <tr>
+<td>\${adminLog.id }</td>
+<td>\${adminLog.menu } - \${adminLog.category }</td>
+<td>\${adminLog.log }</td>
+<td>\${adminLog.adminId }-\${adminLog.adminName }</td>
+<td>\${adminLog.inserted }</td>
+</tr> */
+
+function GetAdminLog(page) {
+	fetch(ctx + "/admin/getAdminLog/" + page)
+	.then(res => res.json())
+	.then(data => {
+		const adminLogList = data.adminLogList;
+		const maxPage = data.maxPage;
+		
+		let adminLogBody = ``;
+		
+		for(var adminLog of adminLogList) {
+			adminLogBody += `
+				<tr>
+					<td>\${adminLog.id }. \${adminLog.log }</td>
+					<td>\${adminLog.adminId }-\${adminLog.adminName }</td>
+				</tr>			
+			`;
+		}
+		
+		
+		const startPage = parseInt((page - 1) / 10) + 1;
+		const endPage = (page + 9) < maxPage ? page + 9 : maxPage;
+		
+		var val2 = '';
+		var val3 = '';
+		var val4 = '';
+		var val5 = '';
+		
+		if(page == 1) {
+			var val2 = 'disabled';
+		}
+		
+		if(page <= 10) {
+			var val3 = 'disabled';
+		} 		
+		
+		if(((page - 1) / 10) * 10 + 11 > maxPage) {
+			var val4 = 'disabled';
+		} 
+		
+		if(page == maxPage) {
+			var val5 = 'disabled';
+		} 		
+
+		
+		let pageOptions = ``;
+		for(var i = startPage; i <= endPage; i++ ) {
+			var val1 = ``;
+			if(page == i) {
+				var val1 = 'active'
+			}
+			
+			pageOptions += `
+				<li class="page-item \${val1}">
+				<button onclick="GetAdminLog(\${i})" class="page-link">\${i }</button>
+			    </li>`;
+		}
+		
+		
+		let pagination1 = `
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+
+			    <li class="page-item \${val2}">
+				    <button onclick="GetAdminLog(1)" class="page-link"><i class="fa-solid fa-angles-left"></i></button>
+			    </li>
+
+			    <li class="page-item \${val3}">
+				    <button onclick="GetAdminLog(\${(page - 1) - (page - 1) % 10 })" class="page-link"><i class="fa-solid fa-angle-left"></i></button>
+			    </li> 
+			    
+			    \${pageOptions}
+			  
+			     <li class="page-item \${val4}">
+				    <button onclick="GetAdminLog(\${((page - 1) / 10) * 10 + 11 })" class="page-link"><i class="fa-solid fa-angle-right"></i></button>
+			    </li>
+			    
+			    <li class="page-item \${val5}">
+				    <button onclick="GetAdminLog(\${maxPage })" class="page-link"><i class="fa-solid fa-angles-right"></i></button>
+			    </li>
+			  </ul>
+			</nav>		
+		`;
+		
+		adminLog1.innerHTML = `
+		<div class="row">
+			<div class="col">
+				<table class="table">
+					<div class="mt-3 ms-3 mb-3 me-auto">
+						<h3><i class="fa-solid fa-angle-right"></i> 관리자 로그</h3>
+					</div>			
+					<thead>
+						<tr>
+							<th>로그</th>
+							<th>관리자명</th>
+						</tr>
+					</thead>
+					<tbody>
+						\${adminLogBody}				
+					</tbody>
+				</table>
+			</div>
+			\${pagination1}
+		</div>`;	
+
+		
+	});
+}
+</script>
+
+
 </body>
 </html>

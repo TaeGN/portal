@@ -4,6 +4,21 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.courseSignUp.CourseSignUpMapper">
 
+	<select id="selectSignUpScheduleByStudentNumber" resultType="com.portal.domain.course.CourseScheduleDto">
+		SELECT
+			csd.classCode,
+			ci.classNumber,
+			csd.day,
+			csd.startTimeId,
+			csd.endTimeId,
+			ci.courseName
+		FROM CourseSchedule csd
+		JOIN CourseSignUp csu ON csd.classCode = csu.classCode AND csu.signUp = 1 AND csu.studentNumber = #{studentNumber}
+		JOIN Course c ON c.classCode = csd.classCode
+		JOIN CourseInfo ci ON c.classNumber = ci.classNumber
+		ORDER BY csd.day, csd.startTimeId
+	</select>
+
 	<select id="selectCountSignUpByClassCode" resultType="int">
 		SELECT count(*)
 		FROM CourseSignUp
