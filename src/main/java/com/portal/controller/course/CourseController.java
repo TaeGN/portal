@@ -239,4 +239,15 @@ public class CourseController {
 		
 		return map;
 	}
+	
+	@PostMapping("remove")
+	@PreAuthorize("hasAnyAuthority('admin','course')")
+	public String remove(int classCode, Authentication authentication) {
+		
+		// course 수정
+		int cnt = courseService.removeCourse(classCode, authentication.getName());
+
+		
+		return "redirect:/course/list";
+	}
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.portal.domain.admin.AdminLogDto;
@@ -67,6 +68,8 @@ public class AdminController {
 		model.addAttribute("page", page);
 	}
 	
+	
+	
 	@GetMapping("getAdminLog/{page}")
 	@PreAuthorize("isAuthenticated()")
 	@ResponseBody
@@ -88,7 +91,7 @@ public class AdminController {
 	@PostMapping("remove")
 	@PreAuthorize("hasAuthority('admin')")
 	public String remove(int id, RedirectAttributes rttr, Authentication authentication) {
-		int cnt = adminService.removeAdminMemberById(id);
+		int cnt = adminService.removeAdminMemberById(id, authentication.getName());
 		
 		String messageLog = "";
 		if(cnt == 1) {
@@ -120,7 +123,9 @@ public class AdminController {
 			RedirectAttributes rttr,
 			Authentication authentication,
 			String username) {
+		
 		int cnt = adminService.modifyAdminMember(adminMember);
+
 		String messageLog = "";
 		if(cnt == 1) {
 			messageLog = "관리자 번호 " + adminMember.getId() + " 정보 수정 완료";
@@ -135,14 +140,52 @@ public class AdminController {
 		return "redirect:/admin/list";
 	}
 	
+//	@PostMapping("modify")
+//	@PreAuthorize("hasAuthority('admin') or (authentication.name == #username)")
+//	public String modify(AdminMemberDto adminMember,
+//			Model model, 
+//			MultipartFile[] addFiles,
+//			@RequestParam(name = "removeFiles", required = false) List<String> removeFiles,
+//			RedirectAttributes rttr,
+//			Authentication authentication,
+//			String username) {
+//		if(addFiles.length != 0) {
+//			int cnt = adminService.modifyAdminMember(adminMember, addFiles, removeFiles);
+//		} else {
+//			int cnt = adminService.modifyAdminMember(adminMember);
+//		}
+//		String messageLog = "";
+//		if(cnt == 1) {
+//			messageLog = "관리자 번호 " + adminMember.getId() + " 정보 수정 완료";
+//			rttr.addFlashAttribute("message", messageLog);
+//			
+//		} else {
+//			messageLog = "관리자 번호 " + adminMember.getId() + " 정보 수정 실패";
+//			rttr.addFlashAttribute("message", messageLog);
+//		}
+//		AdminMemberDto admin = adminMapper.selectAdminMemberByUserName(authentication.getName());
+//		adminLogService.registerAdminLogById(admin.getId(), messageLog, "modify");
+//		return "redirect:/admin/list";
+//	}
+	
 	
 	// 관리자 정보 얻기
 	@GetMapping("get")
 	@PreAuthorize("hasAuthority('admin') or (authentication.name == #username)")
 	public void get(String username, Model model) {
 		AdminMemberDto adminMember = adminService.getAdminMemberByUserName(username);
+		System.out.println(adminMember.getFileList());
 		
 		model.addAttribute("adminMember", adminMember);
+	}
+	
+	@GetMapping("get/{id}")
+	@PreAuthorize("hasAuthority('admin')")
+	@ResponseBody
+	public AdminMemberDto get(@PathVariable int id) {
+		AdminMemberDto adminMember = adminService.getAdminMemberById(id);
+		
+		return adminMember;
 	}
 	
 	
@@ -152,12 +195,14 @@ public class AdminController {
 	public void register() {
 		
 	}	
+	
 	@PostMapping("register")
 	@PreAuthorize("hasAuthority('admin')")
 	public String method(AdminMemberDto adminMember, 
 			RedirectAttributes rttr,
 			Authentication authentication) {
 		int id = adminMapper.selectLastAdminMemberById();
+		
 		adminMember.setId(id + 1);
 		int cnt = adminService.registerAdminMember(adminMember);
 		
@@ -176,6 +221,32 @@ public class AdminController {
 		
 		return "redirect:/admin/list";
 	}
+	
+//	@PostMapping("register")
+//	@PreAuthorize("hasAuthority('admin')")
+//	public String method(AdminMemberDto adminMember, 
+//			MultipartFile[] files,
+//			RedirectAttributes rttr,
+//			Authentication authentication) {
+//		int id = adminMapper.selectLastAdminMemberById();
+//		adminMember.setId(id + 1);
+//		int cnt = adminService.registerAdminMember(adminMember, files);
+//		
+//		String messageLog = "";
+//		if(cnt == 1) {
+//			messageLog = "관리자 번호 " + adminMember.getId() + " 등록 완료";
+//			rttr.addFlashAttribute("message", messageLog);
+//			
+//		} else {
+//			messageLog = "관리자 번호 " + adminMember.getId() + " 등록 실패";
+//			rttr.addFlashAttribute("message", messageLog);
+//		}
+//		// adminLog 등록
+//		AdminMemberDto admin = adminMapper.selectAdminMemberByUserName(authentication.getName());
+//		adminLogService.registerAdminLogById(admin.getId(), messageLog, "register");
+//		
+//		return "redirect:/admin/list";
+//	}
 	
 	
 	// 관리자 리스트

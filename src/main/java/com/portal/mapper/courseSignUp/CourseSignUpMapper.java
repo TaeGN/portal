@@ -36,4 +36,8 @@ public interface CourseSignUpMapper {
 
 	List<CourseScheduleDto> selectSignUpScheduleByStudentNumber(int studentNumber);
 
+	int selectCountSignUpCredit(int studentNumber);
+
+	int selectCountDesireCredit(int studentNumber);
+
 }

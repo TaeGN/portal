@@ -24,7 +24,7 @@
 <hr>
 <div class="d-flex">
 <div id="sugangListId1" data-studentId="${studentId }">
-	<div class="row">
+	<div class="row p-2">
 		<div class="col">
 			<table class="table table-bordered">
 				<thead id="theadId1">
@@ -42,7 +42,7 @@
 						<th>학점</th>
 						<th>강의</th>
 						<th>실습</th>
-						<th>수강정원</th>
+						<th>수강 / 정원</th>
 						<th>수업시간</th>
 						<th>강의실</th>
 						<th>관장학과</th>
@@ -75,13 +75,8 @@
 							<td>${course.courseInfo.credit }</td>
 							<td>${course.courseInfo.theory }</td>
 							<td>${course.courseInfo.practice }</td>
-							<td>${course.maxPersonnel }</td>
+							<td>${course.countSignUp } / ${course.maxPersonnel }</td>
 							<td>${course.dayTime }</td>
-							<%-- <td>
-								<c:forEach items="${course.courseSchedule }" var="courseSchedule">
-									${courseSchedule.day } ${courseSchedule.startTime }-${courseSchedule.endTime } <br>
-								</c:forEach>
-							</td> --%>
 							<td>${course.classroom }</td>
 							<td>${course.department.name }</td>
 						</tr>
@@ -147,6 +142,10 @@ function CancelCourseSignUpConfirm(classCode, studentId) {
 	})
 	.then(res => res.json())
 	.then(data => {
+		const signUpCredit = data.signUpCredit;
+		
+		document.querySelector("#signUpCreditId1").innerHTML = `<a class="nav-link">신청학점 : \${signUpCredit }</a>`;
+		
 		document.querySelector("#cancelCourseSignUpConfirmToastStrong").innerText = data.message;
 		document.querySelector("#cancelCourseSignUpConfirmToastBody").innerText = "학수 번호 : " + data.studentNumber + "님이 수업 코드 : " + data.classCode + " " + data.message;
 		

@@ -18,7 +18,9 @@
 <div class="container-md">
 			<div class="row">
 				<div class="col">
-					강의계획서
+					<div class="mt-3 ms-3 mb-3 me-auto">
+						<h5><i class="fa-solid fa-angle-right"></i>강의계획서</h5>
+					</div>
 					<table class="table table-bordered border-dark">
 						<tr>
 							<td rowspan="5" class="table-primary">교과목정보</td>

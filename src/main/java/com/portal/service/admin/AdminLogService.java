@@ -65,6 +65,11 @@ public class AdminLogService {
 		return adminLogMapper.selectCountAdminLogAll();
 	}
 
+	public int registerSignUpNoticeLogById(int adminId, String log, String category) {
+		String menu = "signUpNotice";
+		return adminLogMapper.insertLog(adminId, log, menu, category);
+	}
+
 	
 	
 }

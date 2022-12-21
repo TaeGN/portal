@@ -26,5 +26,11 @@ public interface AdminMapper {
 
 	int deleteAdminAuthorityByAdminId(int id);
 
+	int insertFile(int id, String fileName);
+
+	int deleteFileByBoardIdAndFileName(int memberId, String fileName);
+
+	AdminMemberDto selectAdminMemberById(int id);
+
 	
 }

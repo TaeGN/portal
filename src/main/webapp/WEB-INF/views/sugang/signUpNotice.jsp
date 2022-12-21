@@ -52,6 +52,10 @@
 					</tbody>
 				</table>
 			</div>
+		<div id="paginationId1">
+		<c:url value="/sugang/signUpNotice" var="currentPageLink"></c:url>
+		<my:paginationNav></my:paginationNav>
+		</div>
 		</div>
 	</div>
 

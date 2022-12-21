@@ -15,7 +15,7 @@
 <my:adminPageTopNav></my:adminPageTopNav>
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
-	<div class="row">
+	<div class="row p-2">
 		<div class="col">
 			<table class="table">
 				<div class="d-flex">

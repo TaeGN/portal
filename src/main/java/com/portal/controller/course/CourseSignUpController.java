@@ -42,9 +42,6 @@ public class CourseSignUpController {
 	private CourseSignUpService courseSignUpService;
 	
 	@Autowired
-	private CourseService courseService;
-	
-	@Autowired
 	private StudentService studentService;
 	
 	@Autowired
@@ -75,9 +72,7 @@ public class CourseSignUpController {
 		List<CourseScheduleDto> signUpScheduleList = courseSignUpService.getSignUpScheduleByStudentId(studentId);
 		for(CourseScheduleDto courseSchedule : signUpScheduleList) {
 			String day = courseSchedule.getDay();
-//			if(!map.containsKey(day)) {
-//				map.put(day, new ArrayList<>(emptyList));
-//			}
+
 			List<String> list = new ArrayList<>(map.get(day));
 			for(int i = courseSchedule.getStartTimeId(); i < courseSchedule.getEndTimeId(); i++) {
 				list.set(i - 1, courseSchedule.getCourseName());
@@ -124,28 +119,6 @@ public class CourseSignUpController {
 		return "courseSignUp/signUpSchedule";
 	}
 	
-//	@GetMapping("signUpSchedule")
-//	public void signUpSchedule(HttpServletRequest req, Model model) {
-//		String studentId = (String)RequestContextUtils.getInputFlashMap(req).get("studentId");
-//		List<CourseScheduleDto> signUpScheduleList = courseSignUpService.getSignUpScheduleByStudentId(studentId);
-//		List<String> emptyList = new ArrayList<>();
-//		for(int i = 0; i < 25; i++) {
-//			emptyList.add(""); 
-//		}
-//		Map<String, List<String>> map = Map.of("Monday", emptyList, "Tuesday", emptyList, "Wednesday", emptyList, "Thursday", emptyList, "Friday", emptyList, "Saturday", emptyList, "Sunday", emptyList);
-//		for(CourseScheduleDto courseSchedule : signUpScheduleList) {
-//			String day = courseSchedule.getDay();
-//			List<String> list = map.get(day);
-//			for(int i = courseSchedule.getStartTimeId(); i < courseSchedule.getEndTimeId(); i++) {
-//				list.set(i - 1, courseSchedule.getCourseName());
-//			}
-//			map.put(day, list);
-//		}
-//		
-//		System.out.println(map);
-//		model.addAttribute("signUpSchedule", map);
-//	}
-	
 	@PostMapping("register")
 	@ResponseBody
 	@PreAuthorize("hasAnyAuthority('student')")
@@ -189,7 +162,11 @@ public class CourseSignUpController {
 			message = "희망수업 삭제 실패";
 		}
 		
+		int desireCredit = courseSignUpService.getCountDesireCreditByStudentNumber(studentNumber);
+		int signUpCredit = courseSignUpService.getCountSignUpCreditByStudentNumber(studentNumber);
 		
+		map.put("signUpCredit", signUpCredit);		
+		map.put("desireCredit", desireCredit);		
 		map.put("message", message);
 		map.put("studentNumber", studentNumber);
 		map.put("classCode", classCode);
@@ -209,7 +186,12 @@ public class CourseSignUpController {
 		int studentNumber = student.getStudentNumber();
 		
 		String message = courseSignUpService.courseSignUp(studentNumber, classCode);
+
+		int signUpCredit = courseSignUpService.getCountSignUpCreditByStudentNumber(studentNumber);
 		
+		
+		
+		map.put("signUpCredit", signUpCredit);
 		map.put("message", message);
 		map.put("studentNumber", studentNumber);
 		map.put("classCode", classCode);
@@ -235,7 +217,9 @@ public class CourseSignUpController {
 		} else {
 			message = "수강신청 취소 실패";
 		}
+		int signUpCredit = courseSignUpService.getCountSignUpCreditByStudentNumber(studentNumber);
 		
+		map.put("signUpCredit", signUpCredit);
 		map.put("message", message);
 		map.put("studentNumber", studentNumber);
 		map.put("classCode", classCode);

@@ -17,15 +17,16 @@
 <sec:authorize access="hasAuthority('student')" var="hasStudentAdmin"></sec:authorize>
 
 <my:sugangNavBar></my:sugangNavBar>
-<div class="mt-3 ms-3">
+<div class="mt-3 ms-3 d-flex">
 	<h5><i class="fa-solid fa-angle-right"></i> 희망수업</h5>
+	<div class="ms-auto d-flex me-3" id="desireId1">${totalNum}과목 / ${desireCredit }학점</div>
 </div>
 
 <hr>
 
 <div class="d-flex">
 <div id="sugangListId1"  data-studentId="${studentId }">
-	<div class="row">
+	<div class="row p-2">
 		<div class="col">
 			<table class="table table-bordered">
 				<thead id="theadId1">
@@ -150,6 +151,13 @@ function SearchCourse(studentId, page) {
 	.then(map => {
 		const desireList = map.desireList;
 		const maxPage = map.maxPage;
+		const signUpCredit = map.signUpCredit;
+		const desireCredit = map.desireCredit;
+		const totalNum = map.totalNum;
+		
+		document.querySelector("#desireId1").innerText = `\${totalNum}과목 / \${desireCredit }학점`;		
+		document.querySelector("#signUpCreditId1").innerHTML = `<a class="nav-link">신청학점 : \${signUpCredit }</a>`;
+		
 		
 		let courseOptions = ``;
 		
@@ -205,7 +213,7 @@ function SearchCourse(studentId, page) {
 		console.log(courseOptions);
 		
 		sugangList1.innerHTML = `
-		<div class="row">
+		<div class="row p-2">
 			<div class="col">
 				<table class="table table-bordered">
 					<thead>
@@ -326,6 +334,10 @@ function CancelCourseSignUpConfirm(classCode, studentId, page) {
 	})
 	.then(res => res.json())
 	.then(data => {
+ 		const signUpCredit = data.signUpCredit;
+		
+		document.querySelector("#signUpCreditId1").innerHTML = `<a class="nav-link">신청학점 : \${signUpCredit }</a>`;
+		
 		// 페이지 새로고침
 		SearchCourse(studentId, page); 
 		
@@ -349,6 +361,7 @@ function CourseSignUpConfirm(classCode, studentId, page) {
 	})
 	.then(res => res.json())
 	.then(data => {
+		
 		// 페이지 새로고침
 		SearchCourse(studentId, page); 
 		

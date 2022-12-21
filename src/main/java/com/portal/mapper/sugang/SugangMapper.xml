@@ -55,8 +55,29 @@
 		FROM SignUpNotice
 		WHERE id = #{id}
 	</select>
-	
 
+
+	<select id="selectSignUpNoticeAllByPage" resultType="com.portal.domain.sugang.SignUpNoticeDto">
+		SELECT 
+			sn.id,
+			sn.campus,
+			sn.title,
+			sn.text,
+			sn.writerId,
+			sn.inserted,
+			am.name writer
+		FROM SignUpNotice sn
+		JOIN AdminMember am ON sn.writerId = am.id
+		LIMIT #{startNum},#{count}
+	</select>	
+
+
+	<select id="selectCountSignUpNoticeAll" resultType="int">
+		SELECT count(*)
+		FROM SignUpNotice sn
+		JOIN AdminMember am ON sn.writerId = am.id
+	</select>
+	
 	<select id="selectSignUpNoticeAll" resultType="com.portal.domain.sugang.SignUpNoticeDto">
 		SELECT 
 			sn.id,
