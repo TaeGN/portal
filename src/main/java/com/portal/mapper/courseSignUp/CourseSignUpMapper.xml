@@ -4,6 +4,23 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.portal.mapper.courseSignUp.CourseSignUpMapper">
 
+	<select id="selectCountDesireCredit" resultType="int">
+		SELECT sum(ci.credit)
+		FROM CourseSignUp csu
+        JOIN Course c ON csu.classCode = c.classCode
+        JOIN CourseInfo ci ON c.classNumber = ci.classNumber
+        WHERE csu.studentNumber = #{studentNumber}
+	</select>
+
+	<select id="selectCountSignUpCredit" resultType="int">
+		SELECT sum(ci.credit)
+		FROM CourseSignUp csu
+        JOIN Course c ON csu.classCode = c.classCode
+        JOIN CourseInfo ci ON c.classNumber = ci.classNumber
+        WHERE csu.signUp = 1
+		AND csu.studentNumber = #{studentNumber}
+	</select>
+
 	<select id="selectSignUpScheduleByStudentNumber" resultType="com.portal.domain.course.CourseScheduleDto">
 		SELECT
 			csd.classCode,
@@ -109,7 +126,8 @@
             pl.name professorCollegeName,
             pl.organizationId professorOragnizationId,
             po.name professorOrganizationName,           
-            if(s.signUp, 'true', 'false') signUp
+            if(s.signUp, 'true', 'false') signUp,
+            (SELECT count(*) FROM CourseSignUp csu WHERE signUp = 1 AND c.classCode = csu.classCode) countSignUp
 		FROM Course	c
 		LEFT JOIN Department d ON c.departmentId = d.id
 		LEFT JOIN College l ON l.id = d.collegeId
@@ -140,6 +158,8 @@
 		<result column="signUp" property="signUp"/>
 		<result column="departmentId" property="departmentId"/>
 		<result column="day" property="dayTime"/>
+		<result column="countSignUp" property="countSignUp"/>
+		
 		
 		<association property="department" javaType="com.portal.domain.course.DepartmentDto">
 			<id column="departmentId" property="id"/>

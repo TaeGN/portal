@@ -63,12 +63,23 @@ public class CourseSignUpService {
 	// signUp true로 변경
 	public String courseSignUp(int studentNumber, int classCode) {
 		String message = "";
+		CourseDto newCourse = courseMapper.selectCourseByClassCode(classCode);
+		
+		// 현재 수강한 과목의 총 학점
+		int countSignUpCredit = courseSignUpMapper.selectCountSignUpCredit(studentNumber);
+		
+		// 새로 수강할 과목의 학점
+		int newSignUpCredit = newCourse.getCourseInfo().getCredit();
+		
+		if(countSignUpCredit + newSignUpCredit > 20) {
+			return "수강신청 실패(신청 가능 학점 초과)";
+		}
 		
 		// 해당 classCode 수업의 현재 수강 신청 인원 수
 		int countSignUp = courseSignUpMapper.selectCountSignUpByClassCode(classCode);
 		
 		// 해당 classCode 수업의 수강 정원
-		int maxPersonnel = courseMapper.selectCourseByClassCode(classCode).getMaxPersonnel();
+		int maxPersonnel = newCourse.getMaxPersonnel();
 		
 		int cnt = 0;
 		
@@ -166,7 +177,15 @@ public class CourseSignUpService {
 		return courseSignUpMapper.selectSignUpScheduleByStudentNumber(studentNumber);
 	}
 
+	public int getCountSignUpCreditByStudentNumber(int studentNumber) {
+		// TODO Auto-generated method stub
+		return courseSignUpMapper.selectCountSignUpCredit(studentNumber);
+	}
 
+	public int getCountDesireCreditByStudentNumber(int studentNumber) {
+		// TODO Auto-generated method stub
+		return courseSignUpMapper.selectCountDesireCredit(studentNumber);
+	}
 
 	
 }

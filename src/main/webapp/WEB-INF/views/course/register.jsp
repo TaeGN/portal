@@ -15,8 +15,8 @@
 <my:adminPageTopNav></my:adminPageTopNav>
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
-	<div class="container-md">
-		<div class="row">
+	<div>
+		<div class="row p-2">
 			<div class="col">
 				<div class="mb-3">
 					<h1>새 강의 등록</h1>
@@ -36,7 +36,7 @@
 					
 					<div class="mb-3">
 						<label for="" class="form-label">학수번호</label>
-						<select name="classNumber" class="form-select" aria-label="Default select example">
+						<select onchange="GetCourseInfo(this.value)" name="classNumber" class="form-select" aria-label="Default select example">
 							<c:forEach items="${courseInfoList }" var="courseInfo">
 								<option value="${courseInfo.classNumber }">${courseInfo.classNumber } : ${courseInfo.courseName }</option>
 							</c:forEach>
@@ -57,45 +57,45 @@
 						<input required="required" type="number" class="form-control" name="maxPersonnel" value="40">
 					</div>
 					
-					<div id="courseScheduleId1" class="mb-3">
-						<label for="" class="form-label">
-							수업시간 
-						</label>
-						<div class="d-flex">
-							<select name="day" class="form-select" aria-label="Default select example">
-								<option value="Monday">월</option>
-								<option value="Tuesday">화</option>
-								<option value="Wednesday">수</option>
-								<option value="Thursday">목</option>
-								<option value="Friday">금</option>
-								<option value="Saturday">토</option>
-								<option value="Sunday">일</option>
-							</select>
-							<select onchange="SelectStartTime(this.value)" name="startTimeId" class="form-select" aria-label="Default select example">
-								<c:forEach items="${courseTimeList }" var="courseTime" end="23">
-									<option value="${courseTime.id }">${courseTime.time }</option>
-								</c:forEach>
-							</select>
-							<select id="selectEndTimeId1"  name="endTimeId" class="form-select" aria-label="Default select example">
-								<c:forEach items="${courseTimeList }" var="courseTime" begin="1">
-									<option value="${courseTime.id }">${courseTime.time }</option>
-								</c:forEach>
-							</select>
-							<div id="buttonId1" class="d-flex">
-								<button id="" type="button" disabled="disabled" class="btn btn-light">
-									<i class="fa-solid fa-xmark"></i>
-								</button>
-								<button onclick="AddCourseSchedule(this.value + 1)" value="1" type="button" class="btn btn-primary">
-									<i class="fa-solid fa-plus"></i>
-								</button>
+						<div id="courseScheduleId1" class="mb-3">
+							<label for="" class="form-label">
+								수업시간 
+							</label>
+							<div class="d-flex">
+								<select name="day" class="form-select" aria-label="Default select example">
+									<option value="Monday">월</option>
+									<option value="Tuesday">화</option>
+									<option value="Wednesday">수</option>
+									<option value="Thursday">목</option>
+									<option value="Friday">금</option>
+									<option value="Saturday">토</option>
+									<option value="Sunday">일</option>
+								</select>
+								<select onclick="SelectStartTime(this)" value="1" name="startTimeId" class="form-select" aria-label="Default select example">
+									<c:forEach items="${courseTimeList }" var="courseTime" end="23">
+										<option value="${courseTime.id }">${courseTime.time }</option>
+									</c:forEach>
+								</select>
+								<select name="endTimeId" class="form-select" aria-label="Default select example">
+									<c:forEach items="${courseTimeList }" var="courseTime" begin="1">
+										<option value="${courseTime.id }">${courseTime.time }</option>
+									</c:forEach>
+								</select>
+								<div id="buttonId1" class="d-flex">
+									<button id="" type="button" disabled="disabled" class="btn btn-light">
+										<i class="fa-solid fa-xmark"></i>
+									</button>
+									<button onclick="AddCourseSchedule(this.value + 1)" value="1" type="button" class="btn btn-primary">
+										<i class="fa-solid fa-plus"></i>
+									</button>
+								</div>
 							</div>
 						</div>
-					</div>
 					
 					<div class="mb-3">
 						<label for="" class="form-label">강의실</label>
 						<div class="d-flex">
-							<select id="selectBuildingId1" name="building" class="form-select" aria-label="Default select example" >
+							<select onchange="selectRoomByBuilding(this.value)" id="selectBuildingId1" name="building" class="form-select" aria-label="Default select example" >
 								<c:forEach items="${buildingList }" var="building">
 									<option value="${building.campus }:${building.id }">${building.campus } ${building.name }</option>
 								</c:forEach>
@@ -136,24 +136,38 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="ms-3 me-2" id="CourseInfoByCourseNumber">
+	
+	</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <script>
 const ctx = "${pageContext.request.contextPath}";
 
-function SelectStartTime(startTimeId) {
-	const selectEndTime = document.querySelector("#selectEndTimeId1");
+GetCourseInfo('ABC111')
+
+function DeleteCourseSchedule(deleteButton) {
+	deleteButton.parentElement.remove();
+}
+
+
+function SelectStartTime(selectStartTime) {
+	const startTimeId = selectStartTime.value;
+	const nextSelect = selectStartTime.nextElementSibling;
+	
 	fetch(ctx + "/course/getEndTime/" + startTimeId)
 	.then(res => res.json())
 	.then(map => {
 		
 		const courseTimeList = map.courseTimeList;
+		
 		let endTimeOptions = ``;
 		for(let courseTime of courseTimeList) {
 			endTimeOptions += `<option value="\${courseTime.id }">\${courseTime.time }</option>`;
 		} 
 		
-		selectEndTime1.innerHTML = `
+		nextSelect.innerHTML = `
 			\${endTimeOptions}
 		`;
 	})
@@ -162,50 +176,44 @@ function SelectStartTime(startTimeId) {
 function AddCourseSchedule(num) {
 	console.log(num);
 	document.querySelector("#courseScheduleId1").insertAdjacentHTML("beforeend",`
-			<div id="dayTimeId + \${num}" class="d-flex">
-				<select name="day" class="form-select" aria-label="Default select example">
-					<option value="Monday">월</option>
-					<option value="Tuesday">화</option>
-					<option value="Wednesday">수</option>
-					<option value="Thursday">목</option>
-					<option value="Friday">금</option>
-					<option value="Saturday">토</option>
-					<option value="Sunday">일</option>
-				</select>
-					<select onchange="SelectStartTime(this.value)" name="startTimeId" class="form-select" aria-label="Default select example">
-						<c:forEach items="${courseTimeList }" var="courseTime" end="23">
-							<option value="${courseTime.id }">${courseTime.time }</option>
-						</c:forEach>
-					</select>
-					<select id="selectEndTimeId1"  name="endTimeId" class="form-select" aria-label="Default select example">
-						<c:forEach items="${courseTimeList }" var="courseTime" begin="1">
-							<option value="${courseTime.id }">${courseTime.time }</option>
-						</c:forEach>
-					</select>
-					<button onclick="DeleteCourseSchedule(this)" value="\${num}" type="button" class="btn btn-light">
-						<i class="fa-solid fa-xmark"></i>
-					</button>
-					<button onclick="AddCourseSchedule(this.value + 1)" value="\${num}" type="button" class="btn btn-primary">
-						<i class="fa-solid fa-plus"></i>
-					</button>
-			</div>
+			<div class="d-flex">
+			<select name="day" class="form-select" aria-label="Default select example">
+				<option value="Monday">월</option>
+				<option value="Tuesday">화</option>
+				<option value="Wednesday">수</option>
+				<option value="Thursday">목</option>
+				<option value="Friday">금</option>
+				<option value="Saturday">토</option>
+				<option value="Sunday">일</option>
+			</select>
+			<select onclick="SelectStartTime(this)" value="1" name="startTimeId" class="form-select" aria-label="Default select example">
+				<c:forEach items="${courseTimeList }" var="courseTime" end="23">
+					<option value="${courseTime.id }">${courseTime.time }</option>
+				</c:forEach>
+			</select>
+			<select name="endTimeId" class="form-select" aria-label="Default select example">
+				<c:forEach items="${courseTimeList }" var="courseTime" begin="1">
+					<option value="${courseTime.id }">${courseTime.time }</option>
+				</c:forEach>
+			</select>
+			<button onclick="DeleteCourseSchedule(this)" value="" type="button" class="btn btn-light">
+				<i class="fa-solid fa-xmark"></i>
+			</button>
+			<button onclick="AddCourseSchedule(this.value)" value="" type="button" class="btn btn-primary">
+				<i class="fa-solid fa-plus"></i>
+			</button>
+		</div>
 			`);
 }
 
-function DeleteCourseSchedule(ths) {
-	var ths = ths;
-	ths.parents("div").remove();
-	/* this.wrap('<div></div>').remove(); */
-}
 
 
 // 강의실
-const selectBuilding1 = document.querySelector("#selectBuildingId1");
-selectBuilding1.addEventListener("change", function selectRoomByBuilding() {
+
+function selectRoomByBuilding(building) {
 	const selectRoomId1 = document.querySelector("#selectRoomId1"); 
 	selectRoomId1.innerHTML = "";
 	
-	const building = document.querySelector("#selectBuildingId1").value
 	const data = {building};
 	fetch(`\${ctx}/course/getClassroom`, {
 		method : "post",
@@ -216,15 +224,81 @@ selectBuilding1.addEventListener("change", function selectRoomByBuilding() {
 	})
 	.then(res => res.json())
 	.then(list => {
+
 		
 		for(const item of list) {
 			const room = `<option value="\${item.id }">\${item.room }\${item.classification }</option>`	
 			selectRoomId1.insertAdjacentHTML("beforeend", room);
 		}
 	});
-});
+}
 
+function GetCourseInfo(classNumber) {
+	fetch(ctx + "/courseInfo/get/" + classNumber)
+	.then(res => res.json())
+	.then(courseInfo => {	
+		CourseInfoByCourseNumber.innerHTML = `
+			<div class="row p-2">
+				<div class="col">
+					<div class="d-flex">
+						<div class="mb-3 mt-3 me-auto">
+							<h3><i class="fa-solid fa-angle-right"></i> \${courseInfo.classNumber} 정보</h3>
+						</div>
+					</div>
 
+					<div class="mb-3">
+						<label class="form-label">
+							학수번호 
+						</label>
+						<input class="form-control" type="text" value="\${courseInfo.classNumber }" readonly>
+					</div>	
+					
+					<div class="mb-3">
+						<label class="form-label">
+							교과목명 
+						</label>
+						<input class="form-control" type="text" value="\${courseInfo.courseName }" readonly>
+					</div>	
+					
+					<div class="mb-3">
+						<label class="form-label">
+							과목구분 
+						</label>
+						<input class="form-control" type="text" value="\${courseInfo.courseClassification }" readonly>
+					</div>	
+
+					
+					<div class="mb-3">
+						<label class="form-label">
+							학점
+						</label>
+						<input class="form-control" type="number" value="\${courseInfo.credit }" readonly>
+					</div>
+					
+					<div class="mb-3">
+						<label class="form-label">
+							강의
+						</label>
+						<input class="form-control" type="number" value="\${courseInfo.theory }" readonly>
+					</div>
+				
+					<div class="mb-3">
+						<label class="form-label">
+							실습
+						</label>
+						<input class="form-control" type="number" value="\${courseInfo.practice }" readonly>
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">수업개요</label>
+						<textarea rows="7" class="form-control" name="summary" value="\${courseInfo.summary }"  readonly>\${courseInfo.summary }</textarea>
+					</div>					
+					
+				</div>
+			</div>
+		`
+	});
+}
 
 
 </script>

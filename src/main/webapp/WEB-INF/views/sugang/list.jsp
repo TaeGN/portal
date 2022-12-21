@@ -29,7 +29,7 @@
 <hr>
 
 <form action="" method="get" id="searchFormId1">
-<div class="d-flex mb-3 mt-3">
+<div class="d-flex mb-3 mt-3 me-2 ms-2">
 	<label class="form-label">
 		조직
 	</label>
@@ -116,7 +116,7 @@
 </div>
 
 	
-<div class="d-flex mb-3">
+<div class="d-flex mb-3 me-2 ms-2">
 	<label class="form-label">
 		강의동
 	</label>
@@ -167,7 +167,7 @@
 <input type="hidden" name="studentId" value="${studentId }">
 
 <div id="sugangListId1" >
-	<div class="row">
+	<div class="row p-2">
 		<div class="col">
 			<table class="table table-bordered">
 				<thead id="theadId1">
@@ -353,7 +353,7 @@ function SearchCourse(studentId, page) {
 		}
 		
 		sugangList1.innerHTML = `
-		<div class="row">
+		<div class="row p-2">
 			<div class="col">
 				<table class="table table-bordered">
 					<thead>

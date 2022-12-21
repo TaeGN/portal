@@ -23,4 +23,8 @@ public interface SugangMapper {
 
 	int selectSearchCourseAll(SearchDto search);
 
+	List<SignUpNoticeDto> selectSignUpNoticeAllByPage(int startNum, int count);
+
+	int selectCountSignUpNoticeAll();
+
 }

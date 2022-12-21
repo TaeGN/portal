@@ -85,16 +85,33 @@ public class SugangController {
 	}
 	
 	@GetMapping("signUpNotice")
-	public void info(Model model) {
-		List<SignUpNoticeDto> signUpNoticeList = sugangService.getSignUpNoticeList();
+	public void info(Model model,
+			@RequestParam(name = "page", defaultValue = "1") int page,
+			Authentication authentication) {
 		
+		int count = 10;
+		int startNum = (page - 1) * count; 
+		
+		List<SignUpNoticeDto> signUpNoticeList = sugangService.getSignUpNoticeListByPage(startNum, count);
+		int totalNum = sugangService.getCountSignUpNoticeAll();
+		int maxPage = (totalNum - 1) / count + 1;
+		
+		StudentDto student = studentService.getStudentByStudentId(authentication.getName());
+		int signUpCredit = courseSignUpService.getCountSignUpCreditByStudentNumber(student.getStudentNumber());
+		
+		model.addAttribute("signUpCredit", signUpCredit);	
+		model.addAttribute("maxPage", maxPage);
+		model.addAttribute("page", page);
 		model.addAttribute("signUpNoticeList", signUpNoticeList);
 	}
 	
 	@GetMapping("signUpNoticeText")
-	public void signUpNoticeText(int id, Model model) {
+	public void signUpNoticeText(int id, Model model, Authentication authentication) {
 		String signUpNoticeText = sugangService.getSignUpNoticeText(id);
+		StudentDto student = studentService.getStudentByStudentId(authentication.getName());
+		int signUpCredit = courseSignUpService.getCountSignUpCreditByStudentNumber(student.getStudentNumber());
 		
+		model.addAttribute("signUpCredit", signUpCredit);			
 		model.addAttribute("signUpNoticeText", signUpNoticeText);
 	}		
 
@@ -121,9 +138,10 @@ public class SugangController {
 		}
 		
 		List<CourseDto> courseList = new ArrayList<>();
+		StudentDto student = new StudentDto();
 		
 		if(authentication.getName() != null) {
-			StudentDto student = studentService.getStudentByStudentId(authentication.getName());
+			student = studentService.getStudentByStudentId(authentication.getName());
 			search.setStudentNumber(student.getStudentNumber());
 			// 로그인 상태
 			courseList = sugangService.getSearchCourseListByStudentNumber(search); 
@@ -138,7 +156,9 @@ public class SugangController {
 		
 		List<OrganizationDto> organizationList = departmentService.getOrganizationAll(); 
 		List<BuildingDto> buildingList = classroomService.getBuildingAll();
+		int signUpCredit = courseSignUpService.getCountSignUpCreditByStudentNumber(student.getStudentNumber());
 		
+		model.addAttribute("signUpCredit", signUpCredit);		
 		model.addAttribute("courseList", courseList);
 		model.addAttribute("buildingList", buildingList);
 		model.addAttribute("organizationList", organizationList);
@@ -223,8 +243,13 @@ public class SugangController {
 		int totalNum = courseSignUpService.getCountDesireByStudentNumber(studentNumber);
 		int maxPage = (totalNum - 1) / count + 1;
 		
+		int desireCredit = courseSignUpService.getCountDesireCreditByStudentNumber(studentNumber);
+		int signUpCredit = courseSignUpService.getCountSignUpCreditByStudentNumber(studentNumber);
 		
+		model.addAttribute("signUpCredit", signUpCredit);
+		model.addAttribute("desireCredit", desireCredit);
 		model.addAttribute("desireList", desireList);
+		model.addAttribute("totalNum", totalNum);
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("page", page);
 	}
@@ -245,8 +270,13 @@ public class SugangController {
 		
 		int totalNum = courseSignUpService.getCountDesireByStudentNumber(studentNumber);
 		int maxPage = (totalNum - 1) / count + 1;
-		System.out.println(desireList);
 		Map<String, Object> map = new HashMap<>();
+		int desireCredit = courseSignUpService.getCountDesireCreditByStudentNumber(studentNumber);
+		int signUpCredit = courseSignUpService.getCountSignUpCreditByStudentNumber(studentNumber);
+
+		map.put("signUpCredit", signUpCredit);
+		map.put("desireCredit", desireCredit);
+		map.put("totalNum", totalNum);
 		map.put("desireList", desireList);
 		map.put("maxPage", maxPage);
 		return map;
@@ -268,7 +298,9 @@ public class SugangController {
 		int totalNum = courseSignUpService.getCountSignUpByStudentNumber(studentNumber);
 		int maxPage = (totalNum - 1) / count + 1;
 		
+		int signUpCredit = courseSignUpService.getCountSignUpCreditByStudentNumber(studentNumber);
 		
+		model.addAttribute("signUpCredit", signUpCredit);
 		model.addAttribute("signUpList", signUpList);
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("page", page);		

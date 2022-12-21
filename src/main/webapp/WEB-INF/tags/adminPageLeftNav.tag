@@ -8,9 +8,11 @@
 <c:url value="/professor/list" var="professorLink"></c:url>
 <c:url value="/course/list" var="courseLink"></c:url>
 <c:url value="/courseInfo/list" var="courseInfoLink"></c:url>
+<c:url value="/signUpNotice/list" var="signUpNoticeLink"></c:url>
 <sec:authorize access="hasAnyAuthority('admin','courseInfo')" var="hasCourseInfo"></sec:authorize>
 <sec:authorize access="hasAnyAuthority('admin','member')" var="hasMember"></sec:authorize>
 <sec:authorize access="hasAnyAuthority('admin','course')" var="hasCourse"></sec:authorize>
+<sec:authorize access="hasAnyAuthority('admin','sugang')" var="hasSugang"></sec:authorize>
 <sec:authorize access="hasAuthority('admin')" var="hasAdmin"></sec:authorize>
 
 <nav class="navbar navbar-expand-lg bg-light">
@@ -69,8 +71,22 @@
 	 	<li class="nav-item ms-4">
 	      <a id="courseCollapse" class="nav-link" aria-current="page" href="${courseInfoLink }">교과목 관리</a>
 	    </li>		        
+        <hr>
+        
 	    </c:if>  
+        
+      <c:if test="${hasSugang }">
+        <li class="nav-item">
+		  <button class="btn btn-light" type="button" >
+		    수강
+			<i class="fa-solid fa-angle-down"></i>
+		  </button>
+        </li>
+	 	<li class="nav-item ms-4">
+	      <a id="memberCollapse" class="nav-link" aria-current="page" href="${signUpNoticeLink }">수강 안내</a>
+	    </li>
 
+	  </c:if>	
      	
 <%--      <li class="nav-item">
 		  <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#memberCollapse" aria-expanded="false" aria-controls="memberCollapse">

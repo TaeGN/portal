@@ -33,9 +33,9 @@ public class SugangService {
 		return sugangMapper.selectSearchCourseListByStudentNumber(search);
 	}
 
-	public List<SignUpNoticeDto> getSignUpNoticeList() {
+	public List<SignUpNoticeDto> getSignUpNoticeListByPage(int startNum, int count) {
 		// TODO Auto-generated method stub
-		return sugangMapper.selectSignUpNoticeAll();
+		return sugangMapper.selectSignUpNoticeAllByPage(startNum, count);
 	}
 
 
@@ -47,6 +47,11 @@ public class SugangService {
 	public int getTotalNumBySearchCourseList(SearchDto search) {
 		// TODO Auto-generated method stub
 		return sugangMapper.selectSearchCourseAll(search);
+	}
+
+	public int getCountSignUpNoticeAll() {
+		// TODO Auto-generated method stub
+		return sugangMapper.selectCountSignUpNoticeAll();
 	}
 
 

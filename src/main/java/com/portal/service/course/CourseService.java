@@ -203,4 +203,9 @@ public class CourseService {
 		return cnt;
 	}
 
+	public int removeCourse(int classCode, String name) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

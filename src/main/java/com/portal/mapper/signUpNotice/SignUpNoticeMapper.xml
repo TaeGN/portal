@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.portal.mapper.signUpNotice.SignUpNoticeMapper">
+
+	<select id="selectSignUpNoticeIdByWriterId" resultType="int">
+		SELECT sun.id
+		FROM SignUpNotice sun
+		JOIN AdminMember am ON sun.writerId = am.id AND sun.writerId = #{id}
+	</select>
+
+	<delete id="deleteSignUpNoticeById">
+		DELETE FROM SignUpNotice
+		WHERE id = #{id}
+	</delete>
+	
+	<select id="selectLastSignUpNoticeId" resultType="int">
+		SELECT id
+		FROM SignUpNotice
+		ORDER BY id DESC
+		LIMIT 1
+	</select>
+
+	<update id="updateSignUpNotice">
+		UPDATE SignUpNotice
+		SET 
+			campus = #{campus},
+			title = #{title},
+			writerId = #{writerId},
+			text = #{text}
+		WHERE id = #{id}
+	</update>
+
+	<insert id="insertSignUpNotice">
+		INSERT INTO SignUpNotice (campus, title, text, writerId)
+		VALUES (#{campus},#{title},#{text},#{writerId})
+	</insert>
+
+	<select id="selectSignUpNoticeById" resultType="com.portal.domain.sugang.SignUpNoticeDto">
+		SELECT 
+			sun.id,
+			sun.campus,
+			sun.title,
+			sun.text,
+			sun.writerId,
+			sun.inserted,
+			am.name writer
+		FROM SignUpNotice sun
+		JOIN AdminMember am ON sun.writerId = am.id
+		WHERE sun.id = #{id}
+	</select>
+	
+	<select id="selectCountSignUpNoticeAll" resultType="int">
+		SELECT count(*)
+		FROM SignUpNotice
+	</select>
+
+	<select id="selectSignUpNoticeAllByPage" resultType="com.portal.domain.sugang.SignUpNoticeDto">
+		SELECT 
+			sun.id,
+			sun.campus,
+			sun.title,
+			sun.text,
+			sun.writerId,
+			sun.inserted,
+			am.name writer
+		FROM SignUpNotice sun
+		JOIN AdminMember am ON sun.writerId = am.id
+		ORDER BY sun.id DESC
+		LIMIT #{startNum},#{count}
+	</select>
+
+</mapper>

@@ -1,5 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <nav aria-label="Page navigation example">
   <ul class="pagination justify-content-center">
@@ -17,8 +18,9 @@
 	    </c:url>	
       <a class="page-link" href="${aheadPageLink }"><i class="fa-solid fa-angle-left"></i></a>
     </li> 
-    
-    <c:forEach var="i" begin="${(page - 1) / 10 + 1 }" end="${page + 9 < maxPage ? page + 9 : maxPage}">
+    <fmt:parseNumber var="bValue" integerOnly="true" value="${(page - 1) / 10}"></fmt:parseNumber>
+    <fmt:parseNumber var="beginValue" integerOnly="true" value="${bValue * 10 + 1 }"></fmt:parseNumber>
+    <c:forEach var="i" begin="${beginValue }" end="${beginValue + 9 < maxPage ? beginValue + 9 : maxPage}">
  	    <c:url value="${currentPageLink }" var="paginationLink">
 	    	<c:param name="page" value="${i }"></c:param>
 	    </c:url>
@@ -26,9 +28,10 @@
     </c:forEach>
  
   
-     <li class="page-item ${((page - 1) / 10) * 10 + 11 > maxPage ? 'disabled' : ''}">
+     <fmt:parseNumber var="backPageValue" integerOnly="true" value="${beginValue + 10 }"></fmt:parseNumber>
+     <li class="page-item ${backPageValue > maxPage ? 'disabled' : ''}">
     	 <c:url value="${currentPageLink }" var="backPageLink">
-	    	<c:param name="page" value="${((page - 1) / 10) * 10 + 11 }"></c:param>
+	    	<c:param name="page" value="${backPageValue }"></c:param>
 	    </c:url>	
     	<a class="page-link" href="${backPageLink }"><i class="fa-solid fa-angle-right"></i></a>
     </li>

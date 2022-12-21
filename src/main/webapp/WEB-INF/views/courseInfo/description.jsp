@@ -20,6 +20,9 @@
 <div class="container-md">
 				<div class="row">
 					<div class="col">
+						<div class="mt-3 ms-3 mb-3 me-auto">
+							<h5><i class="fa-solid fa-angle-right"></i>교과목 개요서</h5>
+						</div>
 						<table class="table table-bordered align-middle">
 							<tr>
 								<td class="text-align-center" rowspan="3">과목</td>

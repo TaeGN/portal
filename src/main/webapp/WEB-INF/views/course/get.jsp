@@ -32,20 +32,6 @@
 				
 				<div class="mb-3">
 					<label class="form-label">
-					년도 / 학년 / 학기
-					</label>
-					<input class="form-control" type="text" value="${course.year }년 / ${course.grade } / ${course.semester }" readonly>
-				</div>
-				
-				<div class="mb-3">
-					<label class="form-label">
-						이수구분 
-					</label>
-					<input class="form-control" type="text" value="${course.courseInfo.courseClassification }" readonly>
-				</div>	
-				
-				<div class="mb-3">
-					<label class="form-label">
 						수업번호 
 					</label>
 					<input class="form-control" type="text" value="${course.classCode }" readonly>
@@ -56,15 +42,16 @@
 						학수번호 
 					</label>
 					<input class="form-control" type="text" value="${course.classNumber }" readonly>
+					<%-- button onclick="GetCourseInfo(this.value)" class="form-control" type="button" value="${course.classNumber }">${course.classNumber }</button> --%>
 				</div>
 				
 				<div class="mb-3">
 					<label class="form-label">
-						교과목명 
+					년도 / 학년 / 학기
 					</label>
-					<input class="form-control" type="text" value="${course.courseInfo.courseName }" readonly>
+					<input class="form-control" type="text" value="${course.year }년 / ${course.grade } / ${course.semester }" readonly>
 				</div>
-				
+
 				<div class="mb-3">
 					<label class="form-label">
 						교강사 
@@ -74,25 +61,25 @@
 				
 				<div class="mb-3">
 					<label class="form-label">
-						학점 
+						수강정원 
 					</label>
-					<input class="form-control" type="text" value="${course.courseInfo.credit }" readonly>
-				</div>		
+					<input class="form-control" type="text" value="${course.maxPersonnel }" readonly>
+				</div>
+								
+<%-- 				<div class="mb-3">
+					<label class="form-label">
+						이수구분 
+					</label>
+					<input class="form-control" type="text" value="${course.courseInfo.courseClassification }" readonly>
+				</div>
+				
 				
 				<div class="mb-3">
 					<label class="form-label">
-						강의 
+						교과목명 
 					</label>
-					<input class="form-control" type="text" value="${course.courseInfo.theory }" readonly>
-				</div>	
-				
-				<div class="mb-3">
-					<label class="form-label">
-						실습 
-					</label>
-					<input class="form-control" type="text" value="${course.courseInfo.practice }" readonly>
-				</div>	
-				
+					<input class="form-control" type="text" value="${course.courseInfo.courseName }" readonly>
+				</div> --%>	
 				
 				<div class="mb-3">
 					<label class="form-label">
@@ -107,26 +94,92 @@
 					</label>
 					<input class="form-control" type="text" value="${course.classroom }" readonly>
 				</div>
-				
-				<div class="mb-3">
-					<label class="form-label">
-						수강정원 
-					</label>
-					<input class="form-control" type="text" value="${course.maxPersonnel }" readonly>
-				</div>
-				
+
 				<div class="mb-3">
 					<label class="form-label">
 						관장학과 
 					</label>
 					<input class="form-control" type="text" value="${course.department.name }" readonly>
 				</div>
+				
+<%-- 				<div class="mb-3">
+					<label class="form-label">
+						학점 / 강의 / 실습 
+					</label>
+					<input class="form-control" type="text" value="${course.courseInfo.credit } / ${course.courseInfo.theory } / ${course.courseInfo.practice }" readonly>
+				</div>	 --%>	
+			
+
+				
+
 			</div>
 		</div>
 	</div>
 	
-	<div id="modifyCourseId1"></div>
+	<div class="me-5" id="modifyCourseId1">
 	
+	</div>
+	<div class="me-2" id="CourseInfoByCourseNumber">
+			<div class="row p-2">
+				<div class="col">
+					<div class="d-flex">
+						<div class="mb-3 mt-3 me-auto">
+							<h3><i class="fa-solid fa-angle-right"></i> ${course.courseInfo.classNumber} 정보</h3>
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label">
+							학수번호 
+						</label>
+						<input class="form-control" type="text" value="${course.courseInfo.classNumber }" readonly>
+					</div>	
+					
+					<div class="mb-3">
+						<label class="form-label">
+							교과목명 
+						</label>
+						<input class="form-control" type="text" value="${course.courseInfo.courseName }" readonly>
+					</div>	
+					
+					<div class="mb-3">
+						<label class="form-label">
+							과목구분 
+						</label>
+						<input class="form-control" type="text" value="${course.courseInfo.courseClassification }" readonly>
+					</div>	
+
+					
+					<div class="mb-3">
+						<label class="form-label">
+							학점
+						</label>
+						<input class="form-control" type="number" value="${course.courseInfo.credit }" readonly>
+					</div>
+					
+					<div class="mb-3">
+						<label class="form-label">
+							강의
+						</label>
+						<input class="form-control" type="number" value="${course.courseInfo.theory }" readonly>
+					</div>
+				
+					<div class="mb-3">
+						<label class="form-label">
+							실습
+						</label>
+						<input class="form-control" type="number" value="${course.courseInfo.practice }" readonly>
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">수업개요</label>
+						<textarea rows="7" class="form-control" name="summary" value="${course.courseInfo.summary }"  readonly>${course.courseInfo.summary }</textarea>
+					</div>					
+					
+				</div>
+			</div>
+		
+	</div>
 </div>	
 
 
@@ -173,6 +226,7 @@
 <script>
 const ctx = "${pageContext.request.contextPath}";
 const modifyCourse1 = document.querySelector("#modifyCourseId1");
+const CourseInfoByCourseNumber = document.querySelector("#CourseInfoByCourseNumber");
 
 const adminLog1 = document.querySelector("#adminLogId1");
 function GetAdminLog(page) {
@@ -298,6 +352,7 @@ function GetDepartmentByCollege(collegeId) {
 		document.querySelector("#departmentId1").innerHTML = `
 			<div>
 				<select name="departmentId" value="0" class="form-select" aria-label="Default select example">
+					<option value=""> </option>
 					\${departmentOption}
 				</select>
 			</div>
@@ -319,13 +374,38 @@ function GetCollegeByOrganization(organizationId) {
 		document.querySelector("#collegeId1").innerHTML = `
 			<div>
 				<select onchange="GetDepartmentByCollege(this.value)" name="collegeId" value="1" class="form-select" aria-label="Default select example">
+					<option value=""> </option>
 					\${collegeOption}
 				</select>
 			</div>
 		`;
 	});
 	
-	GetDepartmentByCollege(1);
+	/* GetDepartmentByCollege(1); */
+}
+
+//강의실
+function selectRoomByBuilding(building) {
+	const selectRoomId1 = document.querySelector("#selectRoomId1"); 
+	selectRoomId1.innerHTML = "";
+	
+/* 	const building = document.querySelector("#selectBuildingId1").value */
+	const data = {building};
+	fetch(`\${ctx}/course/getClassroom`, {
+		method : "post",
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(data)
+	})
+	.then(res => res.json())
+	.then(list => {
+		
+		for(const item of list) {
+			const room = `<option value="\${item.id }">\${item.room }\${item.classification }</option>`	
+			selectRoomId1.insertAdjacentHTML("beforeend", room);
+		}
+	});
 }
 
 
@@ -408,6 +488,8 @@ function ModifyCourse(classCode) {
 		const buildingList = data.buildingList;
 		const roomListByFirstBuilding = data.roomListByFirstBuilding;
 		
+		GetCourseInfo(course.classNumber);
+		
 		let organizationOption = ``;
 		let classNumberOption = ``;
 		let professorOption = ``;
@@ -450,7 +532,7 @@ function ModifyCourse(classCode) {
 						
 						<div class="mb-3">
 							<label for="" class="form-label">학수번호</label>
-							<select name="classNumber" value="\${course.classNumber}" class="form-select" aria-label="Default select example">
+							<select onchange="GetCourseInfo(this.value)" name="classNumber" value="\${course.classNumber}" class="form-select" aria-label="Default select example">
 								\${classNumberOption}
 							</select>
 						</div>
@@ -525,7 +607,7 @@ function ModifyCourse(classCode) {
 						<div class="mb-3">
 							<label for="" class="form-label">강의실</label>
 							<div class="d-flex">
-								<select id="selectBuildingId1" name="building" class="form-select" aria-label="Default select example" >
+								<select onchange="selectRoomByBuilding(this.value)" id="selectBuildingId1" name="building" class="form-select" aria-label="Default select example" >
 									\${buildingOption}
 								</select>
 								<select id="selectRoomId1" name="room" class="form-select" aria-label="Default select example">
@@ -538,6 +620,7 @@ function ModifyCourse(classCode) {
 						<div class="mb-3 d-flex">
 							<div id="organizationId1">
 								<select onchange="GetCollegeByOrganization(this.value)" name="organizationId" value="0" class="form-select" aria-label="Default select example">
+									<option value=""> </option>
 									\${organizationOption}
 								</select>	
 							</div>
@@ -565,7 +648,74 @@ function ModifyCourse(classCode) {
 			</div>
 		`;
 	
-	GetCollegeByOrganization(1);
+	/* GetCollegeByOrganization(1); */
+	});
+}
+
+function GetCourseInfo(classNumber) {
+	fetch(ctx + "/courseInfo/get/" + classNumber)
+	.then(res => res.json())
+	.then(courseInfo => {	
+		CourseInfoByCourseNumber.innerHTML = `
+			<div class="row p-2">
+				<div class="col">
+					<div class="d-flex">
+						<div class="mb-3 mt-3 me-auto">
+							<h3><i class="fa-solid fa-angle-right"></i> \${courseInfo.classNumber} 정보</h3>
+						</div>
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label">
+							학수번호 
+						</label>
+						<input class="form-control" type="text" value="\${courseInfo.classNumber }" readonly>
+					</div>	
+					
+					<div class="mb-3">
+						<label class="form-label">
+							교과목명 
+						</label>
+						<input class="form-control" type="text" value="\${courseInfo.courseName }" readonly>
+					</div>	
+					
+					<div class="mb-3">
+						<label class="form-label">
+							과목구분 
+						</label>
+						<input class="form-control" type="text" value="\${courseInfo.courseClassification }" readonly>
+					</div>	
+
+					
+					<div class="mb-3">
+						<label class="form-label">
+							학점
+						</label>
+						<input class="form-control" type="number" value="\${courseInfo.credit }" readonly>
+					</div>
+					
+					<div class="mb-3">
+						<label class="form-label">
+							강의
+						</label>
+						<input class="form-control" type="number" value="\${courseInfo.theory }" readonly>
+					</div>
+				
+					<div class="mb-3">
+						<label class="form-label">
+							실습
+						</label>
+						<input class="form-control" type="number" value="\${courseInfo.practice }" readonly>
+					</div>
+					
+					<div class="mb-3">
+						<label for="" class="form-label">수업개요</label>
+						<textarea rows="7" class="form-control" name="summary" value="\${courseInfo.summary }"  readonly>\${courseInfo.summary }</textarea>
+					</div>					
+					
+				</div>
+			</div>
+		`
 	});
 }
 

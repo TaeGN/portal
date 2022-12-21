@@ -15,7 +15,7 @@
 <my:adminPageTopNav></my:adminPageTopNav>
 <div class="d-flex">
 <my:adminPageLeftNav></my:adminPageLeftNav>
-	<div class="container-md">
+	<div>
 		<div class="row">
 			<div class="col">
 				<div class="mb-3">
@@ -37,6 +37,11 @@
 						<input required="required" type="text" class="form-control" name="password">
 					</div>
 					
+					<div class="mb-3">
+						<label for="" class="form-label">파일</label>
+						<input multiple type="file" accept="image/*" class="form-control" name="files">
+					</div>
+					
 					<label for="" class="form-label">권한</label>
 					<div class="form-check">
 					  <input class="form-check-input" type="checkbox" value="member" id="checkbox1" name="authorityList">
@@ -55,6 +60,12 @@
 					  <label class="form-check-label" for="flexCheckDefault3">
 					    courseInfo
 					  </label>
+					</div>
+					<div class="form-check">
+						 <input class="form-check-input" type="checkbox" value="sugang" name="authorityList">
+						 <label class="form-check-label" for="flexCheckDefault3">
+						   sugang
+						 </label>
 					</div>
 					<input id="submitButton1" class="btn btn-primary" type="submit" value="등록">
 				</form>
