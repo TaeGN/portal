@@ -5,7 +5,7 @@
 <mapper namespace="com.portal.mapper.courseSignUp.CourseSignUpMapper">
 
 	<select id="selectCountDesireCredit" resultType="int">
-		SELECT sum(ci.credit)
+		SELECT ifnull(sum(ci.credit),0) credit
 		FROM CourseSignUp csu
         JOIN Course c ON csu.classCode = c.classCode
         JOIN CourseInfo ci ON c.classNumber = ci.classNumber
@@ -13,7 +13,7 @@
 	</select>
 
 	<select id="selectCountSignUpCredit" resultType="int">
-		SELECT sum(ci.credit)
+		SELECT ifnull(sum(ci.credit),0) credit
 		FROM CourseSignUp csu
         JOIN Course c ON csu.classCode = c.classCode
         JOIN CourseInfo ci ON c.classNumber = ci.classNumber

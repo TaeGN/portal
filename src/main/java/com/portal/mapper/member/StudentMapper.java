@@ -19,7 +19,7 @@ public interface StudentMapper {
 
 	StudentDto selectStudentByStudentId(String studentId);
 
-	StudentDto selectMinStudentNumberByDepartmentId(int minStudentNumber);
+	StudentDto selectMinStudentNumberByDepartmentId(int minStudentNumber, int maxStudentNumber);
 
 	int updateStudent(StudentDto student);
 

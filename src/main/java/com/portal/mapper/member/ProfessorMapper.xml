@@ -36,7 +36,7 @@
 		LEFT JOIN Department d ON p.departmentId = d.id
         LEFT JOIN College c ON c.id = d.collegeId
         LEFT JOIN Organization o ON o.id = c.organizationId	
-        WHERE professorNumber = #{professorNumber}
+        WHERE p.professorNumber = #{professorNumber}
 	</select>
 	
 	<resultMap type="com.portal.domain.member.ProfessorDto" id="selectProfessorByProfessorNumberMap">
@@ -85,13 +85,15 @@
 
 	<select id="selectMinProfessorNumberByDepartmentId" resultType="com.portal.domain.member.ProfessorDto">
 		SELECT professorNumber FROM Professor
-		WHERE professorNumber >= #{minProfessorNumber}
-		LIMIT 0,1
+		WHERE professorNumber >= #{minProfessorNumber} AND #{maxProfessorNumber} >= professorNumber
+		ORDER BY professorNumber DESC
+		LIMIT 1
 	</select>
 	
 	<update id="updateProfessor">
 	UPDATE Professor
 	SET 
+		professorNumber = #{professorNumber},
 		name = #{name},
 		contact = #{contact},
 		email = #{email},

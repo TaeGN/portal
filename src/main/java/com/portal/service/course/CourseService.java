@@ -112,6 +112,12 @@ public class CourseService {
 	}
 
 	public int removeCourseByClassCode(int classCode, String username) {
+		
+		// CourseSchedule 삭제 
+		courseScheduleMapper.deleteCourseScheduleByClassCode(classCode);
+		// CourseSignUp 삭제
+		courseSignUpMapper.deleteCourseSignUpByClassCode(classCode);
+		// Course 삭제
 		int cnt = courseMapper.deleteCourseByClassCode(classCode);
 		
 		String messageLog = "";
@@ -133,14 +139,8 @@ public class CourseService {
 		int cnt = 1;
 		
 		for(int classCode : classCodeList) {
-			// CourseSchedule 삭제 
-			courseScheduleMapper.deleteCourseScheduleByClassCode(classCode);
-			// CourseSignUp 삭제
-			courseSignUpMapper.deleteCourseSignUpByClassCode(classCode);
-			// Course 삭제
+			// Course 삭제 함수 실행
 			int cnt2 = removeCourseByClassCode(classCode, username);
-			
-
 			cnt *= cnt2;
 		}
 		
@@ -203,9 +203,5 @@ public class CourseService {
 		return cnt;
 	}
 
-	public int removeCourse(int classCode, String name) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 }

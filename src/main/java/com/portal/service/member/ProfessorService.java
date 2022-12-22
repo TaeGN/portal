@@ -49,7 +49,7 @@ public class ProfessorService {
 	public int setProfessorNumberByDepartmentId(int departmentId) {
 		int minProfessorNumber = 202200000 + (departmentId - 1) * 100;
 		int maxProfessorNumber = minProfessorNumber + 99;
-		ProfessorDto professor = professorMapper.selectMinProfessorNumberByDepartmentId(minProfessorNumber);
+		ProfessorDto professor = professorMapper.selectMinProfessorNumberByDepartmentId(minProfessorNumber, maxProfessorNumber);
 		int professorNumber = 0;
 		if(professor != null && professor.getProfessorNumber() < maxProfessorNumber) {
 			professorNumber = professor.getProfessorNumber() + 1;
@@ -66,9 +66,12 @@ public class ProfessorService {
 	}
 
 	public int modifyProfessor(ProfessorDto professor) {
+		
 		// 비밀번호 암호화 (변경될 비밀번호 없으면 기존 비밀번호 그대로)
-		if(professor.getPassword() == null || professor.getPassword().equals("")) {
-			String pw = professorMapper.selectProfessorByProfessorNumber(professor.getProfessorNumber()).getPassword();
+		if(professor.getPassword().isEmpty() || professor.getPassword().equals("")) {
+			ProfessorDto pro = professorMapper.selectProfessorByProfessorNumber(professor.getProfessorNumber());
+			
+			String pw = pro.getPassword();
 			professor.setPassword(pw);
 		} else {
 			professor.setPassword(passwordEncoder.encode(professor.getPassword()));

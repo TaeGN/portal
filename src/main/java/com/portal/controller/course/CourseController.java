@@ -245,7 +245,7 @@ public class CourseController {
 	public String remove(int classCode, Authentication authentication) {
 		
 		// course 수정
-		int cnt = courseService.removeCourse(classCode, authentication.getName());
+		int cnt = courseService.removeCourseByClassCode(classCode, authentication.getName());
 
 		
 		return "redirect:/course/list";

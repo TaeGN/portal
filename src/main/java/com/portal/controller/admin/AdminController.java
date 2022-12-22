@@ -258,13 +258,9 @@ public class AdminController {
 		int startNum = (page - 1) * count; 
 		
 		List<AdminMemberDto> list = adminService.getAdminMemberList(startNum, count);
-		int totalNum = list.size();
+		int totalNum = adminService.getCountAdminMemberAll();
 		int maxPage = (totalNum - 1) / count + 1;
 		
-		int endNum = startNum + count - 1;
-		
-		model.addAttribute("startNum", startNum);
-		model.addAttribute("endNum", endNum);
 		model.addAttribute("maxPage", maxPage);
 		model.addAttribute("page", page);
 		model.addAttribute("adminMemberList", list);

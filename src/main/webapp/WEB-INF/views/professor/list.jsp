@@ -172,7 +172,6 @@ function GetCollegeByOrganization(organizationId) {
 			</div>
 		`;
 	});
-	GetDepartmentByCollege(0);
 }
 
 function ModifyProfessor(professorNumber) {
@@ -193,12 +192,14 @@ function ModifyProfessor(professorNumber) {
 			<div class="row">
 				<div class="col">
 					<div class="d-flex">
-						<h1 class="me-auto">교수 정보 수정</h1>
+					    <div class="mt-3 mb-3 me-auto">
+							<h3><i class="fa-solid fa-angle-right"></i> 교수 정보 수정</h3>
+						</div>
 					</div>
 					<form id="modifyForm" action="\${ctx}/professor/modify" method="post" enctype="multipart/form-data">
 						<div class="mb-3">
 							<label for="" class="form-label">교수번호</label>
-							<input id="professorNumberId1" value="\${professor.professorNumber }" type="number" class="form-control" name="professorNumber" readonly>
+							<input value="\${professor.professorNumber }" type="number" class="form-control" name="professorNumber" readonly>
 						</div>
 					
 						<label for="" class="form-label">학부</label>
@@ -232,7 +233,7 @@ function ModifyProfessor(professorNumber) {
 						
 						<div class="mb-3">
 							<label for="" class="form-label">비밀번호</label>
-							<input type="text" class="form-control" value="" name="password">
+							<input type="text" class="form-control" name="password">
 						</div>
 						
 						<div class="mb-3">
@@ -270,7 +271,6 @@ function ModifyProfessor(professorNumber) {
 				</div>
 			</div>
 		`;
-		GetCollegeByOrganization(0);
 	});
 }
 
@@ -305,13 +305,12 @@ function RegisterProfessor() {
 		for(var organization of organizationList) {
 			organizationOption += `<option value="\${organization.id }">\${organization.name }</option>`
 		}
-		console.log(organizationOption)
 		
 		document.querySelector("#professorInfoByProfessorNumber").innerHTML = `
-		<div class="row">
+		<div class="row p-2">
 			<div class="col">
-				<div class="mb-3">
-					<h1>교수 등록</h1>
+				<div class="mt-3 mb-3 me-auto">
+					<h3><i class="fa-solid fa-angle-right"></i> 교수 등록</h3>
 				</div>
 				<form id="registerForm1" action="\${ctx}/professor/register" method="post" enctype="multipart/form-data">
 				
@@ -384,7 +383,6 @@ function RegisterProfessor() {
 			</div>
 		</div>
 		`;
-		GetCollegeByOrganization(0);
 	});
 }
 
@@ -396,12 +394,14 @@ function GetProfessorInfo(professorNumber) {
 	.then(res => res.json())
 	.then(professor => {	
 		document.querySelector("#professorInfoByProfessorNumber").innerHTML = `
-			<div class="row">
+			<div class="row p-2">
 				<div class="col">
 					<div class="d-flex">
-						<h1 class="me-auto">교수 정보</h1>
+						<div class="mt-3 mb-3">
+							<h3><i class="fa-solid fa-angle-right"></i> 교수 정보</h3>
+						</div>
 						<button onclick="ModifyProfessor(\${professor.professorNumber})" class="btn btn-link" type="button">
-						<i class="fa-solid fa-pen-to-square">교수 정보 수정</i>
+						<i class="fa-solid fa-pen-to-square">수정</i>
 						</button>
 					</div>
 					

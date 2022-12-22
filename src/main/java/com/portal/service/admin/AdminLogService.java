@@ -70,6 +70,11 @@ public class AdminLogService {
 		return adminLogMapper.insertLog(adminId, log, menu, category);
 	}
 
+	public int removeAdminLogByAdminId(int id) {
+		// TODO Auto-generated method stub
+		return adminLogMapper.deleteAdminLogByAdminId(id);
+	}
+
 	
 	
 }

@@ -315,7 +315,7 @@
         	AND i.courseClassification = #{courseClassification}
         </if>
         <if test='classNumber != null and !classNumber.equals("")'>
-        	AND c.classNumber = #{classNumber}
+        	AND c.classNumber LIKE #{classNumber}
         </if>
         <if test='courseName != null and !courseName.equals("")'>
         	AND i.courseName LIKE #{courseName}

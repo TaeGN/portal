@@ -48,9 +48,7 @@
 				<tbody>
 					<c:forEach items="${adminMemberList }" var="adminMember">
 						<tr>
-							<%-- <c:url value="/admin/get" var="getLink">
-								<c:param name="username" value="${adminMember.adminMemberId }"></c:param>
-							</c:url> --%>
+
 							<td>${adminMember.id }</td>
 							<td>
 								<button onclick="GetAdminMember(this.value)" value="${adminMember.id }" class="btn btn-link">${adminMember.name }</button>
@@ -58,11 +56,12 @@
 							</td>
 							<td>${adminMember.adminMemberId }</td>
 							<td>*******</td>
-							<td>
+							<td>${adminMember.authority }</td>
+<%-- 							<td>
 								<c:forEach items="${adminMember.authorityList }" var="authority">
 									${authority } 
 								</c:forEach>
-							</td>
+							</td> --%>
 						</tr>
 					</c:forEach>				
 				</tbody>
@@ -337,7 +336,7 @@ function ModifyAdminMember(id) {
 				<input class="btn btn-danger" type="submit" value="삭제" data-bs-toggle="modal" data-bs-target="#removeModal">
 				
 				<form id="removeForm" action="${removeLink }" method="post">
-				<input type="hidden" name="id" value="${adminMember.id }">
+				<input type="hidden" name="id" value="\${adminMember.id }">
 				</form>
 
 			</div>
