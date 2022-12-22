@@ -75,8 +75,8 @@ public class ProfessorController {
 	@PostMapping("modify")
 	@PreAuthorize("hasAnyAuthority('admin','member')")
 	public String modify(ProfessorDto professor, Authentication authentication) {
+		System.out.println(professor);
 			int cnt = professorService.modifyProfessor(professor);
-			
 			String messageLog = "";
 			int professorNumber = professor.getProfessorNumber();
 			if(cnt == 1) {

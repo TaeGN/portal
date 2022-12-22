@@ -121,6 +121,7 @@ public class StudentController {
 		int departmentId = Integer.parseInt(req.get("departmentId"));
 		System.out.println(departmentId);
 		int studentNumber = studentService.setStudentNumberByDepartmentId(departmentId);
+		System.out.println(studentNumber);
 		map.put("studentNumber", studentNumber);
 		return map;
 	}

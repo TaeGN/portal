@@ -32,5 +32,7 @@ public interface AdminMapper {
 
 	AdminMemberDto selectAdminMemberById(int id);
 
+	int selectCountAdminMemberAll();
+
 	
 }

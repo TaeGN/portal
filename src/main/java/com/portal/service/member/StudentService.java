@@ -60,7 +60,7 @@ public class StudentService {
 	public int setStudentNumberByDepartmentId(int departmentId) {
 		int minStudentNumber = 2022000000 + (departmentId - 1) * 1000;
 		int maxStudentNumber = minStudentNumber + 999;
-		StudentDto student = studentMapper.selectMinStudentNumberByDepartmentId(minStudentNumber);
+		StudentDto student = studentMapper.selectMinStudentNumberByDepartmentId(minStudentNumber, maxStudentNumber);
 		int studentNumber = 0;
 		if(student != null && student.getStudentNumber() < maxStudentNumber) {
 			studentNumber = student.getStudentNumber() + 1;

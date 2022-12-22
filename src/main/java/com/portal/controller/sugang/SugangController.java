@@ -200,6 +200,10 @@ public class SugangController {
 				search.setProfessorName("%" + search.getProfessorName() + "%");
 			}
 			
+			if(search.getClassNumber() != null && !search.getClassNumber().equals("")) {
+				search.setClassNumber("%" + search.getClassNumber() + "%");
+			}
+			
 			List<CourseDto> courseList = new ArrayList<>();
 			
 			if(authentication.getName() != null) {

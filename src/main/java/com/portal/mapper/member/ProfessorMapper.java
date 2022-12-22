@@ -13,7 +13,7 @@ public interface ProfessorMapper {
 
 	int insertProfessor(ProfessorDto professor);
 
-	ProfessorDto selectMinProfessorNumberByDepartmentId(int minProfessorNumber);
+	ProfessorDto selectMinProfessorNumberByDepartmentId(int minProfessorNumber, int maxProfessorNumber);
 
 	ProfessorDto selectProfessorById(String loginId);
 

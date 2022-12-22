@@ -98,11 +98,17 @@
 	</resultMap>
 
 	
+	<select id="selectCountAdminMemberAll" resultType="int">
+		SELECT count(*)
+		FROM AdminMember
+	</select>
 	
 	<select id="selectAdminMemberAll" resultMap="adminMemberAll">
-		SELECT m.id, m.name, adminMemberId, password, authority 
+		SELECT m.id, m.name, m.adminMemberId, m.password, GROUP_CONCAT(a.authority) authority 
 		FROM AdminMember m 
 		JOIN AdminAuthority a ON m.id = a.adminId
+		GROUP BY m.id
+		LIMIT #{startNum},#{count}
 	</select>
 	
  	<resultMap type="com.portal.domain.admin.AdminMemberDto" id="adminMemberAll">
@@ -110,9 +116,10 @@
 	<result column="name" property="name"/>
 	<result column="adminMemberId" property="adminMemberId"/>
 	<result column="password" property="password"/>
-	<collection property="authorityList" ofType="string">
+	<result column="authority" property="authority"/>
+<!-- 	<collection property="authorityList" ofType="string">
 		<result column="authority" property="authority"/>
-	</collection>
+	</collection> -->
 	</resultMap> 
 
 

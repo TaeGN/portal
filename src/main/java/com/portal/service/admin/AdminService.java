@@ -147,6 +147,9 @@ public class AdminService {
 		// 권한 테이블 삭제
 		adminMapper.deleteAdminAuthorityByAdminId(id);
 		
+		// adminLog 삭제
+		adminLogService.removeAdminLogByAdminId(id);
+		
 		// signUpNotice 삭제
 		List<Integer> signUpNoticeIdList = signUpNoticeMapper.selectSignUpNoticeIdByWriterId(id);
 		
@@ -155,9 +158,9 @@ public class AdminService {
 			String messageLog = "";
 			
 			if(cnt2 == 1) {
-				messageLog = "공지번호 : " + id + " 공지사항 삭제 성공";
+				messageLog = "공지번호 : " + signUpNoticeId + " 공지사항 삭제 성공";
 			}	else {
-				messageLog = "공지번호 : " + id + " 공지사항 삭제 실패";
+				messageLog = "공지번호 : " + signUpNoticeId + " 공지사항 삭제 실패";
 			}
 			String category = "remove";
 			AdminMemberDto admin = adminMapper.selectAdminMemberByUserName(username);
@@ -186,8 +189,26 @@ public class AdminService {
 	}
 
 	public int modifyAdminMember(AdminMemberDto adminMember) {
-		String pw = adminMember.getPassword();
-		adminMember.setPassword(passwordEncoder.encode(pw));
+		// 비밀번호 암호화 (변경될 비밀번호 없으면 기존 비밀번호 그대로)
+		if(adminMember.getPassword() == null || adminMember.getPassword().equals("")) {
+			String pw = adminMapper.selectAdminMemberById(adminMember.getId()).getPassword();
+			adminMember.setPassword(pw);
+		} else {
+			adminMember.setPassword(passwordEncoder.encode(adminMember.getPassword()));
+		}		
+		
+		int adminId = adminMember.getId();
+		
+		// authority 삭제
+		int cnt = adminMapper.deleteAdminAuthorityByAdminId(adminId);
+		
+		int cnt2 = 0;
+		// authority 등록
+		for(String authority : adminMember.getAuthorityList()) {
+			cnt2 += adminMapper.insertAdminAuthority(adminId, authority);
+		}
+		
+		// update member
 		return adminMapper.updateAdminMember(adminMember);
 	}
 
@@ -208,6 +229,11 @@ public class AdminService {
 		}		
 		
 		return cnt1 * cnt2;
+	}
+
+	public int getCountAdminMemberAll() {
+		// TODO Auto-generated method stub
+		return adminMapper.selectCountAdminMemberAll();
 	}
 
 

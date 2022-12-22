@@ -78,14 +78,14 @@ public class CourseInfoController {
 	
 	@GetMapping("get/{classNumber}")
 	@ResponseBody
-	@PreAuthorize("hasAnyAuthority('admin','courseInfo')")
+	@PreAuthorize("hasAnyAuthority('admin','courseInfo','course')")
 	public CourseInfoDto getInfo(@PathVariable String classNumber) {
 		CourseInfoDto courseInfo = courseInfoService.getCourseInfoByClassNumber(classNumber);
 		return courseInfo;
 	}
 	
 	@GetMapping("list")
-	@PreAuthorize("hasAnyAuthority('admin','course','member')")
+	@PreAuthorize("hasAnyAuthority('admin','course','courseInfo')")
 	public void list(Model model,
 			@RequestParam(name = "page", defaultValue = "1") int page) {
 		

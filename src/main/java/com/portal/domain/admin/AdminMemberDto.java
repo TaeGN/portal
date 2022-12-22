@@ -12,6 +12,7 @@ public class AdminMemberDto {
 	private String name;
 	private String adminMemberId;
 	private String password;
+	private String authority;
 	private List<String> authorityList;
 	private List<FileDto> fileList;
 }

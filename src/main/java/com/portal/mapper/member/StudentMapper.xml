@@ -29,8 +29,9 @@
 
 	<select id="selectMinStudentNumberByDepartmentId" resultType="com.portal.domain.member.StudentDto">
 		SELECT studentNumber FROM Student
-		WHERE studentNumber >= #{minStudentNumber}
-		LIMIT 0,1
+		WHERE studentNumber >= #{minStudentNumber} AND #{maxStudentNumber} >= studentNumber
+		ORDER BY studentNumber DESC
+		LIMIT 1
 	</select>
 	
 	<insert id="insertStudent">

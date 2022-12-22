@@ -16,4 +16,6 @@ public interface AdminLogMapper {
 
 	int selectCountAdminLogAll();
 
+	int deleteAdminLogByAdminId(int id);
+
 }

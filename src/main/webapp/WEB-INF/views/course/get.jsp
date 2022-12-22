@@ -402,7 +402,7 @@ function selectRoomByBuilding(building) {
 	.then(list => {
 		
 		for(const item of list) {
-			const room = `<option value="\${item.id }">\${item.room }\${item.classification }</option>`	
+			const room = `<option value="\${item.room }\${item.classification }">\${item.room }\${item.classification }</option>`	
 			selectRoomId1.insertAdjacentHTML("beforeend", room);
 		}
 	});
