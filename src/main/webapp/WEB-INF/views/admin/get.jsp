@@ -67,13 +67,13 @@
 				</div>	
 				
 				<%-- 이미지 출력 --%>
-				<div class="mb-3">
+<%-- 				<div class="mb-3">
 					<c:forEach items="${adminMember.fileList }" var="file">
 						<div>
 							<img class="img-fluid img-thumbnail" src="${imgUrl }/${file.memberId }/${URLEncoder.encode(file.name, 'utf-8')}" alt="">
 						</div>
 					</c:forEach>		
-				</div>
+				</div> --%>
 	
 	
 			</div>
